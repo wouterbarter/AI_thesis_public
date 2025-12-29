@@ -1,0 +1,95 @@
+id: 080be5c39ffc
+dimensions:
+  relevance:
+    name: Relevance
+    description: Relevance BARS style prompt
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - BARS
+    - relevance
+    - scale_4
+    template_chat:
+      system: 'You are an expert evaluator. Your task is to rate the Relevance of
+        the Question provided for the Answer on a scale of 1 to 4.
+
+
+        *Relevance: Does the answer discuss the specific topic and entities requested?*
+
+        1 = **Irrelevant**: Discusses a completely different topic (e.g., "baby delivery"
+        instead of "respirators").
+
+        2 = **Topic Mismatch**: Discusses a related category but the wrong specific
+        entity (e.g., "Work Visa" instead of "Pandemic Visa").
+
+        3 = **Broadly Relevant**: Discusses the correct topic but includes significant
+        tangential or unrelated information.
+
+        4 = **Precise**: Focuses exclusively on the specific entity and topic requested
+        in the question.'
+      user: "Question:\n{question}\n\nAnswer: \n{answer}"
+  completeness:
+    name: Completeness
+    description: Completeness BARS style prompt
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - BARS
+    - completeness
+    - scale_4
+    template_chat:
+      system: 'Instruction: Rate the Completeness of the Answer provided for the Question
+        on a scale of 1 to 4. Use the following rubric to determine the score:
+
+
+        *Completeness: Does the answer contain all necessary information to resolve
+        the user''s intent?*
+
+        1 = **Deficient**: Misses the core answer entirely; the user cannot solve
+        their problem.
+
+        2 = **Sparse**: Provides the basic answer but lacks detail, context, or specific
+        constraints
+
+        3 = **Adequate**: Covers the main points and necessary constraints.
+
+        4 = **Exhaustive**: "Super detailed" and informative; covers the answer, constraints,
+        exceptions, and provides context/links.'
+      user: "Question:\n{question}\n\nAnswer: \n{answer}"
+  directness:
+    name: Directness
+    description: directness BARS style prompt
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - BARS
+    - directness
+    - scale_4
+    template_chat:
+      system: 'Instruction: Rate the Directness of the Answer provided for the Question
+        on a scale of 1 to 4. Use the following rubric to determine the score:
+
+
+        *Directness: Is the answer explicit and unequivocal?*
+
+        1 = **Confusing/Contradictory**: Logic is flawed (e.g., says "No" but implies
+        "Yes") or grammar obscures meaning.
+
+        2 = **Implicit/Inferred**: The user must use logical entailment to deduce
+        the answer (e.g., "Only X is allowed" implies "Y is not").
+
+        3 = **Clear**: The answer is stated clearly but may be buried after an intro
+        or disclaimer.
+
+        4 = **Unequivocal**: The answer is explicit, immediate, and leaves no room
+        for interpretation.'
+      user: "Question:\n{question}\n\nAnswer: \n{answer}"

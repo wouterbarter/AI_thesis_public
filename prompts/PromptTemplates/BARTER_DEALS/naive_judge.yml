@@ -1,0 +1,24 @@
+id: f686fa3259
+name: naive_judge
+description: Base evaluation prompt that requests rating.
+constrained_output:
+- '1'
+- '2'
+- '3'
+- '4'
+- '5'
+tags:
+- tokens_5
+- QA_evaluation
+- baseline
+version: 1
+template_chat:
+  system: 'You will be given a deal text.
+
+    Your task is to rate the overall quality of the deal text on a scale from 1 to
+    5.
+
+    Only output the integer rating.'
+  user: 'Deal text:
+
+    "{deal_text}"'

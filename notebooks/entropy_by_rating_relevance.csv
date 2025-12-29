@@ -1,0 +1,17 @@
+,model_name,prompt_id,mode_rating,entropy
+0,Qwen/Qwen3-4B-Instruct-2507,080be5c39ffc,1.0,0.29131958
+1,Qwen/Qwen3-4B-Instruct-2507,080be5c39ffc,2.0,0.76406825
+2,Qwen/Qwen3-4B-Instruct-2507,080be5c39ffc,3.0,0.87893856
+3,Qwen/Qwen3-4B-Instruct-2507,080be5c39ffc,4.0,0.109031685
+4,Qwen/Qwen3-4B-Instruct-2507,2f16b595bed1,1.0,0.30123764
+5,Qwen/Qwen3-4B-Instruct-2507,2f16b595bed1,2.0,0.16330037
+6,Qwen/Qwen3-4B-Instruct-2507,2f16b595bed1,3.0,0.43596226
+7,Qwen/Qwen3-4B-Instruct-2507,2f16b595bed1,4.0,0.032670457
+8,google/gemma-3-4b-it,080be5c39ffc,1.0,0.02550389
+9,google/gemma-3-4b-it,080be5c39ffc,2.0,0.14220557
+10,google/gemma-3-4b-it,080be5c39ffc,3.0,0.11298028
+11,google/gemma-3-4b-it,080be5c39ffc,4.0,0.03285343
+12,google/gemma-3-4b-it,2f16b595bed1,1.0,0.15525277
+13,google/gemma-3-4b-it,2f16b595bed1,2.0,0.08316995
+14,google/gemma-3-4b-it,2f16b595bed1,3.0,0.09549304
+15,google/gemma-3-4b-it,2f16b595bed1,4.0,0.036123764

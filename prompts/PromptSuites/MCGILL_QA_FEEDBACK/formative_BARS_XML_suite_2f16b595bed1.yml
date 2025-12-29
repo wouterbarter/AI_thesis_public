@@ -1,0 +1,115 @@
+id: 2f16b595bed1
+dimensions:
+  relevance:
+    name: Relevance_XML
+    description: Relevance BARS style prompt with XML tags
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - BARS
+    - XML
+    - relevance
+    - scale_4
+    template_chat:
+      system: "<instruction>\nYou are an expert evaluator. Your task is to rate the\
+        \ Relevance of the <candidate_answer> provided for the <question> on a scale\
+        \ of 1 to 4.\n</instruction>\n\n<rubric>\n    <definition>\n        *Relevance:\
+        \ Does the answer discuss the specific topic and entities requested?*\n  \
+        \  </definition>\n\n    <scale>\n    1 = **Irrelevant**: Discusses a completely\
+        \ different topic (e.g., \"baby delivery\" instead of \"respirators\").\n\
+        \    2 = **Topic Mismatch**: Discusses a related category but the wrong specific\
+        \ entity (e.g., \"Work Visa\" instead of \"Pandemic Visa\").\n    3 = **Broadly\
+        \ Relevant**: Discusses the correct topic but includes significant tangential\
+        \ or unrelated information.\n    4 = **Precise**: Focuses exclusively on the\
+        \ specific entity and topic requested in the question.\n    </scale>\n</rubric>"
+      user: '<question>
+
+        {question}
+
+        </question>
+
+
+        <candidate_answer>
+
+        {answer}
+
+        </candidate_answer>'
+  completeness:
+    name: Completeness_XML
+    description: Completeness BARS style prompt with XML tags
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - BARS
+    - XML
+    - completeness
+    - scale_4
+    template_chat:
+      system: "<instruction>\nYou are an expert evaluator. Your task is to rate the\
+        \ Completeness of the <candidate_answer> provided for the <question> on a\
+        \ scale of 1 to 4.\n</instruction>\n\n<rubric>\n    <definition>\n       \
+        \ *Completeness: Does the answer contain all necessary information to resolve\
+        \ the user's intent?*\n    </definition>\n\n    <scale>\n    1 = **Deficient**:\
+        \ Misses the core answer entirely; the user cannot solve their problem.\n\
+        \    2 = **Sparse**: Provides the basic answer but lacks detail, context,\
+        \ or specific constraints\n    3 = **Adequate**: Covers the main points and\
+        \ necessary constraints.\n    4 = **Exhaustive**: \"Super detailed\" and informative;\
+        \ covers the answer, constraints, exceptions, and provides context/links.\n\
+        \    </scale>\n</rubric>"
+      user: '<question>
+
+        {question}
+
+        </question>
+
+
+        <candidate_answer>
+
+        {answer}
+
+        </candidate_answer>'
+  directness:
+    name: Directness_XML
+    description: directness BARS style prompt with XML tags
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - BARS
+    - XML
+    - directness
+    - scale_4
+    template_chat:
+      system: "<instruction>\nYou are an expert evaluator. Your task is to rate the\
+        \ Directness of the <candidate_answer> provided for the <question> on a scale\
+        \ of 1 to 4.\n</instruction>\n\n<rubric>\n    <definition>\n        *Directness:\
+        \ How easily can the user extract the explicit answer?*\n    </definition>\n\
+        \n    <scale>\n        1 = **Obscured**: The answer is hidden behind contradictions,\
+        \ confusing grammar, or total evasiveness. The user is left guessing.\n  \
+        \      2 = **Indirect**: The answer is present but requires user effort to\
+        \ decode (e.g., through inference, reading between the lines, or connecting\
+        \ separate points).\n        3 = **Delayed**: The answer is explicitly stated,\
+        \ but the user must read through introductory fluff, disclaimers, or excessive\
+        \ context to find it.\n        4 = **Immediate**: The answer is the very first\
+        \ thing presented (or clearly highlighted), leaving zero ambiguity or search\
+        \ time.\n    </scale>\n</rubric>"
+      user: '<question>
+
+        {question}
+
+        </question>
+
+
+        <candidate_answer>
+
+        {answer}
+
+        </candidate_answer>'

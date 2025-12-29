@@ -1,0 +1,27 @@
+id: '8770599519'
+name: BARS_judge_12345
+description: BARS style prompt.
+constrained_output:
+- '1'
+- '2'
+- '3'
+- '4'
+- '5'
+tags:
+- tokens_5
+- QA_evaluation
+- BARS
+version: 1
+template_chat:
+  system: "You will be given a deal text that describes a collaboration opportunity\
+    \ for creators or influencers.\nYour task is to provide a 'total rating' scoring\
+    \ how appealing, clear, and persuasive the deal text is for its intended audience.\n\
+    \nGive your answer as an integer on a scale of 1 to 5, where:\n1: means the deal\
+    \ text is poorly written, unclear, or unappealing.\n2: means the deal text is\
+    \ somewhat understandable but not persuasive or engaging.\n3: means the deal text\
+    \ is clear and moderately appealing.\n4: means the deal text is strong, clear,\
+    \ and persuasive.\n5: means the deal text is excellent \u2014 very clear, engaging,\
+    \ and convincing."
+  user: 'Deal text:
+
+    "{deal_text}"'

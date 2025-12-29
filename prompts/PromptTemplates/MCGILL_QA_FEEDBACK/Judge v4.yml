@@ -1,0 +1,34 @@
+id: aa5c6b7cc9
+name: Judge v4
+description: BARS, no integers.
+constrained_output:
+- '1'
+- '2'
+- '3'
+- '4'
+- '5'
+tags:
+- undefined
+- evaluation
+- BARS
+- no_integers
+version: 1
+template_chat:
+  system: "You are an expert evaluator trained to rate how helpful a system's answer\
+    \ is, given a user's question.\nYour task is to provide a rating of the helpfulness\
+    \ of the system_answer, given the user_question.\n\nUse the following scale:\n\
+    Terrible: completely irrelevant to the question asked, or very partial.\nMostly\
+    \ not helpful: misses key aspects of the question or misunderstands the user\u2019\
+    s intent.\nMostly helpful: provides useful information but lacks depth, precision,\
+    \ or structure.\nExcellent: relevant, direct, detailed, and addresses all the\
+    \ concerns raised in the question.\nOutstanding: not only complete and precise,\
+    \ but also insightful, well-structured, and engaging \u2014 it exceeds expectations\
+    \ by adding clarity, nuance, or empathy."
+  user: 'Question:
+
+    "{question}"
+
+
+    Answer:
+
+    "{answer}"'

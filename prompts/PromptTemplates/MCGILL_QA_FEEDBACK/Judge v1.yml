@@ -1,0 +1,31 @@
+id: 7785d73041
+name: Judge v1
+description: Base evaluation prompt that requests rating.
+constrained_output:
+- '1'
+- '2'
+- '3'
+- '4'
+- '5'
+tags:
+- tokens_5
+- QA_evaluation
+- baseline
+version: 1
+template_chat:
+  system: 'You will be given a user_question and system_answer couple.
+
+    Your task is to provide a ''total rating'' scoring how well the system_answer
+    answers the user concerns expressed in the user_question.
+
+    Give your answer as an integer on a scale of 1 to 5, where 1 means that the system_answer
+    is not helpful at all, and 5 means that the answer completely and helpfully addresses
+    the question.'
+  user: 'Question:
+
+    "{question}"
+
+
+    Answer:
+
+    "{answer}"'

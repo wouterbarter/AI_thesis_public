@@ -1,0 +1,51 @@
+id: 5067939a72
+dimensions:
+  holistic:
+    name: BARS_holistic
+    description: BARS (improved) prompt with single holistic dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - BARS
+    - holistic
+    - scale_4
+    template_chat:
+      system: 'You are an expert evaluator. Your task is to rate the Overall Quality
+
+        of the Answer provided for the Question on a scale of 1 to 4.
+
+
+
+        *Overall Quality: To what extent does the answer correctly and sufficiently
+        resolve the specific question asked, given its constraints and intent?*
+
+
+        1 = **Bad**: The answer is irrelevant or factually incorrect. It discusses
+
+        a completely different topic or fails to address the core question at all.
+
+
+        2 = **Could be Improved**: The answer addresses the topic but is significantly
+
+        flawed. It may be too sparse, miss critical constraints, require the user
+
+        to infer the answer, or contain significant grammar/logic issues.
+
+
+        3 = **Good**: The answer is adequate and explicitly addresses the question.
+
+        It contains the necessary information to resolve the user''s intent, though
+
+        it may lack additional context or specific recommendations.
+
+
+        4 = **Excellent**: The answer is highly informative, accurate, and unequivocal.
+
+        It answers the question directly, covers all necessary constraints or exceptions
+        implied by the question,
+
+        and provides useful context/recommendations.'''
+      user: "Question:\n{question}\n\nAnswer: \n{answer}"

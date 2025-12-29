@@ -1,0 +1,75 @@
+# -----------------
+# config.yaml
+# -----------------
+
+active_analysis: 'mcgill_qa_feedback'
+
+generation_globals:
+  batch_size: 2
+  debug_row_limit: 1400
+  top_k: 1000
+  models_to_run:
+    - 'google/gemma-3-4b-it'
+    - 'Qwen/Qwen3-4B-Instruct-2507'
+    # - 'mistralai/Ministral-8B-Instruct-2410'
+    # - 'google/gemma-3-1b-it'
+
+analyses:
+  barter_deals:
+    name: "Barter Deals Analysis"
+    variable_names:
+      - 'deal_text'
+    keys:
+      raw_id_col: 'deal_id'
+      evaluations_id_col: 'input_id'
+    filters:
+      country_code: 'NLD'
+    model_vars:
+      model_type: 'OLS'
+      target: 'apps_after_7_days'
+      cluster_col: 'partner_id'
+      experimental_groups: 
+        - 'model_name'
+        - 'prompt_id'
+        - 'dimension_name'
+      categorical_predictors:
+        - 'deal_type'
+        - 'first_content_type'
+      binary_predictors:
+        - 'accepts_international'
+      # target: 'applications_till_day_7'
+      var_of_interest: 'mean_rating'
+
+  mcgill_qa_feedback:
+    name: "McGill Feedback Analysis"
+    variable_names:
+      - 'question'
+      - 'answer'
+    keys:
+      raw_id_col: 'input_id'
+      evaluations_id_col: 'input_id'
+    model_vars:
+      experimental_groups: 
+        - 'model_name'
+        - 'prompt_id'
+        - 'dimension_name'
+    # paths:
+    #   raw_data: 'data/raw/MCGILL_QA_FEEDBACK.csv'
+    #   results_logs_dir: 'results/MCGILL_QA_FEEDBACK/'
+
+
+
+output_paths:
+  # The "raw results" from the RUN step
+  # This is a DIRECTORY
+  raw_results_dir: 'reports/raw_results'
+  
+  # The "compiled results" from the COMPILE step
+  # This is a FILE
+  compiled_results_csv: 'reports/comparison_summary.csv'
+  
+  # The directory for saving all plots
+  figures_dir: 'reports/figures'
+  
+  # The final, "analysis-ready" data (from data_processing)
+  analysis_ready_data: 'data/processed/analysis_ready.parquet'

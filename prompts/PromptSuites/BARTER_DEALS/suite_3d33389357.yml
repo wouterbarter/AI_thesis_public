@@ -1,0 +1,24 @@
+id: 3d33389357
+dimensions:
+  holistic:
+    name: naive_holistic
+    description: Naive (baseline) prompt with single holistic dimension
+    constrained_output:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - naive
+    - holistic
+    - baseline
+    - scale_4
+    template_chat:
+      system: You will be given a deal text, consisting of marketing copy. Rate the
+        marketing copy on a likert scale of 1 to 4.
+      user: 'Deal text:
+
+        {deal_text}
+
+
+        Rate the marketing copy on a scale of 1 to 4.'
