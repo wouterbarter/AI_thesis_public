@@ -1,0 +1,123 @@
+% !TEX root = ../main.tex
+
+\section{Theoretical Framework}
+
+\subsection{Measurement view of LLM-as-a-Judge}
+
+This thesis treats LLM-based evaluators as measurement instruments that map an input (e.g., marketing copy text) to a score that represents an underlying (subjective) construct (e.g., "Quality"). To formalize this, we adopt the framework of Psychometric Latent Variable Theory. Psychometrics concerns itself with the measurement of psychological attributes, called constructs. In psychology, constructs are defined as latent (unobservable) variables underlying human behavior, such as cognitive abilities and personality traits. Assuming constructs can be treated as quantitative (for a discussion, see: \citep{michell1997quantitative}), we can measure them by defining their relationship with manifest (observable) variables ("indicators"). Typically, these manifest variables are measured through item scores on a test. For example, the latent construct of \textit{Extraversion} is measured via items like "Talks a lot" or "Has a lot of energy" \citep{john1991big}. 
+
+The same theoretical principles underlie measurements that are used in Machine Learning (ML), where "gold" labels for supervised learning are sourced by having people rate samples. By supplying the raters with specific criteria, their rating is assumed to be a reliable and valid representation of some underlying construct. 
+
+We hypothesize that a similar approach can be applied to LLMs. As \citet{zheng_judging_2023} and related LLMAJ literature demonstrate, LLMs are capable of mimicking human judgment in evaluation tasks. In psychometrical terms, this implies they are capable of measuring latent variables. 
+
+% However, a latent variable is only meaningful relative to a rigorous construct definition. Adopting a latent variable framework allows us to define this construct, design the LLM evaluator, and test its validity. In this chapter, we first analyse the causal mechanisms assumed in latent variable models (formative vs. reflective). Next, we explore how these models can be operationalized for LLMs. Lastly, we discuss the concept of validity, and how it can be experimentally verified. 
+
+However, a latent variable is only meaningful relative to a rigorous construct definition. Adopting a latent variable framework allows us to methodically design an LLM evaluator and test its validity. Accordingly, this chapter is organized as follows: 
+
+\begin{itemize}
+    \item \textbf{Theoretical Definition (Section 3.2):} We explain the two causal models that define the relationship between the latent variable and its indicators: the \emph{reflective} and the \emph{formative} model. 
+    \item \textbf{Computational Operationalization (Section 3.3):} We demonstrate how a subjective evaluation task can be designed to measure these indicators, and how their measurement can be operationalized by using LLMs as instruments.
+    \item \textbf{Empirical Validation (Section 3.4):} We use the psychometrical concept of \textit{construct validity} and its subtypes to establish a framework for empirically validating the instrument.
+\end{itemize}
+
+
+% However, a latent variable is only meaningful relative to a clear and rigorous construct definition. Adopting a latent-variable framework allows us to structure the design of the evaluator in three stages. Accordingly, this chapter is organized as follows:
+
+% \begin{itemize}
+%     \item \textbf{Construct Definition (Section 3.2):} We define what we mean by \emph{Quality} and introduce the two measurement models used in this thesis, contrasting \emph{reflective} and \emph{formative} assumptions.
+%     \item \textbf{Operationalization in an LLM Evaluator (Section 3.3):} We show how these measurement assumptions are implemented in practice, by translating them into decomposed rubrics, prompting strategies, and constrained scoring procedures for small open-source LLMs.
+%     \item \textbf{Validation Framework (Section 3.4):} We specify how the instrument is evaluated empirically, distinguishing between standard performance metrics and validity evidence supporting the intended interpretation and use of the scores.
+% \end{itemize}
+
+
+
+% "However, a latent variable is only meaningful relative to a rigorous construct definition. Adopting a latent variable framework allows us to systematically address the three stages of instrument design. Accordingly, this chapter is organized as follows:
+
+% Theoretical Definition (Section 3.2): We first analyze the ontological status of the "Quality" construct, contrasting the causal mechanisms of Reflective and Formative models.
+
+% Computational Operationalization (Section 3.3): We explore how these theoretical models are translated into specific LLM architectures and prompting strategies.
+
+% Empirical Validation (Section 3.4): We define the framework for testing the instrument, distinguishing between standard accuracy metrics and rigorous construct validity evidence."
+
+
+% % \textbf{AI DRAFT}
+% This thesis treats an LLM-based evaluator as a measurement instrument: a system that maps an observable artifact (marketing text + context) to a score intended to represent an underlying construct (“Quality”). In classical ML terms, this looks like a prediction pipeline; in psychometrics, it is a measurement model with explicit assumptions about what the score means and how it should be validated.
+
+% Two implications follow:
+
+% A “quality score” is only meaningful relative to a construct definition (what the score is supposed to represent).
+
+% Evidence for usefulness is not only accuracy on a dataset, but validity evidence: whether the instrument measures what it claims to measure, for the intended use.
+
+% The core contribution of this thesis is to use latent variable theory to motivate a specific kind of evaluator design: formative construct decomposition implemented through structured prompts and constrained scoring.
+
+
+
+\subsection{Latent Variables Models: Reflective vs. Formative}
+
+Latent variable models define a relationship between manifest and latent variables. Two model types are distinguished: formative and reflective \citep{bollen1991conventional}. They differ in their assumptions about the direction of causality. 
+
+In formative models, the manifest variables are assumed to be the common cause of the latent variable. The canonical example is Socioeconomic Status (SES), which can be defined as the composite of three main features: income, education, and prestige \citep{mcquitty2013structural}. Formally, for a set of manifest variables indexed by $i = 1,2, \dots ,n$, we assume
+
+\begin{equation}
+    \eta = \sum_{i=1}^{n} \gamma_i x_i + \zeta
+\end{equation}
+
+where $\eta$ is a latent construct, $\gamma_i$ a formative weight, $x_i$ a manifest variable, $\zeta$ the disturbance term. 
+
+In reflective models, the latent variable causes the manifest variables. For example, following a "g-factor" interpretation of the latent variable intelligence \citep{spearman1961general}, we assume that intelligence is an inherent trait that humans possess which causes people's performance on cognitive tasks. Formally, for any given manifest variable $i$, we assume
+
+\begin{equation}
+    x_i = \lambda_i \eta + \varepsilon_i
+\end{equation}
+
+where $x_i$ is a manifest variable, $\lambda_i$ a factor loading, $\eta$ the latent construct, and $\varepsilon_i$ the measurement error.
+
+
+These definitions have consequences for construct operationalization. In the formative model, the latent variable is defined by its constituents. Therefore, omitting one variable changes the meaning of the latent variable (e.g., measuring "SES" without "Income" fundamentally changes the construct ). Conversely, in the reflective model, the constituents are the effect of the latent variable, and are therefore assumed to covary. Omission of one of its constituents would not redefine the construct.
+
+% Explain latent variable models, reflective, and formative (Bollen \& Lennox)
+
+% Important to consider: 
+% Reflective: indicators are effects of the latent variable. If g changes, all else equal the expected scores on each test shift. Dropping one indicator doesn’t change what g is (it just measures it less well).
+% Formative: indicators define the construct. If you remove an indicator, you literally change the construct.
+
+\subsection{Operationalizing LLM Evaluation}
+
+Assuming the construct to be formative or reflective determines how to design the measurement instrument and how to test for validity. Construct misspecification is a highly debated topic in psychology and the social sciences. Typically, stemming from the field of Classical Test Theory, constructs were implicitly assumed to be reflective \citep{nunnally1996psychometric}. As the effect indicators are assumed to be caused by the latent construct, 
+
+We consider the "Quality" construct ("Q\&A answer quality" in the case of \citet{li_using_2022}, and "marketing copy quality" in the case of Barter Deals). 
+
+
+
+
+Measurement instrument validity depends on whether the latent construct is assumed to be formative or reflective. In the formative model, the latent variable is defined by the indicators, so "omitting an indicator is omitting a part of the construct" \citep{bollen1991conventional}. Omitting one indicator changes the meaning of the latent variable (e.g., measuring "SES" without "Income" fundamentally changes the construct). Conversely, in the reflective model, the indicators are the effect of the latent variable. This implies that the indicators must covary. Omitting one indicator would not redefine the construct, and they are interchangeable \citep{jarvis2003critical}.  
+
+Consider the "Quality" construct ("Q\&A answer quality" in the case of \citet{li_using_2022}, and "marketing copy quality" in the case of Barter Deals). To determine whether \textit{Quality} is formative or reflective, we consider the direction of causality. Consider some indicators of text quality, such as fluency, tone, and relevancy. If \textit{Quality} were reflective, an increase in \textit{Quality} would cause an increase in all its indicators. However, this is theoretically incoherent. For example, by improving text relevancy \textit{Quality} can be improved, while retaining the same level of fluency. On the other hand, if we improve fluency, \textit{Quality} increases. Therefore, \textit{Quality} is considered to be a formative construct.  
+
+
+
+
+
+Explain how an evaluation task can be framed as a formative latent variable measurement problem, and how we use LLMs as measurement devices.
+
+Explain the processing pipeline: we define the formative variable, and measure the subdimensions individually. We design a prompt that targets these subdimensions specifically. We have the LLM process the prompt (here there is a tree: some use CoT, reasoning models, etc., but we opt for single-token generation: it functions as a 'snapshot' of subjectivity, and is computationally more efficient, which is a very strict requirement if a model is to be used in production; arguably this is more methods however). Internally, the LLM processes the prompt. Generation in LLMs works by computing the conditional probability of each token in the vocabulary, given the previous tokens. This produces logits, or scores, which can be converted to probabilities using the softmax function. A distinction should be made between single-token generation and multi-token generation. Given a prompt, the logits are computed for the first next token. When the temperature $T=0$, the token with the highest logit in the set of allowed tokens is selected. This set can be the full token set (the entire vocabulary) for unconstrained generation, or a subset for constrained generation. For evaluation, generation would be constrained to e.g. set(1,2,3,4), corresponding to the possible values on a four-point likert scale. Multi-token generation adds a layer of complexity. Although the logits are deterministically computed, sampling is generally done stochastically. For example, first selecting low logit tokens might lead to a higher marignal probability if it leads to a sequence of high logit tokens. Methods like beam search allow efficient mapping of the probability space. However, for the current project, we specifically aim to investigate the logits, which are used to gain a better understanding of how the model processes the input. For multi-token generation, marginal probabilities would have to be estimated to obtain a reliable estimate of the model's internal representation of the construct, which adds a huge layer of complexity which we avoid. Moreover, single-token generation only requires a single forward pass, which is computationally cheap, and therefore best suited for production environments. 
+
+After a single forward pass, the model's internal representation reflects its subjective evaluation of the target text, contained in the subset of constrained tokens corresponding to the target evaluation space.
+
+
+\subsection{Construct Validity \& Validation of the Evaluation Instrument}
+
+"Quality" is a latent variable == construct. Explain the broader concept of validity (by comparing with reliability, example of darts: if a robot throws 10 darts in exactly the same place but they're not on the dartboard, it is reliable, but invalid- confidently incorrect). Explain construct validity, "whether a test (or measurement device) measures what we intend for it to measure", discuss different subsumers that are relevant: 1. content validity (important when defining the subdimensions, and afterwards the prompts) 2. Criterion validity (in-depth explanation of how it relates its operationalization: FeedbackQA comparison with ground truth (concurrent validity), Barter prediction of KPI (predictive validity))
+
+
+"Validity becomes actionable: each validity type is introduced at the moment it matters, tied to the concrete test (FeedbackQA, KPI prediction)."
+
+- content validity = rubric coverage + prompt constraints
+- concurrent validity = agreement with human ratings on FeedbackQA
+- predictive validity = correlation/utility vs downstream KPI
+
+"Ultimately, the validity of a measurement instrument cannot be established through theoretical design alone; it requires empirical verification against external criteria. Following the framework of Criterion Validity, we test the proposed formative evaluator on two distinct axes. First, we assess Concurrent Validity by measuring the alignment between the model’s scores and human-annotated 'gold labels' within the FeedbackQA dataset. Second, we evaluate Predictive Validity by examining the relationship between the model's quality scores and downstream performance metrics (KPIs) within Barter’s industrial environment. By satisfying both academic and industrial validation criteria, we aim to demonstrate that the formative latent variable approach provides a robust, scalable alternative to traditional holistic human oversight. The following chapter details the specific experimental setup, datasets, and model architectures used to perform this validation."
+
+
+\textit{diagram of how an LLM evaluator assuming a formative model would work}

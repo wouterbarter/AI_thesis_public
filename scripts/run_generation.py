@@ -35,8 +35,6 @@ def main(config: dict):
     Main orchestration function for the data generation pipeline.
     """
 
-
-
     # --- 1. Load Configs & Data ---
     active_analysis_name = config['active_analysis']
     try:
@@ -70,10 +68,14 @@ def main(config: dict):
     top_k = gen_globals['top_k']
 
     # Load and filter prompts
-    tags_to_skip = set(['baseline']) # TODO WARNING HARDCODED,
-    required_tags = set(['holistic'])
+    tags_to_skip = set()
+    required_tags = set()
+    # tags_to_skip = set(['baseline']) # TODO WARNING HARDCODED,
+    # required_tags = set(['holistic'])
+
     pm = PromptManager(folder=prompt_suites_dir)
-    prompt_suites = pm.load_all(tags_to_skip=tags_to_skip, required_tags=required_tags)
+    prompt_suites = pm.load_all(
+        tags_to_skip=tags_to_skip, required_tags=required_tags)
 
     # TODO: 'tokens_5' should also be a config variable
     # prompt_templates = pm.get_filtered_prompts(required_tags=['tokens_5'])

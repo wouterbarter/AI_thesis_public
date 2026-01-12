@@ -6,11 +6,12 @@ active_analysis: 'mcgill_qa_feedback'
 
 generation_globals:
   batch_size: 2
-  debug_row_limit: 1400
+  debug_row_limit: 200
   top_k: 1000
   models_to_run:
     - 'google/gemma-3-4b-it'
     - 'Qwen/Qwen3-4B-Instruct-2507'
+    - 'meta-llama/Llama-3.2-3B-Instruct'
     # - 'mistralai/Ministral-8B-Instruct-2410'
     # - 'google/gemma-3-1b-it'
 
