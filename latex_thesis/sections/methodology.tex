@@ -12,7 +12,7 @@ The \textit{FeedbackQA} dataset \citet{li_using_2022} contains evaluations of Q\
 
 The \textit{Barter Deals} dataset contains 'deals' written by companies ($n=???$). On the Barter platform, companies ('partners') can barter goods and services in exchange for influencer content. For example, a company that sells hair styling tools offers their new product in exchange for a video of a creator using it; or, a museum provides free entrance to a creator and their friends in exchange for a video of their visit. The 'deal text' is the marketing copy that is posted on the Barter platform. Users can apply to deals, and the partner can accept or reject the application. Once accepted, the partner provides the good or service, and the creator provides the content. 
 
-In the current study, we consider the 'deal text' (marketing copy) and the number of applications the deal has obtained after the first seven days of going live (\textit{applications after 7 days}). The variable \textit{applications after 7 days} is chosen because it serves as a proxy for marketing copy quality. One might apply to a deal because they like the product or the brand, but they could also be convinced to apply bceause of the way the copy is written. A valid measurement of marketing copy quality would therefore be predictive of whether somebody applies to a deal or not. By controlling for the fixed effects of the brand and the product category we can separate the effects of marketing copy quality, and hereby determine whether the LLM provides a valid measurement of it. 
+In the current study, we consider the 'deal text' (marketing copy) and the number of applications the deal has obtained after the first seven days of going live (\textit{applications after 7 days}). The variable \textit{applications after 7 days} is chosen because it serves as a behavioral proxy for marketing copy quality. One might apply to a deal because they like the product or the brand, but they could also be convinced to apply bceause of the way the copy is written. A valid measurement of marketing copy quality would therefore be predictive of whether somebody applies to a deal or not. By controlling for the fixed effects of the brand and the product category we can separate the effects of marketing copy quality, and hereby determine whether the LLM measurements satisfy predictive validity. 
 
 \subsection{Operationalization of Evaluation Constructs}
 
@@ -28,9 +28,7 @@ For the question answering task, we derive the formative dimensions from the qua
     \item \textbf{Directness:} Whether the answer directly answers the question.
 \end{itemize}
 
-We expect a degree of covariance among the dimensions, since high-quality answers generally score high across all three. However, the formative framework allows for orthogonal variation across the dimensions as well. For example, \citet{li_using_2022} highlight an answer rated \textit{could be improved} (2/4) with the feedback: \textit{"The answer is about some of the online risks but not about how to protect against them."}. This indicates an answer that is relevant but incomplete. While a holistic prompt forces the model to compress the conflicting signals into a single scalar value, the formative prompt explicitly models models this by decomposing it. 
-
-
+We expect a degree of covariance among the dimensions, since high-quality answers generally score high across all three. However, the formative framework allows for orthogonal variation across the dimensions as well. For example, \citet{li_using_2022} highlight an answer rated \textit{could be improved} (2/4) with the feedback: \textit{"The answer is about some of the online risks but not about how to protect against them."}. This indicates an answer that is relevant but incomplete. While a holistic prompt forces the model to compress the conflicting signals into a single scalar value, the formative prompt explicitly models this by decomposing it. 
 
 \subsubsection{Construct definition: Barter deals}
 
@@ -49,19 +47,21 @@ In the absence of prior academic literature for the proprietary Barter dataset, 
 
 To perform evaluations we select three popular small-scale, open-source instruction-tuned models: Qwen3-4B-Instruct-2507 \citep{qwen3technicalreport} (AliBaba), Gemma3-4B-IT \citep{gemma_2025} (Google), and Llama-3.2-3B-Instruct (Meta). These models were selected to represent the current state-of-the-art open-source models. 
 
-The choice of model type (small, open-source, instruction-tuned) is based on the methodological requirements, and the operational constraints of the industrial partner, Barter. Methodologically, the use of open-source models enables "white-box" access to the model's probability distribution. This allows us to compute the logit-weighted mean and the Shannon entropy. Moreover, we prefer instruction-tuned models over base models to ensure adherence to the evaluation instructions provided in the prompt. Operationally, Barter requires the evaluator to balance validity with cost-efficiency and latency. Proprietary models like GPT-4 incur costs that scale with volume, while open-source models incur only fixed compute costs, making them a more scalable solution. 
+The choice of model type (small, open-source, instruction-tuned) is based on the methodological requirements and the operational constraints of the industrial partner. Methodologically, the use of open-source models enables "white-box" access to the model's probability distribution. This allows us to compute the logit-weighted mean and the Shannon entropy. Moreover, we prefer instruction-tuned models over base models to ensure adherence to the evaluation instructions provided in the prompt. Operationally, Barter requires the evaluator to balance validity with cost-efficiency and latency. Proprietary models like GPT-4 incur costs that scale with volume, while open-source models incur only fixed compute costs, making them a more scalable solution. 
 
 \subsection{Experimental design \& Validation Strategy}
 
-\subsubsection{Internal Validity: Alignment with Human Raters (FeedbackQA)}
+\subsubsection{Convergent Validity: Alignment with Human Raters (FeedbackQA)}
 
-\subsubsection{External Validity: Behavioral Prediction (Barter Deals)}
+\subsubsection{Predictive Validity: Behavioral Prediction (Barter Deals)}
+
+
+
+
 
 % \subsection{Construct definition}
 
 % \subsubsection{McGill FeedbackQA}
-
-
 
 % In \citet{li_using_2022}, they require the raters to provide feedback for each Q&A pair. They determine that the evaluators use certain decision policies to come to their rating. For example, 
 

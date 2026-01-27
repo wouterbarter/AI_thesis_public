@@ -21,53 +21,61 @@ Reallocating 'name_of_file' (item size: 1) to 11 items.
 Reallocating 'name_of_file' (item size: 1) to 30 items.
 A level-1 auxiliary file: appendices/A_extra_graphs.aux
 Database file #1: references.bib
+Warning--empty year in bang_transforming_2025
+Warning--empty year in gu_survey_2025
+Warning--empty journal in li_fine-grained_2026
+Warning--empty year in li_fine-grained_2026
+Warning--empty year in li_fine-grained_2026
 Warning--empty year in li_using_2022
 Warning--empty year in li_using_2022
 Warning--empty year in liu_g-eval_2023
+Warning--empty journal in messick_validity_1994
+Warning--empty year in messick_validity_1994
+Warning--empty year in messick_validity_1994
 Warning--empty journal in spearman1961general
 Warning--empty journal in gemma_2025
 Warning--empty journal in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
-You've used 12 entries,
+You've used 13 entries,
             2773 wiz_defined-function locations,
-            674 strings with 7106 characters,
-and the built_in function-call counts, 5685 in all, are:
-= -- 479
-> -- 388
-< -- 8
-+ -- 133
-- -- 120
-* -- 469
-:= -- 889
-add.period$ -- 38
-call.type$ -- 12
-change.case$ -- 76
-chr.to.int$ -- 11
-cite$ -- 32
-duplicate$ -- 238
-empty$ -- 429
-format.name$ -- 138
-if$ -- 1163
+            685 strings with 8122 characters,
+and the built_in function-call counts, 7111 in all, are:
+= -- 591
+> -- 562
+< -- 9
++ -- 191
+- -- 177
+* -- 615
+:= -- 1119
+add.period$ -- 50
+call.type$ -- 13
+change.case$ -- 98
+chr.to.int$ -- 12
+cite$ -- 42
+duplicate$ -- 268
+empty$ -- 467
+format.name$ -- 196
+if$ -- 1446
 int.to.chr$ -- 2
 int.to.str$ -- 1
 missing$ -- 9
-newline$ -- 70
-num.names$ -- 48
-pop$ -- 175
+newline$ -- 84
+num.names$ -- 52
+pop$ -- 234
 preamble$ -- 1
-purify$ -- 64
+purify$ -- 85
 quote$ -- 0
-skip$ -- 195
+skip$ -- 232
 stack$ -- 0
-substring$ -- 134
-swap$ -- 21
-text.length$ -- 1
+substring$ -- 132
+swap$ -- 33
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 132
-warning$ -- 8
-while$ -- 46
+type$ -- 143
+warning$ -- 16
+while$ -- 49
 width$ -- 0
-write$ -- 155
-(There were 8 warnings)
+write$ -- 180
+(There were 16 warnings)

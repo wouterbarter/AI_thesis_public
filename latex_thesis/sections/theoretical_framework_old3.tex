@@ -1,0 +1,288 @@
+% !TEX root = ../main.tex
+
+\section{Theoretical Framework}
+
+\subsection{Measurement view of LLM-as-a-Judge}
+
+This thesis treats LLM-based evaluators as measurement instruments that map an input (e.g., marketing copy text) to a score that represents an underlying (subjective) variable (e.g., "Quality"). 
+
+
+
+
+To formalize this, we adopt the framework of latent variable models in psychometrics. Psychometrics concerns itself with the measurement of psychological attributes, called constructs. In psychology, constructs are defined as latent (unobservable) variables underlying human behavior, such as cognitive abilities and personality traits. Assuming constructs can be treated as quantitative (for a discussion, see: \citep{borsboom2003theoretical}), we can measure them by defining their relationship with manifest (observable) variables ("indicators"). Typically, these manifest variables are measured through item scores on a test. For example, the latent construct of \textit{Extraversion} is measured via items like "Talks a lot" or "Has a lot of energy" \citep{john1991big}. 
+
+The same theoretical principles underlie measurements that are used in Machine Learning (ML), where human annotations are used as 'gold labels', and serve as the reference standard. When a reviewer is asked to "rate marketing copy on a four-point scale", we are establishing a measurement procedure. But what does the measurement represent? Typically, the procedure involves instructions, 
+
+Although human raters are imperfect instruments subject to noise, by supplying them with specific criteria, their ratings are treated as a reliable and valid representation of some underlying construct. 
+
+
+
+We hypothesize that a similar approach can be applied to LLMs. As \citet{zheng_judging_2023} and related LLMAJ literature demonstrate, LLMs can LLMs are capable of aligning with human judgment in evaluation tasks. In psychometric terms, this implies they are capable of serving as an instrument to measure latent variables.
+
+However, a latent variable is only meaningful relative to a rigorous construct definition. Adopting a latent variable framework allows us to methodically design an LLM evaluator and test its validity. Accordingly, this chapter is organized as follows: 
+
+\begin{itemize}
+    \item \textbf{Theoretical Definition (Section 3.2):} We explain the two causal models that define the relationship between the latent variable and its indicators: the \emph{reflective} and the \emph{formative} model. 
+    \item \textbf{Computational Operationalization (Section 3.3):} We demonstrate how a subjective evaluation task can be designed to measure these indicators, and how their measurement can be operationalized by using LLMs as instruments.
+    \item \textbf{Empirical Validation (Section 3.4):} We use the psychometric concept of \textit{construct validity} and its subtypes to establish a framework for empirically validating the instrument.
+\end{itemize}
+
+
+% So I wanted to use these two papers as exemplars to showcase methodological errors that are common in llm evaluator methods- not necessarily to say that "these are two seed papers that I build upon", but more so to illustrate what my method actually solves. However, to a reviewer it might seem like a strawman, because I couldve taken two other papers that do not commit these methodological errors. Is this something I should account for?
+
+
+% It is a valid concern, but you are likely **not** building a strawman argument, provided you frame it correctly. In fact, choosing \citet{wang2025evaluating} strengthens your argument because it is a rigorous, high-quality study that represents the "state-of-the-art" in psychometric LLM evaluation.
+
+% If you were criticizing a weak, obscure paper, that would be a strawman. By criticizing a paper that explicitly claims to establish a "systematic framework for evaluating automated scoring systems", you are attacking the **Steel Man**—the strongest version of the opposing view.
+
+% To insulate yourself from the "cherry-picking" critique, you simply need to clarify that these papers are **representative of the dominant paradigm**, not random outliers.
+
+% Here is how to adjust your text to make this clear:
+
+% ### 1. Frame them as "Paradigmatic" rather than "Bad"
+
+% Instead of saying "A similar measurement approach is taken in...", explicitly state that these studies exemplify the current standard for fine-grained evaluation.
+
+% **Suggested Edit:**
+
+% > "We examine \citet{li_fine-grained_2026} and \citet{wang2025evaluating} as **exemplars of the prevailing methodological paradigm** in fine-grained LLM evaluation. These studies represent the current state-of-the-art by moving beyond simple holistic scoring to analytic decomposition. However, even these rigorous frameworks exhibit fundamental theoretical and methodological limitations that characterize the broader field..."
+% > 
+% > 
+
+% ### 2. Highlight their Rigor to Validate your Target
+
+% You can briefly mention *why* you picked them: they are the ones actually applying psychometric theory (G-Theory, MFRM). If *they*—the ones focusing on validity—make these errors (e.g., halo effects , lack of predictive validity ), it implies the error is systemic to the framework, not just a mistake by the authors.
+
+% **Suggested Edit for the "However" paragraph:**
+
+% > "However, despite their rigorous application of psychometric tools like Generalizability Theory, these methodologies lack a foundational **causal model** for the decomposition itself..."
+% > 
+% > 
+
+% ### 3. The "Methodological Choices" Paragraph (Revised)
+
+% Here is how to rewrite your "Methodological Choices" paragraph to be safer. It frames the "single prompt" issue as a standard practice in the field (which Wang et al. follow) rather than a unique failing of these specific authors.
+
+% > "Moreover, the standard engineering strategy employed in these studies introduces several confounding variables. Typically, such approaches operationalize multidimensional rubrics by supplying all dimensions in a single prompt. This introduces **positional bias**... and **autoregressive dependencies**..."
+% > 
+% > 
+
+% ### Why this protects you:
+
+% 1. **It generalizes the critique:** You are critiquing "the approach employed in these studies," not "these authors."
+% 2. **It acknowledges their quality:** By citing their use of advanced metrics (like G-Theory), you show you aren't ignoring their contributions; you are pointing out that even the best current methods miss the *formative* perspective.
+% 3. 
+% **It focuses on the "Gap":** The Wang et al. paper explicitly lists its validity metrics: Inter-rater reliability, Pearson correlations, and MFRM rater effects. It **does not** list predictive validity against behavioral KPIs. Pointing this out isn't a strawman; it's identifying a genuine gap in the literature.
+
+
+
+
+\subsection{Theoretical Definition: Latent Constructs}
+
+\subsubsection{Latent Variable Models: Reflective vs. Formative}
+
+Latent variable models define a relationship between manifest and latent variables. Two model types are distinguished: formative and reflective \citep{bollen1991conventional}. They differ in their assumptions about the direction of causality. 
+
+In formative models, the latent variable is assumed to be a composite construct, caused by the manifest variables ("causal indicators"). The canonical example is Socioeconomic Status (SES), which can be defined as the composite of three main features: income, education, and prestige \citep{mcquitty2013structural}. Formally, for a set of causal indicators indexed by $i = 1,2, \dots ,n$, we assume
+
+\begin{equation}
+    \eta = \sum_{i=1}^{n} \gamma_i x_i + \zeta
+\end{equation}
+
+where $\eta$ is a latent construct, $\gamma_i$ a formative weight, $x_i$ a manifest variable, $\zeta$ the disturbance term. 
+
+In reflective models, the latent variable causes the manifest variables ("effect indicators"). For example, following a "g-factor" interpretation of the latent variable intelligence \citep{spearman1961general}, we assume that intelligence is an inherent trait that humans possess which causes people's performance on cognitive tasks. Formally, for any given manifest variable $i$, we assume
+
+\begin{equation}\label{formative_model}
+    x_i = \lambda_i \eta + \varepsilon_i
+\end{equation}
+
+where $x_i$ is an effect indicator, $\lambda_i$ a factor loading, $\eta$ the latent construct, and $\varepsilon_i$ the measurement error.
+
+
+% \paragraph{Implications for validity} 
+% A reflective specification motivates validation evidence focused on internal structure and reliability (since indicators are exchangeable manifestations of a common cause), whereas a formative specification motivates evidence focused on content coverage and external relations (since the indicator set defines the construct and indicators need not co-vary). Accordingly, internal-consistency statistics are not primary validity evidence for formative constructs; instead, validity is assessed by whether the specified constituents collectively capture the intended domain and predict relevant criteria.
+
+% \paragraph{Exemplars in LLM-based measurement.}
+% \citet{wang2025evaluating} align with a reflective measurement stance. Their target is writing ability, which is assumed to systematically manifest in rubric dimensions such as organization and fluency. This permits reliability analyses that decompose observed score variance into facets of the measurement design (e.g., persons, tasks, raters), as in Generalizability Theory and related psychometric models. Under a reflective interpretation, variability attributable to measurement facets is treated as error/irrelevant variance with respect to the latent trait, and reliability can be improved by strengthening the measurement design (e.g., additional tasks/raters or well-behaved indicators) without changing the meaning of the construct.
+
+% By contrast, \citet{li_fine-grained_2026} operationalize evaluation via batteries of criteria organized by task category (e.g., correctness, completeness, documentation for coding). This strategy implicitly corresponds to a formative view: broad target attributes are represented as composites defined by multiple constituents to cover the content domain. Under such a construct specification, improvement is not achieved by treating additional criteria as interchangeable observations of a single underlying trait; rather, the indicator set constitutes the construct. Consequently, adding or omitting criteria is not merely a reliability adjustment but a construct-definition decision, analogous to how removing ``income'' from SES changes what SES means.
+
+
+
+% \paragraph{Exemplars in LLM-based measurement.}
+
+% \citet{wang2025evaluating} assume a reflective model. Their goal is to measure writing ability, which they assume to cause variation in dimensions such as "organization" and "fluency". This allows them to use statistical methods based on G-theory, which decomposes the variance of $\varepsilon_i$. The decomposition relies on the assumption that sources of variation are external to the effect indicator, for example due to intra-individual differences in writing ability. As a consequence, differences in how the effect indicators relate to the latent construct are assumed to be error, and not signal. Measurement of additional effect indicators reduces error, but does not change the meaning of the latent construct.
+%  % it is also error in formative models, just purely measurement error, not due to differences in the causal relationship (IS THIS TRUE?)
+
+% \citet{li_fine-grained_2026} assume a formative model. Recall that they aim to define an evaluation battery that is not overly general, but also not so task-specific that it does not generalize to different but similar tasks. To this end, they adopt a hierarchical approach where they define multiple task categories with corresponding evaluation criteria. For example, for the task category "Coding" they evaluate "Correctness", "Completeness", "Documentation", etc.; for the task category "Writing" they evaluate "User Satisfaction", "Information Richness", "Text Quality", etc. By defining multiple evaluation criteria per task, they attempt to cover the entire breadth of the domain of the main category. They assess validity by correlating LLM evaluations with human evaluations. In doing so, they assume that increasing the correlation and reducing the LLM-human error improves the measurements. Therefore, error is contained in the causal indicators, and not in the latent construct itself. Measurement of additional indicators does not reduce this error. As a matter of fact, it is not even possible: the construct is defined by the indicators. Adding or omitting one changes the meaning of the construct, just as omitting "Income" from SES changes the entire meaning of SES. 
+
+
+% Quality-for-purpose
+
+
+
+\subsection{Operationalizing LLM Evaluation}
+
+In this interpretation, LLMs can serve as instruments to measure manifest variables, and thereby produce measurements of the latent variables. We define a measurement of an indicator $j$ as a mapping of a triplet $\mathbf{u}_j = [s; c_j; d]$ of task instructions $s$ (e.g., "rate the text on a four-point Likert scale"), criterion specification $c_j$ (e.g., "persuasiveness is defined by ..."), and input text $d$ to a scalar value $x_j$, where $x_j$ corresponds to the manifest variable for indicator $j$. 
+
+The model processes $\mathbf{u}_j$ to compute a vector of unnormalized logits $\mathbf{z} \in \mathbb{R}^{|\mathcal{V}|}$ over the vocabulary $\mathcal{V}$. To enforce the measurement scale defined in $s$, we restrict the output to a constrained set of tokens $\mathcal{C} \subset \mathcal{V}$ (e.g., $\mathcal{C} = \{``1", ``2", ``3", ``4"\}$). 
+
+The measurement of an indicator is derived by computing the conditional probability mass over this valid set via a constrained softmax function:
+
+\begin{equation}
+    P_{\mathcal{C}}(k | \mathbf{u}_j) = \frac{\exp(z_k)}{\sum_{i \in \mathcal{C}} \exp(z_i)} \quad \text{for } k \in \mathcal{C}
+\end{equation}
+
+
+We obtain a measurement of $x_j$ by either taking the mode or the expectation of the distribution. The mode
+
+
+\begin{equation}
+x_j^{\text{mode}} = \arg\max_{k \in \mathcal{C}} P_{\mathcal{C}}(k \mid \mathbf{u}_j)
+\end{equation}
+
+corresponds to a greedy decoding procedure, where the most probable token in the constrained set $\mathcal{C}$ is selected as rating. The expectation 
+
+\begin{equation}
+x_j^{\mathbb{E}} = \sum_{k \in \mathcal{C}} k \cdot P_{\mathcal{C}}(k \mid \mathbf{u}_j)
+\end{equation}
+
+weights the tokens by the predicted probabilities, resulting in a scalar measurement. 
+
+% \subsection{Operationalizing LLM Evaluation}
+
+% We operationalize this by considering LLMs as instruments to measure indicators. LLMs define a conditional distribution over token sequences. Given an input sequence $\mathbf{u} = (u_1,\dots,u_n)$, the next-token probabilities are defined by 
+
+
+% \begin{equation}
+%     P(\mathbf{u}) \;=\; \prod_{t=1}^{n} P(u_t \mid u_{<t}),
+% \end{equation}
+
+
+% Given a sequence of input
+
+
+% We define a measurement of an indicator $j$ as a mapping of a triplet $\mathbf{u}_j = [s; c_j; d]$ of task instructions $s$ (e.g., "rate the text on a four-point Likert scale"), criterion specification $c_j$ (e.g., "persuasiveness is defined by ..."), and input text $d$ to a scalar value $x_j$, where $x_j$ corresponds to the manifest variable for indicator $j$. 
+
+% The model processes $\mathbf{u}_j$ to compute a vector of unnormalized logits $\mathbf{z} \in \mathbb{R}^{|\mathcal{V}|}$ over the vocabulary $\mathcal{V}$. To enforce the measurement scale defined in $s$, we restrict the output to a constrained set of tokens $\mathcal{C} \subset \mathcal{V}$ (e.g., $\mathcal{C} = \{``1", ``2", ``3", ``4"\}$). 
+
+% The measurement of an indicator is derived by computing the conditional probability mass over this valid set via a constrained softmax function:
+
+% \begin{equation}
+%     P_{\mathcal{C}}(k | \mathbf{u}_j) = \frac{\exp(z_k)}{\sum_{i \in \mathcal{C}} \exp(z_i)} \quad \text{for } k \in \mathcal{C}
+% \end{equation}
+
+
+% We obtain a measurement of $x_j$ by either taking the mode or the expectation of the distribution. The mode
+
+
+% \begin{equation}
+% x_j^{\text{mode}} = \arg\max_{k \in \mathcal{C}} P_{\mathcal{C}}(k \mid \mathbf{u}_j)
+% \end{equation}
+
+% corresponds to a greedy decoding procedure, where the most probable token in the constrained set $\mathcal{C}$ is selected as rating. The expectation 
+
+% \begin{equation}
+% x_j^{\mathbb{E}} = \sum_{k \in \mathcal{C}} k \cdot P_{\mathcal{C}}(k \mid \mathbf{u}_j)
+% \end{equation}
+
+% weights the tokens by the predicted probabilities, resulting in a scalar measurement. 
+
+
+
+
+
+
+
+
+
+
+
+The meaning of the indicators depends on the model assumptions. 
+
+Under a reflective model, indicators represent interchangeable components of a latent cause.  
+
+
+In the current thesis, we assume a formative model. Our goal is to determine the "Quality" of an input text, which is defined by the requirements that the industrial partner sets for their platform. In this quality-for-purpose interpretation, 
+
+
+
+
+
+
+
+\newpage
+
+
+
+
+
+
+
+
+
+% Although strictly speaking Likert-style ratings represent an ordinal scale, we treat it as interval. Ordinal scales only assume that the ratings are ordered, which theoretically limits operations to non-parametric statistics such as the mode. However, the necessity of strict adherence to the assumptions of measurement scales is a debated topic in psychometrics, and evidence suggests that parametric statistics remain robust on ordinal data \citep{norman2010likert}. One of the advantages of LLM evaluators is that they provide access to the rating distribution through their logits, as opposed to just the ratings themselves. As \citet{liu_g-eval_2023} show, this distribution contains valuable signal, which is lost when only considering the mode. 
+
+
+
+% \newpage
+
+% To measure the construct "Quality" ("Q\&A answer quality" in the case of \citet{li_using_2022}, and "marketing copy quality" in the case of Barter Deals), we must first determine whether we treat it as formative or reflective. 
+
+% Assuming a formative or reflective latent variable has consequences for which methods can be applied. \citet{wang2025evaluating} use LLMs as a replacement for humans to rate essays and determine the author's writing ability. Multiple dimensions of writing ability are distinguished, such as "Voice" ("the writer has chosen a voice appropriate for the topic") and "Fluency" ("The writing has an effective flow and rhythm"). A student with high writing ability is assumed to score high on all these dimensions. This assumes a reflective model, where the writing ability is the latent construct which causes covariance in the effect indicators. 
+
+% Our goal is the opposite. Instead of measuring some latent writing ability, we need to determine whether an NLG text is of sufficient quality. 
+
+% Accordingly, we specify Quality as a set of criteria that jointly define the construct, where the criteria correspond to the causal indicators $x_j$ in the formative model. 
+
+% We use the LLM 
+
+% A measurement of an indicator $j$ is defined as a mapping of a triplet $\mathbf{u}_j = [s; c_j; d]$ of task instructions $s$, criterion specification $c_j$, and input text $d$ to a scalar value $x_j$, where $x_j$ corresponds to the manifest variable for indicator $j$. 
+
+
+
+
+
+% To implement this evaluation, the model processes $\mathbf{u}_j$ to compute a vector of unnormalized logits $\mathbf{z} \in \mathbb{R}^{|\mathcal{V}|}$ over the vocabulary $\mathcal{V}$. To enforce the measurement scale defined in $s$, we restrict the output to a constrained set of tokens $\mathcal{C} \subset \mathcal{V}$ (e.g., $\mathcal{C} = \{``1", ``2", ``3", ``4"\}$). 
+
+% The measurement is derived by computing the conditional probability mass over this valid set via a constrained softmax function:
+
+% \begin{equation}
+%     P_{\mathcal{C}}(k | \mathbf{u}_j) = \frac{\exp(z_k)}{\sum_{i \in \mathcal{C}} \exp(z_i)} \quad \text{for } k \in \mathcal{C}
+% \end{equation}
+
+% The expected value or mode of this constrained distribution serves as the scalar measurement $x_j$ of the formative indicator $j$. 
+
+% Although strictly speaking Likert-style ratings represent an ordinal scale, we treat it as interval. Ordinal scales only assume that the ratings are ordered, which theoretically limits operations to non-parametric statistics such as the mode. However, the necessity of strict adherence to the assumptions of measurement scales is a debated topic in psychometrics, and evidence suggests that parametric statistics remain robust on ordinal data \citep{norman2010likert}. One of the advantages of LLM evaluators is that they provide access to the rating distribution through their logits, as opposed to just the ratings themselves. As \citet{liu_g-eval_2023} show, this distribution contains valuable signal, which is lost when only considering the mode. 
+
+% Therefore, we consider both the mode and the expectation of the logits as valid ratings. The modal rating is defined as the integer associated with the highest probability token:
+
+% \begin{equation} 
+%     x_j^{\text{mode}} = v\left(\underset{k \in \mathcal{C}}{\mathrm{argmax}} , P_{\mathcal{C}}(k | \mathbf{u}_j)\right) 
+% \end{equation}
+
+% The expected rating is defined as the scalar derived from the probability-weighted tokens:
+
+% \begin{equation} 
+%     x_j = \mathbb{E}[k] = \sum_{k \in \mathcal{C}} v(k) \cdot P_{\mathcal{C}}(k | \mathbf{u}_j) 
+% \end{equation}
+
+% where $v(k)$ represents the numeric value of token $k$. 
+
+
+
+
+
+
+
+
+% Standard psychometric evaluation establishes the quality of a measurement through two properties: reliability and validity. Reliability concerns the stability of measurements under repeated or equivalent conditions, whereas validity concerns whether the measurement behaves as a representation of the intended construct.
+
+% In this thesis, we mainly consider validity. Although reliability is often analysed in the context of LLMs by performing repeated measurements using the same prompt (e.g., \citep{manning2025human}, \citep{wang2025evaluating}, \citep{chehbouni2025neither}, \citep{yavuz2025utilizing}), this only applies in the case of stochastic sampling, whereas we use a deterministic decoding strategy through single-token generation and logit extraction. 
+
+
+
+
+
+% \textit{diagram of how an LLM evaluator assuming a formative model would work}

@@ -1,9 +1,15 @@
-\begin{thebibliography}{12}
+\begin{thebibliography}{13}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bang et~al.()Bang, Kim, and Min]{bang_transforming_2025}
+G.~Bang, D.~Kim, and M.~Min.
+\newblock Transforming user defined criteria into explainable indicators with
+  an integrated {LLM} {AHP} system.
+\newblock URL \url{http://arxiv.org/abs/2601.05267}.
 
 \bibitem[Bollen and Lennox(1991)]{bollen1991conventional}
 K.~Bollen and R.~Lennox.
@@ -11,18 +17,24 @@ K.~Bollen and R.~Lennox.
   perspective.
 \newblock \emph{Psychological bulletin}, 110\penalty0 (2):\penalty0 305, 1991.
 
-\bibitem[Jarvis et~al.(2003)Jarvis, MacKenzie, and
-  Podsakoff]{jarvis2003critical}
-C.~B. Jarvis, S.~B. MacKenzie, and P.~M. Podsakoff.
-\newblock A critical review of construct indicators and measurement model
-  misspecification in marketing and consumer research.
-\newblock \emph{Journal of consumer research}, 30\penalty0 (2):\penalty0
-  199--218, 2003.
+\bibitem[Gu et~al.()Gu, Jiang, Shi, Tan, Zhai, Xu, Li, Shen, Ma, Liu, Wang,
+  Zhang, Wang, Gao, Ni, and Guo]{gu_survey_2025}
+J.~Gu, X.~Jiang, Z.~Shi, H.~Tan, X.~Zhai, C.~Xu, W.~Li, Y.~Shen, S.~Ma, H.~Liu,
+  S.~Wang, K.~Zhang, Y.~Wang, W.~Gao, L.~Ni, and J.~Guo.
+\newblock A survey on {LLM}-as-a-judge.
+\newblock URL \url{http://arxiv.org/abs/2411.15594}.
+\newblock Read\_Status: In Progress Read\_Status\_Date:
+  2025-10-14T13:58:05.029Z.
 
-\bibitem[John et~al.(1991)John, Donahue, and Kentle]{john1991big}
-O.~P. John, E.~M. Donahue, and R.~L. Kentle.
-\newblock Big five inventory.
-\newblock \emph{Journal of personality and social psychology}, 1991.
+\bibitem[Li and Sun()]{li_fine-grained_2026}
+Y.~Li and Y.~Sun.
+\newblock A fine-grained evaluation framework for language models: Combining
+  pointwise grading and pairwise comparison.
+\newblock 63\penalty0 (1):\penalty0 104270.
+\newblock ISSN 0306-4573.
+\newblock \doi{10.1016/j.ipm.2025.104270}.
+\newblock URL
+  \url{https://www.sciencedirect.com/science/article/pii/S0306457325002110}.
 
 \bibitem[Li et~al.()Li, Sharma, Lu, Cheung, and Reddy]{li_using_2022}
 Z.~Li, P.~Sharma, X.~H. Lu, J.~C.~K. Cheung, and S.~Reddy.
@@ -44,15 +56,18 @@ S.~McQuitty and M.~Wolf.
 \newblock \emph{Journal of African Business}, 14\penalty0 (1):\penalty0 58--69,
   2013.
 
-\bibitem[Michell(1997)]{michell1997quantitative}
-J.~Michell.
-\newblock Quantitative science and the definition of measurement in psychology.
-\newblock \emph{British journal of Psychology}, 88\penalty0 (3):\penalty0
-  355--383, 1997.
-
-\bibitem[Nunnally~James and Bernstein~Ira(1996)]{nunnally1996psychometric}
-C.~Nunnally~James and H.~Bernstein~Ira.
-\newblock Psychometric theory, 1996.
+\bibitem[Messick()]{messick_validity_1994}
+S.~Messick.
+\newblock Validity of psychological assessment: Validation of inferences from
+  persons' responses and performances as scientific inquiry into score meaning.
+\newblock 1994\penalty0 (2):\penalty0 i--28.
+\newblock ISSN 2330-8516.
+\newblock \doi{10.1002/j.2333-8504.1994.tb01618.x}.
+\newblock URL
+  \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/j.2333-8504.1994.tb01618.x}.
+\newblock \_eprint:
+  https://onlinelibrary.wiley.com/doi/pdf/10.1002/j.2333-8504.1994.tb01618.x
+  Read\_Status: New Read\_Status\_Date: 2025-10-14T12:42:52.831Z.
 
 \bibitem[Spearman(1961)]{spearman1961general}
 C.~Spearman.
@@ -69,6 +84,14 @@ G.~Team.
 Q.~Team.
 \newblock Qwen3 technical report, 2025{\natexlab{b}}.
 \newblock URL \url{https://arxiv.org/abs/2505.09388}.
+
+\bibitem[Wang et~al.(2025)Wang, Huang, Du, Guo, Liu, and
+  Wang]{wang2025evaluating}
+Y.~Wang, J.~Huang, L.~Du, Y.~Guo, Y.~Liu, and R.~Wang.
+\newblock Evaluating large language models as raters in large-scale writing
+  assessments: A psychometric framework for reliability and validity.
+\newblock \emph{Computers and Education: Artificial Intelligence}, page 100481,
+  2025.
 
 \bibitem[Zheng et~al.()Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li, Li,
   Xing, Zhang, Gonzalez, and Stoica]{zheng_judging_2023}

@@ -1,0 +1,182 @@
+% !TEX root = ../main.tex
+
+\section{Theoretical Framework}
+
+\subsection{Measurement view of LLM-as-a-Judge}
+
+This thesis treats LLM-based evaluators as measurement instruments that map an input (e.g., marketing copy text) to a score that represents an underlying (subjective) construct (e.g., "Quality"). To formalize this, we adopt the framework of latent variable models in psychometrics. Psychometrics concerns itself with the measurement of psychological attributes, called constructs. In psychology, constructs are defined as latent (unobservable) variables underlying human behavior, such as cognitive abilities and personality traits. Assuming constructs can be treated as quantitative (for a discussion, see: \citep{borsboom2003theoretical}), we can measure them by defining their relationship with manifest (observable) variables ("indicators"). Typically, these manifest variables are measured through item scores on a test. For example, the latent construct of \textit{Extraversion} is measured via items like "Talks a lot" or "Has a lot of energy" \citep{john1991big}. 
+
+The same theoretical principles underlie measurements that are used in Machine Learning (ML), where human annotations are used as 'gold labels', and serve as the reference standard. When a reviewer is asked to "rate marketing copy on a four-point scale", we are establishing a measurement procedure. Although human raters are imperfect instruments subject to noise, by supplying them with specific criteria, their ratings are treated as a reliable and valid representation of some underlying construct. 
+
+We hypothesize that a similar approach can be applied to LLMs. As \citet{zheng_judging_2023} and related LLMAJ literature demonstrate, LLMs can LLMs are capable of aligning with human judgment in evaluation tasks. In psychometric terms, this implies they are capable of serving as an instrument to measure latent variables.
+
+However, a latent variable is only meaningful relative to a rigorous construct definition. Adopting a latent variable framework allows us to methodically design an LLM evaluator and test its validity. Accordingly, this chapter is organized as follows: 
+
+\begin{itemize}
+    \item \textbf{Theoretical Definition (Section 3.2):} We explain the two causal models that define the relationship between the latent variable and its indicators: the \emph{reflective} and the \emph{formative} model. Moreover, we discuss measurement validity.
+    \item \textbf{Computational Operationalization (Section 3.3):} We demonstrate how a subjective evaluation task can be designed to measure these indicators, and how their measurement can be operationalized by using LLMs as instruments.
+    \item \textbf{Empirical Validation (Section 3.4):} We use the psychometrical concept of \textit{construct validity} and its subtypes to establish a framework for empirically validating the instrument.
+\end{itemize}
+
+
+\subsection{Theoretical Definition: Latent Constructs}
+
+\subsubsection{Latent Variable Models: Reflective vs. Formative}
+
+Latent variable models define a relationship between manifest and latent variables. Two model types are distinguished: formative and reflective \citep{bollen1991conventional}. They differ in their assumptions about the direction of causality. 
+
+In formative models, the latent variable is assumed to be a composite construct, caused by the manifest variables ("causal indicators"). The canonical example is Socioeconomic Status (SES), which can be defined as the composite of three main features: income, education, and prestige \citep{mcquitty2013structural}. Formally, for a set of causal indicators indexed by $i = 1,2, \dots ,n$, we assume
+
+\begin{equation}
+    \eta = \sum_{i=1}^{n} \gamma_i x_i + \zeta
+\end{equation}
+
+where $\eta$ is a latent construct, $\gamma_i$ a formative weight, $x_i$ a manifest variable, $\zeta$ the disturbance term. 
+
+In reflective models, the latent variable causes the manifest variables ("effect indicators"). For example, following a "g-factor" interpretation of the latent variable intelligence \citep{spearman1961general}, we assume that intelligence is an inherent trait that humans possess which causes people's performance on cognitive tasks. Formally, for any given manifest variable $i$, we assume
+
+\begin{equation}\label{formative_model}
+    x_i = \lambda_i \eta + \varepsilon_i
+\end{equation}
+
+where $x_i$ is an effect indicator, $\lambda_i$ a factor loading, $\eta$ the latent construct, and $\varepsilon_i$ the measurement error.
+
+
+% \subsubsection{Construct Validity}
+
+% Assuming the construct to be formative or reflective determines how to design a valid measurement instrument and how to test for this validity. Construct validity pertains to whether the measurements are a valid representation of the construct we intend to measure. Construct misspecification alters the meaning and interpretation of the measurements, and is therefore a highly debated topic in psychology and the social sciences. 
+
+% Typically, stemming from the field of Classical Test Theory, constructs were often implicitly (and erroneously \citep{bollen1991conventional}) assumed to be reflective \citep{nunnally1996psychometric}. To measure a reflective latent construct, we can sample from its domain by developing a multi-item scale \citep{diamantopoulos2001index}, where the items measure the effect indicators. As indicators are assumed to be noisy measurements of the same underlying construct, they are theoretically interchangeable \citep{coltman2008formative}, and omitting one would not change the meaning of the construct or its interpretation. 
+
+% Conversely, valid measurements of a formative construct requires a census of indicators that covers the entire scope of the construct. Since the construct is defined by its indicators, they are not interchangeable, and "omitting an indicator is omitting a part of the construct" \citep{bollen1991conventional}. Following the example of SES, measuring "SES" without "Income" fundamentally changes the construct. Erroneously defining a formative construct as reflective could therefore have serious consequences for construct validity.
+
+\subsection{Operationalizing LLM Evaluation}
+
+To measure the construct "Quality" ("Q\&A answer quality" in the case of \citet{li_using_2022}, and "marketing copy quality" in the case of Barter Deals), we must first determine whether we treat it as formative or reflective. Although a multitude of theoretical and empirical considerations can be made (e.g., see \citet{coltman2008formative}), for the current thesis it suffices to adopt a constructivist approach and treat the construct as formative (see \citet{borsboom2003theoretical} for a discussion). Our goal is to perform subjective evaluation, specifically in a business context. This requires us to design an evaluation framework that satisfies the requirements determined by the relevant stakeholders. This set of requirements determines our conceptualization of "Quality"; omit a requirement, and change the definition of "Quality". 
+
+% (TODO: (text) Quality is obviously formative on an ontological level- the quality of a text doesn't cause e.g. good grammar, fluency, clarity, etc. Moreover, we can improve the Grammar of a text without changing anything else about it, and improve the quality. However, it is quite difficult to argue that text Quality (or any other textual property) is always formative, independently whatever property such as topic or language, etc. In the final thesis I will probably have to better substantiate the formative assumption)
+
+Accordingly, following a formative interpretation we specify Quality as a set of criteria that jointly define the construct, where the criteria correspond to the causal indicators $x_j$ in the formative model. Similar to the way Rubrics are designed, a valid measurement of an indicator $j$ is defined as a mapping of a triplet of task instructions $s$, criterion specification $c_j$, and input text $d$ to a scalar value $x_j$, where $x_j$ corresponds to the manifest variable for indicator $j$. 
+
+We posit that LLMs can operationalize this measurement mapping. Through pre-training on large textual corpora, parameters $\theta$ are learned that capture complex semantic and syntactic regularities, including the relationship between instructions, criteria, and content. In this framework, $s$ and $c_j$ serve as the conditioning context for $d$. Given the prompt sequence $\mathbf{u}_j = [s; c_j; d]$, the model computes next-token logits over its vocabulary. When restricted to the rating tokens, these logits define a probability distribution that operationalizes the degree to which $d$ satisfies $c_j$ under instructions $s$. 
+
+To implement this evaluation, the model processes $\mathbf{u}_j$ to compute a vector of unnormalized logits $\mathbf{z} \in \mathbb{R}^{|\mathcal{V}|}$ over the vocabulary $\mathcal{V}$. To enforce the measurement scale defined in $s$, we restrict the output to a constrained set of tokens $\mathcal{C} \subset \mathcal{V}$ (e.g., $\mathcal{C} = \{``1", ``2", ``3", ``4"\}$).
+
+The measurement is derived by computing the conditional probability mass over this valid set via a constrained softmax function:
+
+\begin{equation}
+    P_{\mathcal{C}}(k | \mathbf{u}_j) = \frac{\exp(z_k)}{\sum_{i \in \mathcal{C}} \exp(z_i)} \quad \text{for } k \in \mathcal{C}
+\end{equation}
+
+The expected value or mode of this constrained distribution serves as the scalar measurement $x_j$ of the formative indicator $j$. 
+
+Although strictly speaking Likert-style ratings represent an ordinal scale, we treat it as interval. Ordinal scales only assume that the ratings are ordered, which theoretically limits operations to non-parametric statistics such as the mode. However, the necessity of strict adherence to the assumptions of measurement scales is a debated topic in psychometrics, and evidence suggests that parametric statistics remain robust on ordinal data \citep{norman2010likert}. One of the advantages of LLM evaluators is that they provide access to the rating distribution through their logits, as opposed to just the ratings themselves. As \citet{liu_g-eval_2023} show, this distribution contains valuable signal, which is lost when only considering the mode. 
+
+Therefore, we consider both the mode and the expectation of the logits as valid ratings. The modal rating is defined as the integer associated with the highest probability token:
+
+\begin{equation} 
+    x_j^{\text{mode}} = v\left(\underset{k \in \mathcal{C}}{\mathrm{argmax}} , P_{\mathcal{C}}(k | \mathbf{u}_j)\right) 
+\end{equation}
+
+The expected rating is defined as the scalar derived from the probability-weighted tokens:
+
+\begin{equation} 
+    x_j = \mathbb{E}[k] = \sum_{k \in \mathcal{C}} v(k) \cdot P_{\mathcal{C}}(k | \mathbf{u}_j) 
+\end{equation}
+
+where $v(k)$ represents the numeric value of token $k$. 
+
+
+
+
+
+
+% TODO n.b.: For this reason, it is especially important that we satisfy the requirement of construct coverage (content validity), so downstream efficacy is guaranteed. Even if measurements are 100\% accurate, evaluations of quality would be biased: copy would be incorrectly flagged as (in)sufficiently good, and a loss function using the evaluations would be misspecified and optimize towards the wrong target. 
+
+
+
+
+% \subsection{Empirical Validation: Construct Validity}
+
+% Psychometric evaluation characterizes measurement quality through reliability and validity. Reliability concerns the stability of measurements under repeated or equivalent conditions, whereas validity concerns whether the measurement behaves as a representation of the intended construct.
+
+% This thesis focuses on validity. Our evaluator uses deterministic single-token logit extraction, which removes variability due to stochastic decoding. Nevertheless, LLM-based measurement can still be sensitive to design factors such as rubric wording, prompt framing, and input perturbations. We therefore treat these factors as controlled experimental design choices and leave a systematic reliability analysis (e.g., paraphrase stability and prompt-robustness) to future work.
+
+% Validity assessment depends on the assumed measurement model. Under a reflective model, indicators are effects of a common cause and are therefore expected to covary; internal consistency (e.g., inter-item correlation) is informative. Under a formative model, indicators are causal constituents of the construct. Low internal consistency does not invalidate the construct, because the indicators need not covary. Instead, validity is supported if the indicator measurements jointly explain variables that are theoretically downstream of the construct \citep{bollen1991conventional}.
+
+% In classical testing, validity is evaluated for the test instrument independent of the test-taker. For LLM evaluators, the measurement is produced by a model conditioned on a task specification. Validity therefore attaches to the full measurement pipeline: given an evaluation input $\mathbf{u}_j$ (instructions, criterion, and object), does the LLM implement a measurement function that yields scores that behave like measurements of the intended construct? This yields two complementary targets of validation:
+% (i) \emph{construct validity of the operationalization} (do the measured indicators behave as constituents of the construct as theorized?), and
+% (ii) \emph{instrument validity of the evaluator} (does the LLM-based procedure produce those indicator measurements in a way that aligns with external criteria?).
+
+% We operationalize construct validity through two datasets, each testing a different part of the nomological network.
+% On \textsc{FeedbackQA} \citep{li_using_2022}, we test \emph{convergent validity} by comparing the formative indicator measurements against human holistic judgments collected for the same objects.
+% On \textsc{Barter Deals}, we test \emph{predictive validity} by evaluating whether the indicator measurements predict downstream outcomes relevant to the application setting.
+% Together, these experiments assess whether the proposed formative specification produces measurements that are externally coherent and practically predictive, which is the core validity requirement under a formative interpretation.
+
+
+
+
+\subsection{Empirical Validation: Construct Validity}
+
+Standard psychometric evaluation establishes the quality of a measurement through two properties: reliability and validity. Reliability concerns the stability of measurements under repeated or equivalent conditions, whereas validity concerns whether the measurement behaves as a representation of the intended construct.
+
+In this thesis, we mainly consider validity. Although reliability is often analysed in the context of LLMs by performing repeated measurements using the same prompt (e.g., \citep{manning2025human}, \citep{wang2025evaluating}, \citep{chehbouni2025neither}, \citep{yavuz2025utilizing}), this only applies in the case of stochastic sampling, whereas we use a deterministic decoding strategy through single-token generation and logit extraction. 
+
+
+
+
+\newpage
+
+
+
+
+% possibly argue that the prompt specification relates to construct validity, e.g.
+% \textit{Intra-rater reliability}—the consistency of scores across repeated trials—is inherently a property of the evaluator. While human raters exhibit variability due to fatigue or cognitive noise, we eliminate this source of error by utilizing deterministic decoding strategies (e.g., Temperature = 0).
+
+Assessment of validity is different for formative and reflective constructs. As effect indicators of a reflective construct are assumed to covary, internal consistency is a crucial measure, which is typically measured through indicator correlation. However, for formative constructs, “causal indicators are not invalidated by low internal consistency, so to assess validity we need to examine other variables that are effects of the latent variable” \citep{bollen1991conventional}. The intuition is simple: if an external variable is a measurement of the latent construct, the formative indicators should have explanatory power. %According to \citet{diamantopoulos2008advancing}, indicator validity can tested against an overall measure, assuming that the overal measure is a valid criterion. In our case, 
+
+
+
+
+To this end, we use two different datasets with which we measure two types of construct validity: FeedbackQA \citep{li_using_2022} and Barter Deals. FeedbackQA contains holistic measurements of the quality of Q\&A answers, which serve as a direct measurement of the latent Quality construct. Besides a rating, the annotators also provide feedback, containing their motivation for the rating. From this, \citet{li_using_2022} abstract multiple general indicators that are commonly used as motivation. We use these as our causal indicators. 
+
+
+% \subsubsection{Indicator Validity and Convergent Evidence}
+
+% To rigorously assess the validity of the formative decomposition, we adopt the framework proposed by \citet{diamantopoulos2001index} regarding indicator validity. Unlike reflective models, where validity is assessed via inter-item correlations, formative validity requires examining the impact of each indicator on the latent construct.
+
+% \citet{bollen1989structural} argues that the validity of formative indicators is reflected in their weight parameters (γ) within the structural model. Indicators with non-significant weights fail to capture a meaningful portion of the construct and are candidates for elimination.
+
+% We operationalize this assessment using the "external variable" approach described by \citet{diamantopoulos2001index}. We utilize the holistic human quality score (Yholistic​) from the FeedbackQA dataset as a "global measure" summarizing the essence of the construct. By fitting the regression model:
+
+% \begin{equation} Y_{holistic} = \beta_0 + \sum_{j=1}^{n} \beta_j x_j + \epsilon \end{equation}
+
+% we interpret the estimated coefficients βj​ as proxies for the formative weights γ. This allows us to evaluate validity at two levels: \begin{enumerate} \item \textbf{Indicator Validity:} Determined by the statistical significance and magnitude of individual coefficients βj​. A significant coefficient implies the specific formative criterion (e.g., "Politeness") is a valid determinant of the human perception of quality. \item \textbf{Construct Validity:} Determined by the aggregate predictive power (R2) of the set of indicators. A high R2 confirms that the chosen set of formative indicators collectively creates a valid representation of the underlying construct "Quality." \end{enumerate}
+
+
+
+\newpage
+
+We obtain measurements of the indicators using the formative prompting approach, and define a model according to Equation \ref{formative_model}, regressing Quality on the indicators. By treating the human labels as valid measurements of the Quality construct, 
+
+
+
+\newpage
+
+Psychometrics distinguishes validity and reliability. Reliability pertains to whether repeated administrations of a test yield the same measurements, and validity pertains to whether the test measures what it intends to measure. This is often explained through a metaphor of a dartboard: a valid instrument successfully hits the bullseye; a reliable instrument hits the darts in exactly the same spot on the board; and a valid and reliable instrument always hits the bullseye. 
+
+Reliability measures consider both inter-observer and intra-observer variability. For example, a human assessment can vary based on their mood, the time of day, or due to rater fatigue, causing intra-rater variability. 
+
+"Quality" is a latent variable == construct. Explain the broader concept of validity (by comparing with reliability, example of darts: if a robot throws 10 darts in exactly the same place but they're not on the dartboard, it is reliable, but invalid- confidently incorrect). Explain construct validity, "whether a test (or measurement device) measures what we intend for it to measure", discuss different subsumers that are relevant: 1. content validity (important when defining the subdimensions, and afterwards the prompts) 2. Criterion validity (in-depth explanation of how it relates its operationalization: FeedbackQA comparison with ground truth (concurrent validity), Barter prediction of KPI (predictive validity))
+
+
+"Validity becomes actionable: each validity type is introduced at the moment it matters, tied to the concrete test (FeedbackQA, KPI prediction)."
+
+- content validity = rubric coverage + prompt constraints
+- concurrent validity = agreement with human ratings on FeedbackQA
+- predictive validity = correlation/utility vs downstream KPI
+
+"Ultimately, the validity of a measurement instrument cannot be established through theoretical design alone; it requires empirical verification against external criteria. Following the framework of Criterion Validity, we test the proposed formative evaluator on two distinct axes. First, we assess Concurrent Validity by measuring the alignment between the model’s scores and human-annotated 'gold labels' within the FeedbackQA dataset. Second, we evaluate Predictive Validity by examining the relationship between the model's quality scores and downstream performance metrics (KPIs) within Barter’s industrial environment. By satisfying both academic and industrial validation criteria, we aim to demonstrate that the formative latent variable approach provides a robust, scalable alternative to traditional holistic human oversight. The following chapter details the specific experimental setup, datasets, and model architectures used to perform this validation."
+
+
+\textit{diagram of how an LLM evaluator assuming a formative model would work}
