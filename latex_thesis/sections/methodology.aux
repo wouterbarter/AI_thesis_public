@@ -1,25 +1,44 @@
 \relax 
 \citation{li_using_2022}
 \citation{li_using_2022}
-\citation{li_using_2022}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Methods}{12}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Data}{12}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{FeedbackQA}{12}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Barter deals}{12}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Operationalization of Evaluation Constructs}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}FeedbackQA (Human Labels)}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}Barter deals (Behavioral KPI)}{12}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Descriptive statistics of the behavioral KPI \textit  {applications after 7 days}}}{12}{}\protected@file@percent }
+\newlabel{tab:apps7d_stats}{{1}{12}{}{table.1}{}}
+\citation{li_using_2022}
+\newlabel{sec:text_length_overview}{{4.1.3}{13}{}{subsubsection.4.1.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.3}Text Length Overview}{13}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Descriptive statistics of input text length (estimated token counts).}}{13}{}\protected@file@percent }
+\newlabel{tab:token_stats}{{2}{13}{}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Operationalization of Evaluation Constructs}{13}{}\protected@file@percent }
+\newlabel{sec:prompt_design}{{4.2.1}{13}{}{subsubsection.4.2.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Prompt Design \& Construct Definition}{13}{}\protected@file@percent }
 \citation{li_using_2022}
 \citation{qwen3technicalreport}
 \citation{gemma_2025}
-\@writefile{toc}{\contentsline {subsubsection}{Construct definition: FeedbackQA}{13}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Construct definition: Barter deals}{13}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Model selection}{13}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Experimental design \& Validation Strategy}{14}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Convergent Validity: Alignment with Human Raters (FeedbackQA)}{14}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Predictive Validity: Behavioral Prediction (Barter Deals)}{14}{}\protected@file@percent }
+\citation{gu_survey_2025}
+\@writefile{toc}{\contentsline {paragraph}{FeedbackQA}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Barter Deals}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Model Selection \& Implementation}{14}{}\protected@file@percent }
+\citation{wolf2020transformers}
+\citation{li_using_2022}
+\citation{liu_g-eval_2023}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Logit-Based LLM Evaluation Pipeline.} The input sequence is processed through a frozen transformer architecture (single forward pass) to generate logits for the next token. Rather than sampling text, the evaluator extracts probabilities for specific rating tokens (1–4) to obtain evaluations. N.b.: Specifications are ommitted from the ChatTemplate for brevity, for a full example see Appendix \ref {app:apply_chat_template}.}}{16}{}\protected@file@percent }
+\newlabel{fig:evaluator_diagram}{{1}{16}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Computation of evaluations}{16}{}\protected@file@percent }
+\newlabel{eq:weighted_score}{{11}{16}{}{equation.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Experimental design \& Validation Strategy}{16}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.1}Alignment with Human Raters (FeedbackQA)}{16}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Correlation}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Convergent validity.}{17}{}\protected@file@percent }
+\newlabel{eq:feedbackqa_formative_regression}{{12}{17}{}{equation.12}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}Behavioral Prediction (Barter Deals)}{17}{}\protected@file@percent }
 \@setckpt{sections/methodology}{
-\setcounter{page}{15}
-\setcounter{equation}{6}
-\setcounter{enumi}{2}
+\setcounter{page}{18}
+\setcounter{equation}{14}
+\setcounter{enumi}{0}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}
 \setcounter{enumiv}{0}
@@ -27,12 +46,12 @@
 \setcounter{mpfootnote}{0}
 \setcounter{part}{0}
 \setcounter{section}{4}
-\setcounter{subsection}{4}
-\setcounter{subsubsection}{0}
+\setcounter{subsection}{5}
+\setcounter{subsubsection}{2}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{0}
-\setcounter{table}{0}
+\setcounter{figure}{1}
+\setcounter{table}{2}
 \setcounter{chapter}{1}
 \setcounter{@inst}{1}
 \setcounter{@auth}{1}
@@ -54,4 +73,6 @@
 \setcounter{remark}{0}
 \setcounter{parentequation}{0}
 \setcounter{NAT@ctr}{0}
+\setcounter{lstnumber}{1}
+\setcounter{lstlisting}{0}
 }

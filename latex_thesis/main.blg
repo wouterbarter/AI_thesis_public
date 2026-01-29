@@ -18,8 +18,10 @@ A level-1 auxiliary file: sections/conclusion.aux
 Reallocating 'name_of_file' (item size: 1) to 9 items.
 The style file: abbrvnat.bst
 Reallocating 'name_of_file' (item size: 1) to 11 items.
-Reallocating 'name_of_file' (item size: 1) to 30 items.
-A level-1 auxiliary file: appendices/A_extra_graphs.aux
+Reallocating 'name_of_file' (item size: 1) to 25 items.
+A level-1 auxiliary file: appendices/A_prompts.aux
+Reallocating 'name_of_file' (item size: 1) to 29 items.
+A level-1 auxiliary file: appendices/B_sample_data.aux
 Database file #1: references.bib
 Warning--empty year in bang_transforming_2025
 Warning--empty year in gu_survey_2025
@@ -28,54 +30,56 @@ Warning--empty year in li_fine-grained_2026
 Warning--empty year in li_fine-grained_2026
 Warning--empty year in li_using_2022
 Warning--empty year in li_using_2022
+Warning--empty year in lin_validity-guided_2025
 Warning--empty year in liu_g-eval_2023
 Warning--empty journal in messick_validity_1994
 Warning--empty year in messick_validity_1994
 Warning--empty year in messick_validity_1994
+Warning--empty year in shi_judging_2025
 Warning--empty journal in spearman1961general
 Warning--empty journal in gemma_2025
 Warning--empty journal in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
-You've used 13 entries,
+You've used 18 entries,
             2773 wiz_defined-function locations,
-            685 strings with 8122 characters,
-and the built_in function-call counts, 7111 in all, are:
-= -- 591
-> -- 562
-< -- 9
-+ -- 191
-- -- 177
-* -- 615
-:= -- 1119
-add.period$ -- 50
-call.type$ -- 13
-change.case$ -- 98
-chr.to.int$ -- 12
-cite$ -- 42
-duplicate$ -- 268
-empty$ -- 467
-format.name$ -- 196
-if$ -- 1446
+            718 strings with 9342 characters,
+and the built_in function-call counts, 9657 in all, are:
+= -- 801
+> -- 750
+< -- 13
++ -- 256
+- -- 237
+* -- 822
+:= -- 1516
+add.period$ -- 66
+call.type$ -- 18
+change.case$ -- 132
+chr.to.int$ -- 17
+cite$ -- 54
+duplicate$ -- 370
+empty$ -- 656
+format.name$ -- 261
+if$ -- 1972
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 9
-newline$ -- 84
-num.names$ -- 52
-pop$ -- 234
+missing$ -- 12
+newline$ -- 110
+num.names$ -- 72
+pop$ -- 316
 preamble$ -- 1
-purify$ -- 85
+purify$ -- 114
 quote$ -- 0
-skip$ -- 232
+skip$ -- 319
 stack$ -- 0
-substring$ -- 132
-swap$ -- 33
-text.length$ -- 2
+substring$ -- 191
+swap$ -- 46
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 143
-warning$ -- 16
-while$ -- 49
+type$ -- 198
+warning$ -- 18
+while$ -- 70
 width$ -- 0
-write$ -- 180
-(There were 16 warnings)
+write$ -- 243
+(There were 18 warnings)

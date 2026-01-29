@@ -1,0 +1,80 @@
+\section{Sample data}\label{app:sample_data}
+
+\subsection{FeedbackQA examples}
+
+\subsubsection*{Example F01} 
+
+\begin{description}
+    \item[Question:] Is it still possible to access medical appointments and medications through my doctor?
+    \item[Answer:] You can access bulk-billed appointments with your doctor, nurse or mental health professional via phone or videoconference. If you would like to arrange a telehealth appointment, contact your doctor. Accessing medicines while staying at home. Your doctor may be able to arrange to have your prescriptions sent to your pharmacy directly so you
+can stay at home. For more information on whether you can access this service please call your pharmacy and speak to them about the best way to arrange this.
+    \item[Rating 1:] 4
+    \item[Feedback 1:] Gives information on how patients can access appointments with their doctors during the pandemic.
+    \item[Rating 2:] 3
+    \item[Feedback 2:] This answer relates to accessing medical appointments and medications, but does not give much information.
+\end{description}
+
+% \textit{Question:} Is it still possible to access medical appointments and medications through my doctor \\
+% \textit{Answer:} You can access bulk-billed appointments with your doctor, nurse or mental health professional via phone or videoconference. If you would like to arrange a telehealth appointment, contact your doctor. Accessing medicines while staying at home. Your doctor may be able to arrange to have your prescriptions sent to your pharmacy directly so you
+% can stay at home. For more information on whether you can access this service please call your pharmacy and speak to them about the best way to arrange this. \\
+% \textit{Rating 1:} 4 \\
+% \textit{Feedback 1:} Gives information on how patients can access appointments with their doctors during the pandemic. \\
+% \textit{Rating 2:} 3 \\
+% \textit{Feedback 2:} This answer relates to accessing medical appointments and medications, but does not give much information. \\
+
+
+\begin{table}[h]
+\centering
+\caption{Sampled FeedbackQA items (IDs and labels), and Qwen scores for Relevance, Completeness, Directness, and Holistic criteria}
+\label{tab:feedbackqa_samples}
+\begin{tabularx}{\textwidth}{@{}l l r r r r r@{}}
+\toprule
+ID & Human label 1 & Human label 2 & Rel. & Comp. & Dir. & Holistic \\
+\midrule
+F01 & 4 & 3 & 4 & 3 & 3 & 4 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+\subsection{Barter Deals examples}
+
+
+\subsubsection*{Example B01}
+\begin{description}
+  \item[Deal text:] We’d love a video capturing the experience of visiting our store in the heart of Amsterdam—from the vibe of the city and the walk over, to exploring the shop itself. While you’re there, pick your favorite bag from the collection and make it part of the story!
+
+Keep it authentic, stylish, and feel free to show the charm of the surroundings too!
+  \item[Applications after 7 days:] 39
+  \item[Product category:] Activities
+\end{description}
+
+
+\subsubsection*{Example B02}
+\begin{description}
+  \item[Deal text:] Choose 2 coffees and pastries you like:)
+  \item[Applications after 7 days:] 6
+  \item[Product category:] Food
+\end{description}
+
+
+
+% \begin{table}[t]
+% \centering
+% \caption{Sampled Barter deals with category, KPI, and LLM indicators.}
+% \label{tab:barter_samples}
+% \begin{tabularx}{\textwidth}{@{}l l r r r r@{}}
+% \toprule
+% ID & Category & Apps (7d) & Pers. & Clar. & CTA \\
+% \midrule
+% B01 & Travel & 0 & 2.1 & 3.4 & 2.7 \\
+% B02 & Beauty & 37 & 3.6 & 3.2 & 3.8 \\
+% \bottomrule
+% \end{tabularx}
+% \end{table}
+
+% \paragraph{B02}
+% \begin{lstlisting}[basicstyle=\ttfamily\small, breaklines=true]
+% Marketing copy:
+% ...
+% \end{lstlisting}

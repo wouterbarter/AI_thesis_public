@@ -1,4 +1,4 @@
-\begin{thebibliography}{13}
+\begin{thebibliography}{18}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -45,6 +45,14 @@ Z.~Li, P.~Sharma, X.~H. Lu, J.~C.~K. Cheung, and S.~Reddy.
 \newblock \doi{10.18653/v1/2022.findings-acl.75}.
 \newblock URL \url{http://arxiv.org/abs/2204.03025}.
 
+\bibitem[Lin()]{lin_validity-guided_2025}
+Z.~Lin.
+\newblock A validity-guided workflow for robust large language model research
+  in psychology.
+\newblock URL \url{http://arxiv.org/abs/2507.04491}.
+\newblock Read\_Status: In Progress Read\_Status\_Date:
+  2025-10-14T14:31:31.251Z.
+
 \bibitem[Liu et~al.()Liu, Iter, Xu, Wang, Xu, and Zhu]{liu_g-eval_2023}
 Y.~Liu, D.~Iter, Y.~Xu, S.~Wang, R.~Xu, and C.~Zhu.
 \newblock G-eval: {NLG} evaluation using {GPT}-4 with better human alignment.
@@ -69,6 +77,18 @@ S.~Messick.
   https://onlinelibrary.wiley.com/doi/pdf/10.1002/j.2333-8504.1994.tb01618.x
   Read\_Status: New Read\_Status\_Date: 2025-10-14T12:42:52.831Z.
 
+\bibitem[Messick(1989)]{messick1989meaning}
+S.~Messick.
+\newblock Meaning and values in test validation: The science and ethics of
+  assessment.
+\newblock \emph{Educational researcher}, 18\penalty0 (2):\penalty0 5--11, 1989.
+
+\bibitem[Shi et~al.()Shi, Ma, Liang, Diao, Ma, and Vosoughi]{shi_judging_2025}
+L.~Shi, C.~Ma, W.~Liang, X.~Diao, W.~Ma, and S.~Vosoughi.
+\newblock Judging the judges: A systematic study of position bias in
+  {LLM}-as-a-judge.
+\newblock URL \url{http://arxiv.org/abs/2406.07791}.
+
 \bibitem[Spearman(1961)]{spearman1961general}
 C.~Spearman.
 \newblock " general intelligence" objectively determined and measured.
@@ -92,6 +112,19 @@ Y.~Wang, J.~Huang, L.~Du, Y.~Guo, Y.~Liu, and R.~Wang.
   assessments: A psychometric framework for reliability and validity.
 \newblock \emph{Computers and Education: Artificial Intelligence}, page 100481,
   2025.
+
+\bibitem[Whitely(1983)]{whitely1983construct}
+S.~E. Whitely.
+\newblock Construct validity: Construct representation versus nomothetic span.
+\newblock \emph{Psychological bulletin}, 93\penalty0 (1):\penalty0 179, 1983.
+
+\bibitem[Wolf et~al.(2020)Wolf, Debut, Sanh, Chaumond, Delangue, Moi, Cistac,
+  Rault, Louf, Funtowicz, et~al.]{wolf2020transformers}
+T.~Wolf, L.~Debut, V.~Sanh, J.~Chaumond, C.~Delangue, A.~Moi, P.~Cistac,
+  T.~Rault, R.~Louf, M.~Funtowicz, et~al.
+\newblock Transformers: State-of-the-art natural language processing.
+\newblock In \emph{Proceedings of the 2020 conference on empirical methods in
+  natural language processing: system demonstrations}, pages 38--45, 2020.
 
 \bibitem[Zheng et~al.()Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li, Li,
   Xing, Zhang, Gonzalez, and Stoica]{zheng_judging_2023}

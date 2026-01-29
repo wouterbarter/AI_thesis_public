@@ -190,6 +190,21 @@ INPUT C:\Program Files\MiKTeX\tex\generic\pgf\libraries\shapes\pgflibraryshapes.
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\libraries\pgflibraryarrows.meta.code.tex
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\libraries\pgflibraryarrows.meta.code.tex
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\libraries\pgflibraryarrows.meta.code.tex
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\booktabs\booktabs.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\booktabs\booktabs.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\tools\tabularx.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\tools\tabularx.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\listings.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\listings.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstpatch.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstpatch.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstpatch.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\listings.cfg
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\listings.cfg
+INPUT C:\Program Files\MiKTeX\tex\latex\listings\listings.cfg
 INPUT .\preamble\commands.tex
 INPUT .\preamble\commands.tex
 INPUT .\preamble\commands.tex
@@ -221,9 +236,12 @@ INPUT sections\discussion.aux
 INPUT .\sections\conclusion.aux
 INPUT .\sections\conclusion.aux
 INPUT sections\conclusion.aux
-INPUT .\appendices\A_extra_graphs.aux
-INPUT .\appendices\A_extra_graphs.aux
-INPUT appendices\A_extra_graphs.aux
+INPUT .\appendices\A_prompts.aux
+INPUT .\appendices\A_prompts.aux
+INPUT appendices\A_prompts.aux
+INPUT .\appendices\B_sample_data.aux
+INPUT .\appendices\B_sample_data.aux
+INPUT appendices\B_sample_data.aux
 OUTPUT main.aux
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -310,12 +328,31 @@ INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecti1000.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx7.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx5.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecrm0700.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecrm0500.tfm
 INPUT .\sections\methodology.tex
 INPUT .\sections\methodology.tex
 OUTPUT sections\methodology.aux
 INPUT .\sections\methodology.tex
 INPUT .\sections\methodology.tex
 INPUT sections\methodology.tex
+INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecti0900.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmr9.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmmi9.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmsy9.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex9.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx9.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx6.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msam10.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ectt1000.tfm
+INPUT .\figures\evaluator_diagram.png
+INPUT .\figures\evaluator_diagram.png
+INPUT .\figures\evaluator_diagram.png
+INPUT .\figures\evaluator_diagram.png
+INPUT .\figures\evaluator_diagram.png
+INPUT .\figures\evaluator_diagram.png
+INPUT .\figures\evaluator_diagram.png
 INPUT .\sections\results.tex
 INPUT .\sections\results.tex
 OUTPUT sections\results.aux
@@ -332,7 +369,19 @@ OUTPUT sections\conclusion.aux
 INPUT .\main.bbl
 INPUT .\main.bbl
 INPUT main.bbl
-OUTPUT appendices\A_extra_graphs.aux
+INPUT .\appendices\A_prompts.tex
+INPUT .\appendices\A_prompts.tex
+OUTPUT appendices\A_prompts.aux
+INPUT .\appendices\A_prompts.tex
+INPUT .\appendices\A_prompts.tex
+INPUT appendices\A_prompts.tex
+INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ectt1200.tfm
+INPUT .\appendices\B_sample_data.tex
+INPUT .\appendices\B_sample_data.tex
+OUTPUT appendices\B_sample_data.aux
+INPUT .\appendices\B_sample_data.tex
+INPUT .\appendices\B_sample_data.tex
+INPUT appendices\B_sample_data.tex
 INPUT main.aux
 INPUT .\sections\introduction.aux
 INPUT .\sections\introduction.aux
@@ -355,9 +404,20 @@ INPUT sections\discussion.aux
 INPUT .\sections\conclusion.aux
 INPUT .\sections\conclusion.aux
 INPUT sections\conclusion.aux
-INPUT .\appendices\A_extra_graphs.aux
-INPUT .\appendices\A_extra_graphs.aux
-INPUT appendices\A_extra_graphs.aux
+INPUT .\appendices\A_prompts.aux
+INPUT .\appendices\A_prompts.aux
+INPUT appendices\A_prompts.aux
+INPUT .\appendices\B_sample_data.aux
+INPUT .\appendices\B_sample_data.aux
+INPUT appendices\B_sample_data.aux
+INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
+INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
+INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1000.pk
+INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1000.pk
+INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti0900.pk
+INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti0900.pk
+INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0700.pk
+INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0700.pk
 INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1000.pk
 INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1000.pk
 INPUT C:\Users\Wouter Barter\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk
@@ -386,10 +446,16 @@ INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmex10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmex10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi10.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi6.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi6.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi7.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi7.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi9.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi9.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr10.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr6.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr6.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr7.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr7.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb

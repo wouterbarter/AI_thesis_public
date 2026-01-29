@@ -7,11 +7,16 @@ from src import paths
 from pandas.util import hash_pandas_object
 import os
 from pathlib import Path
+from src.analysis.metrics import compute_entropy, calculate_reliability_gap, compute_validity_mass
+import numpy as np
 
-#TODO: I use hashing to generate input_id, but that might lead to duplicate hashes in downstream processing which could be removed in processing
+
+# TODO: I use hashing to generate input_id, but that might lead to duplicate hashes in downstream processing which could be removed in processing
+
 
 def load_input_data(path_to_parquet: str | Path):
     return pd.read_parquet(path_to_parquet)
+
 
 def load_llm_results_data(path_to_llm_results: Path) -> pd.DataFrame:
     dm = DataManager(path_to_llm_results)
@@ -20,20 +25,18 @@ def load_llm_results_data(path_to_llm_results: Path) -> pd.DataFrame:
     return analysis_df
 
 
-
-
 def create_sorted_logits(
-    df: pd.DataFrame, 
+    df: pd.DataFrame,
     label_order: Optional[List[str]] = None
 ) -> pd.DataFrame:
     """
     Sorts 'constrained_tokens' and 'constrained_logits' columns while maintaining pairing.
-    
+
     Args:
         df: DataFrame with 'constrained_tokens' (flat list) and 
             'constrained_logits' (list of lists) columns
         label_order: Optional list defining desired sort order (e.g., ['1', '2', '3', '4'])
-    
+
     Returns:
         DataFrame with added 'sorted_tokens' and 'sorted_logits' columns
     """
@@ -44,8 +47,9 @@ def create_sorted_logits(
     )
     return sorted_df
 
+
 def _reorder_logits_row(
-    row: pd.Series, 
+    row: pd.Series,
     label_order: Optional[List[str]] = None
 ) -> pd.Series:
     """
@@ -53,13 +57,13 @@ def _reorder_logits_row(
     """
     tokens = row['constrained_tokens']
     logits = row['constrained_logits']
-    
+
     if hasattr(logits, 'tolist'):
         logits = logits.tolist()
-    
+
     if not tokens or not logits:
         return pd.Series([[], []], index=['sorted_tokens', 'sorted_logits'])
-    
+
     if label_order:
         # Custom order: need index-based approach
         order_map = {token: i for i, token in enumerate(label_order)}
@@ -68,13 +72,15 @@ def _reorder_logits_row(
             key=lambda i: order_map.get(tokens[i], float('inf'))
         )
         sorted_tokens = [tokens[i] for i in sort_indices]
-        sorted_logits = [[logit_list[i] for i in sort_indices] for logit_list in logits]
+        sorted_logits = [[logit_list[i] for i in sort_indices]
+                         for logit_list in logits]
     else:
         # Natural sort: optimize with direct sorting
         sort_indices = sorted(range(len(tokens)), key=lambda i: tokens[i])
         sorted_tokens = sorted(tokens)  # Faster than list comprehension
-        sorted_logits = [[logit_list[i] for i in sort_indices] for logit_list in logits]
-    
+        sorted_logits = [[logit_list[i] for i in sort_indices]
+                         for logit_list in logits]
+
     return pd.Series(
         [sorted_tokens, sorted_logits],
         index=['sorted_tokens', 'sorted_logits']
@@ -84,20 +90,20 @@ def _reorder_logits_row(
 # def create_sorted_logits(df: pd.DataFrame, label_order: Optional[list] = None) -> pd.DataFrame:
 #     """
 #     Applies logic to sort the 'constrained_tokens' and 'constrained_logits' columns.
-    
-#     label_order: An optional list defining the desired sort order 
+
+#     label_order: An optional list defining the desired sort order
 #                  (e.g., ['1', '2', '3', '4', '5']).
 #     """
 #     print("Reordering logits...")
-    
+
 #     # The .apply() call *already* returns the new DataFrame
 #     # with 'sorted_tokens' and 'sorted_logits'
 #     sorted_df = df.apply(
 #         _reorder_logits_row,  # (Your helper function)
-#         axis=1, 
+#         axis=1,
 #         label_order=label_order
 #     )
-    
+
 #     return sorted_df
 
 # # --- Private Helper Function ---
@@ -121,21 +127,20 @@ def _reorder_logits_row(
 #         # Create a lookup map for the desired order
 #         # e.g., {'1': 0, '2': 1, '3': 2, ...}
 #         order_map = {token: i for i, token in enumerate(label_order)}
-        
+
 #         # Sort using the map. Use .get() for safety.
 #         # Push any unknown tokens to the end.
 #         sorted_pairs = sorted(
-#             zipped_pairs, 
+#             zipped_pairs,
 #             key=lambda pair: order_map.get(pair[0], float('inf'))
 #         )
 #     else:
-#         # Default to alphabetical/numeric sort if no order is given 
+#         # Default to alphabetical/numeric sort if no order is given
 #         sorted_pairs = sorted(zipped_pairs)
 
 #     sorted_tokens, sorted_logits = zip(*sorted_pairs)
 #     return pd.Series([list(sorted_tokens), list(sorted_logits)],
 #                      index=['sorted_tokens', 'sorted_logits'])
-
 
 
 # Data cleaning
@@ -163,22 +168,25 @@ def remove_garbage_rows(df: pd.DataFrame, input_vars: list[str], data_col: str =
     helper['text_hash'] = hash_pandas_object(df[input_vars], index=False)
     # helper['text_hash'] = df['deal_text'].apply(hash)
     # helper['hashable_tokens'] = df[data_col].apply(tuple)
-    helper['hashable_tokens'] = df[data_col].apply(lambda x: tuple(x[0])) # Only apply to first element of list, which is sufficient to detect output that projects Priors
+    # Only apply to first element of list, which is sufficient to detect output that projects Priors
+    helper['hashable_tokens'] = df[data_col].apply(lambda x: tuple(x[0]))
 
     helper['model_name'] = df['model_name']
 
-    unique_texts_per_output = helper.groupby(['model_name', 'hashable_tokens'])['text_hash'].transform('nunique')
+    unique_texts_per_output = helper.groupby(['model_name', 'hashable_tokens'])[
+        'text_hash'].transform('nunique')
     is_garbage_mask = unique_texts_per_output > 1
 
     # --- Step 2: Create the "blocklist" of problematic experimental keys ---
     #
     # Define the columns that uniquely identify an experimental trial
     trial_cols = ['input_id', 'prompt_id', 'assistant_prefix']
-    
+
     # Get the keys of trials that failed at least once
     tainted_trials = df.loc[is_garbage_mask, trial_cols].drop_duplicates()
-    
-    print(f"Found {len(tainted_trials)} experimental trials contaminated by garbage output.")
+
+    print(
+        f"Found {len(tainted_trials)} experimental trials contaminated by garbage output.")
     # --- Step 3: Perform the "Anti-Merge" to filter the main DataFrame ---
     #
     # We use pd.merge with how='left' and indicator=True.
@@ -187,10 +195,10 @@ def remove_garbage_rows(df: pd.DataFrame, input_vars: list[str], data_col: str =
     # - If a row is clean, it gets marked as 'left_only'.
     #
     merged = df.merge(
-        tainted_trials, 
-        on=trial_cols, 
-        how='left', 
-        indicator=True # This creates the '_merge' column
+        tainted_trials,
+        on=trial_cols,
+        how='left',
+        indicator=True  # This creates the '_merge' column
     )
 
     # --- Step 4: Create the final, clean DataFrame ---
@@ -201,8 +209,9 @@ def remove_garbage_rows(df: pd.DataFrame, input_vars: list[str], data_col: str =
 
     return clean_df, dirty_df
 
-def get_balanced_intersection(df: pd.DataFrame, 
-                              input_id_col: str, 
+
+def get_balanced_intersection(df: pd.DataFrame,
+                              input_id_col: str,
                               experimental_groups: list[str],
                               model_col: str = 'model_name') -> pd.DataFrame:
     """
@@ -210,47 +219,42 @@ def get_balanced_intersection(df: pd.DataFrame,
     is present for ALL models found in the dataset.
     """
 
-    key_cols = [input_id_col] + [col for col in experimental_groups if col != model_col]
+    key_cols = [input_id_col] + \
+        [col for col in experimental_groups if col != model_col]
 
     # 1. Identify all unique models in the current clean data
     required_models = df['model_name'].unique()
     n_models = len(required_models)
-    
+
     print(f"Balancing data across {n_models} models: {required_models}")
 
     # 2. Count how many models successfully completed each trial
     # We group by the trial keys (input_id, prompt_id, etc) and count unique models
     trial_counts = df.groupby(key_cols)['model_name'].nunique()
-    
+
     # 3. Identify trials that have a count equal to the total number of models
     # These are the "Complete" trials
     valid_trials = trial_counts[trial_counts == n_models].index
-    
+
     # 4. Filter the original dataframe to keep only these complete trials
-    # We use .isin() on the index if it's a single level, but for multi-col keys 
+    # We use .isin() on the index if it's a single level, but for multi-col keys
     # it's often cleaner to merge or join.
-    
+
     # Let's make the keys a proper index on the main df for fast joining
     df_indexed = df.set_index(key_cols)
-    
+
     # Intersection
     balanced_df = df_indexed.loc[valid_trials].reset_index()
-    
+
     print(f"Original rows: {len(df)} -> Balanced rows: {len(balanced_df)}")
-    
+
     return balanced_df
-
-
-
-from typing import List, Optional
-import torch
-import pandas as pd
 
 
 def compute_ratings_from_logits(
     df: pd.DataFrame,
-    weights: Optional[List[float]]| torch.Tensor = None
-    ) -> pd.DataFrame:
+    weights: Optional[List[float]] | torch.Tensor = None
+) -> pd.DataFrame:
     """
     Calculates mean and mode ratings from a DataFrame column of logits.
 
@@ -270,11 +274,12 @@ def compute_ratings_from_logits(
     # --- 1. Handle Defaults and Data Prep ---
     if weights is None:
         weights = [1.0, 2.0, 3.0, 4.0]
-    
+
     weights_tensor = torch.tensor(weights, dtype=torch.float32)
-    
+
     # Extract data from pandas
-    logits_tensor = torch.tensor(df['sorted_logits'].tolist(), dtype=torch.float32)
+    logits_tensor = torch.tensor(
+        df['sorted_logits'].tolist(), dtype=torch.float32)
 
     # --- 2. Call the Core Logic Function ---
     mean_rating_tensor, mode_rating_tensor = _compute_ratings_from_tensors(
@@ -283,8 +288,8 @@ def compute_ratings_from_logits(
 
     # --- SAFETY CHECK: Ensure 1-to-1 mapping ---
     batch_size = len(df)
-    
-    # If the tensor is [Batch, 1], this check passes. 
+
+    # If the tensor is [Batch, 1], this check passes.
     # If it is [Batch, N], this fails before you hit the confusing Pandas error.
     if mean_rating_tensor.numel() != batch_size:
         raise ValueError(
@@ -301,32 +306,29 @@ def compute_ratings_from_logits(
     }, index=df.index)
 
 
-
 def _compute_ratings_from_tensors(
     logits_tensor: torch.Tensor,
     weights_tensor: torch.Tensor
-    ) -> tuple[torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor]:
     """
     Core logic: Calculates mean and mode ratings from tensors.
-    
+
     Returns:
         A tuple of (mean_rating_tensor, mode_rating_tensor)
     """
     softmax_logits = torch.softmax(logits_tensor, dim=-1)
-    
+
     # Calculate mean rating (weighted average)
     # print(softmax_logits.shape)
     # print(weights_tensor.shape)
 
     mean_rating = softmax_logits @ weights_tensor
 
-
     # Calculate mode rating
     mode_rating_index = softmax_logits.argmax(dim=-1)
     mode_rating_label = weights_tensor[mode_rating_index]
-    
-    return mean_rating, mode_rating_label
 
+    return mean_rating, mode_rating_label
 
 
 # def _compute_ratings_from_tensors(
@@ -335,19 +337,19 @@ def _compute_ratings_from_tensors(
 #     ) -> tuple[torch.Tensor, torch.Tensor]:
 #     """
 #     Core logic: Calculates mean and mode ratings from tensors.
-    
+
 #     Returns:
 #         A tuple of (mean_rating_tensor, mode_rating_tensor)
 #     """
 #     softmax_logits = torch.softmax(logits_tensor, dim=1)
-    
+
 #     # Calculate mean rating (weighted average)
 #     mean_rating = torch.matmul(softmax_logits, weights_tensor)
 
 #     # Calculate mode rating
 #     mode_rating_index = softmax_logits.argmax(dim=1)
 #     mode_rating_label = weights_tensor[mode_rating_index]
-    
+
 #     return mean_rating, mode_rating_label
 
 # def compute_ratings_from_logits(
@@ -373,9 +375,9 @@ def _compute_ratings_from_tensors(
 #     # --- 1. Handle Defaults and Data Prep ---
 #     if weights is None:
 #         weights = [1.0, 2.0, 3.0, 4.0, 5.0]
-    
+
 #     weights_tensor = torch.tensor(weights, dtype=torch.float32)
-    
+
 #     # Extract data from pandas
 #     logits_tensor = torch.tensor(df['sorted_logits'].tolist(), dtype=torch.float32)
 
@@ -392,14 +394,14 @@ def _compute_ratings_from_tensors(
 #     }, index=df.index)
 
 
-
-def get_analysis_ready_df(full_config: dict, 
-                          active_analysis: Optional[str] = None, 
-                          use_cache: bool = False, 
+def get_analysis_ready_df(full_config: dict,
+                          active_analysis: Optional[str] = None,
+                          use_cache: bool = False,
                           force_refresh: bool = False,
                           return_dirty_df: bool = False) -> pd.DataFrame:
 
-    active_analysis_name = active_analysis if active_analysis is not None else full_config['active_analysis']
+    active_analysis_name = active_analysis if active_analysis is not None else full_config[
+        'active_analysis']
     print(f"Loading files for analysis {active_analysis_name}")
     # active_analysis_name = full_config['active_analysis']
     analysis_name = active_analysis_name.upper()
@@ -416,7 +418,8 @@ def get_analysis_ready_df(full_config: dict,
         try:
             return pd.read_pickle(cache_path)
         except Exception as e:
-            print(f"⚠️ Cache file corrupted or incompatible. Re-running pipeline. Error: {e}")
+            print(
+                f"⚠️ Cache file corrupted or incompatible. Re-running pipeline. Error: {e}")
 
     print("🐢 Running full processing pipeline...")
 
@@ -426,73 +429,75 @@ def get_analysis_ready_df(full_config: dict,
     evaluations_id_col = analysis_config['keys']['evaluations_id_col']
     input_variable_names = analysis_config['variable_names']
 
-
-
-    # ---- Specific config vars 
-    ## Currently, metadata_df does not contain the top_k variable, but new datasets will have it #TODO implement, top_k from config
+    # ---- Specific config vars
+    # Currently, metadata_df does not contain the top_k variable, but new datasets will have it #TODO implement, top_k from config
     data_col = 'top_k_tokens'
     # data_col = f'top_{top_k}_tokens'
-    ## TODO: Just sorts when label_order=None, but I will need to customize to test for positional bias
-    ### I will need to extract it from the prompt template if I want to implement this
-    label_order = analysis_config['model_vars'].get('label_order', None) 
+    # TODO: Just sorts when label_order=None, but I will need to customize to test for positional bias
+    # I will need to extract it from the prompt template if I want to implement this
+    label_order = analysis_config['model_vars'].get('label_order', None)
 
     input_df = load_input_data(raw_data_path)
-    evaluations_df = load_llm_results_data(results_dir) 
-
+    evaluations_df = load_llm_results_data(results_dir)
 
     print("Finished loading experiment data")
 
     # ---- Variable dependent vars
-    ## TODO: Now only works when entire dataset is constrained to 5 tokens, not for varying token constraints.
+    # TODO: Now only works when entire dataset is constrained to 5 tokens, not for varying token constraints.
     n_labels = len(evaluations_df['constrained_tokens'].iloc[0])
     label_weights = torch.arange(1, n_labels + 1, dtype=torch.float32)
 
     # ----- Processing
     # Combine
-    merged_df = pd.merge(input_df, evaluations_df, 
-                         left_on = id_col, right_on = evaluations_id_col) 
-    
-
+    merged_df = pd.merge(input_df, evaluations_df,
+                         left_on=id_col, right_on=evaluations_id_col)
 
     # Clean
-    ## Clean first since it relies on the entire dataset to detect the garbage rows
-    ## TODO: check todos in function def
-    clean_df,dirty_df = remove_garbage_rows(merged_df,
-                                   input_variable_names,
-                                   data_col)
-    
-    BALANCE = False #TODO warning hardcoded
+    # Clean first since it relies on the entire dataset to detect the garbage rows
+    # TODO: check todos in function def
+    clean_df, dirty_df = remove_garbage_rows(merged_df,
+                                             input_variable_names,
+                                             data_col)
+
+    BALANCE = False  # TODO warning hardcoded
     if BALANCE:
-        balanced_df = get_balanced_intersection(clean_df, id_col, experimental_groups, model_col = 'model_name')
+        balanced_df = get_balanced_intersection(
+            clean_df, id_col, experimental_groups, model_col='model_name')
     else:
         balanced_df = clean_df
-
-    
-
 
     # Feature engineering
     sorted_logits_df = create_sorted_logits(balanced_df, label_order)
     # return sorted_logits_df
     ratings_df = compute_ratings_from_logits(sorted_logits_df, label_weights)
-    
+
     # Assemble
     final_df = pd.concat([balanced_df, sorted_logits_df, ratings_df], axis=1)
 
-    if use_cache:
-            # Ensure directory exists
-            os.makedirs(cache_path.parent, exist_ok=True)
-            print(f"💾 Saving result to {cache_path}...")
-            final_df.to_pickle(cache_path, protocol=5)
+    # Features
+    # Probabilities
+    softmax_logits = torch.softmax(torch.tensor(
+        final_df['sorted_logits'].tolist()), dim=-1)
 
-    if return_dirty_df: 
+    final_df['entropy'] = compute_entropy(softmax_logits)
+    # TODO make n=4 dependent on len of constrained tokens
+    final_df['normalized_entropy'] = final_df['entropy'] / np.log(4)
+
+    # Mean score
+    final_df['mean_human_rating'] = (
+        final_df['score_1'] + final_df['score_2']) / 2
+
+    # Disagreement
+    final_df['human_disagreement'] = abs(
+        final_df['score_1'] - final_df['score_2'])
+
+    if use_cache:
+        # Ensure directory exists
+        os.makedirs(cache_path.parent, exist_ok=True)
+        print(f"💾 Saving result to {cache_path}...")
+        final_df.to_pickle(cache_path, protocol=5)
+
+    if return_dirty_df:
         return final_df, dirty_df
 
     return final_df
-
-
-
-    
-
-
-
-
