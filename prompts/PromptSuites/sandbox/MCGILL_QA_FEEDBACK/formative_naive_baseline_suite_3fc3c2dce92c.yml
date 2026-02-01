@@ -1,0 +1,57 @@
+id: 3fc3c2dce92c
+dimensions:
+  Relevance:
+    name: naive_Relevance
+    description: Naive prompt that measures the Relevance dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - naive
+    - Relevance
+    - baseline
+    - scale_4
+    template_chat:
+      system: You are an expert evaluator. Your task is to rate the overall Relevance
+        of the Answer provided for the Question on a scale of 1 to 4, where 1 is the
+        lowest Relevance and 4 is the highest Relevance.
+      user: "Question:\n    {question}\n\n    Answer: \n    {answer}"
+  Completeness:
+    name: naive_Completeness
+    description: Naive prompt that measures the Completeness dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - naive
+    - Completeness
+    - baseline
+    - scale_4
+    template_chat:
+      system: You are an expert evaluator. Your task is to rate the overall Completeness
+        of the Answer provided for the Question on a scale of 1 to 4, where 1 is the
+        lowest Completeness and 4 is the highest Completeness.
+      user: "Question:\n    {question}\n\n    Answer: \n    {answer}"
+  Directness:
+    name: naive_Directness
+    description: Naive prompt that measures the Directness dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    tags:
+    - naive
+    - Directness
+    - baseline
+    - scale_4
+    template_chat:
+      system: You are an expert evaluator. Your task is to rate the overall Directness
+        of the Answer provided for the Question on a scale of 1 to 4, where 1 is the
+        lowest Directness and 4 is the highest Directness.
+      user: "Question:\n    {question}\n\n    Answer: \n    {answer}"
+description: naive formative

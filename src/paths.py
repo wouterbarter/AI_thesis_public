@@ -14,5 +14,3 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 RESULTS_DIR = PROJECT_ROOT / "results"
 PROMPT_TEMPLATE_DIR = PROJECT_ROOT / "prompts/PromptTemplates"
 PROMPT_SUITE_DIR = PROJECT_ROOT / "prompts/PromptSuites"
-
-

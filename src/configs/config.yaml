@@ -3,6 +3,7 @@
 # -----------------
 
 active_analysis: 'mcgill_qa_feedback'
+sandbox_mode: 'True'
 
 generation_globals:
   batch_size: 2

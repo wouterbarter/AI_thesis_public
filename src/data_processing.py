@@ -403,11 +403,13 @@ def get_analysis_ready_df(full_config: dict,
     active_analysis_name = active_analysis if active_analysis is not None else full_config[
         'active_analysis']
     print(f"Loading files for analysis {active_analysis_name}")
-    # active_analysis_name = full_config['active_analysis']
     analysis_name = active_analysis_name.upper()
     raw_data_path = paths.RAW_DATA_DIR / f'{analysis_name}.parquet'
-    results_dir = paths.RESULTS_DIR / analysis_name
-    # results_dir = Path("../results_test")
+
+    if full_config['sandbox_mode'] != 'True':
+        results_dir = paths.RESULTS_DIR / analysis_name
+    else:
+        results_dir = paths.RESULTS_DIR / 'sandbox' / analysis_name
 
     cache_filename = f"{active_analysis_name}_analysis_ready.pkl"
     cache_path = paths.RESULTS_DIR / active_analysis_name / cache_filename
@@ -443,7 +445,7 @@ def get_analysis_ready_df(full_config: dict,
     print("Finished loading experiment data")
 
     # ---- Variable dependent vars
-    # TODO: Now only works when entire dataset is constrained to 5 tokens, not for varying token constraints.
+    # TODO: Now only works when entire dataset is constrained to n tokens, not for varying token constraints.
     n_labels = len(evaluations_df['constrained_tokens'].iloc[0])
     label_weights = torch.arange(1, n_labels + 1, dtype=torch.float32)
 

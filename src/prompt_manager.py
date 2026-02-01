@@ -1,7 +1,7 @@
 import yaml
 import hashlib
 from pathlib import Path
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 import pandas as pd
 import hashlib
 import yaml
@@ -203,6 +203,7 @@ class PromptSuite:
     id: str
     # One or multiple templates belonging to one Latent Variable
     templates: Dict[str, PromptTemplate]
+    description: Optional[str]
 
     @property
     def dimensions(self) -> list[str]:
@@ -219,14 +220,14 @@ class PromptSuite:
         return set.intersection(*list_of_sets)
 
     @classmethod
-    def from_list(cls, template_list: list[PromptTemplate]):
+    def from_list(cls, template_list: list[PromptTemplate], description: str = ''):
         templates = {
             template.dimension_name: template for template in template_list}
         suite_id = cls.generate_suite_id(templates)
-        return cls(suite_id, templates)
+        return cls(suite_id, templates, description)
 
     @classmethod
-    def from_dict(cls, template_dict: Dict[str, Any]):
+    def from_dict(cls, template_dict: Dict[str, Any], description: str = ''):
         templates = {}
 
         # 1. Structural Heuristic: Does it have a 'dimensions' block?
@@ -262,7 +263,7 @@ class PromptSuite:
             raise ValueError(
                 "Dictionary matches neither Suite nor Template schema.")
 
-        return cls(suite_id, templates)
+        return cls(suite_id, templates, description)
 
     @staticmethod
     def generate_suite_id(templates: Dict[str, PromptTemplate]) -> str:
@@ -308,7 +309,8 @@ class PromptSuite:
 
         return {
             "id": self.id,
-            "dimensions": dimensions_data
+            "dimensions": dimensions_data,
+            'description': self.description
         }
 
     def render(
@@ -332,7 +334,8 @@ class PromptSuite:
                 assistant_prefix=final_prefix,  # TODO called twice from different source
                 input_id=input_id,
                 token_constraints=tmpl.token_constraints,
-                constraint_ids=tmpl._cached_constraint_ids
+                constraint_ids=tmpl._cached_constraint_ids,
+                metadata={'tags': tmpl.tags}
             )
             prepared_prompts.append(p_prompt)
 
@@ -455,7 +458,8 @@ class PromptManager:
             try:
                 with open(path, "r", encoding='utf-8') as f:
                     prompt_dict = yaml.safe_load(f)
-                ps = PromptSuite.from_dict(prompt_dict)
+                desc = prompt_dict.pop('description')
+                ps = PromptSuite.from_dict(prompt_dict, description=desc)
                 if not required_tags.issubset(ps.tags):
                     print(f"Skipping {ps.id}")
                     continue
