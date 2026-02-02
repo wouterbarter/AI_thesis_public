@@ -7,7 +7,7 @@ sandbox_mode: 'True'
 
 generation_globals:
   batch_size: 2
-  debug_row_limit: 200
+  # debug_row_limit: 200
   top_k: 1000
   models_to_run:
     - 'google/gemma-3-4b-it'
