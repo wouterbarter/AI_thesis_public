@@ -31,3 +31,19 @@ pip install -r requirements.txt
 
 # run first experiment
 python experiments/01_construct_validity/run_experiment.py
+
+
+## 🛠️ Setup & Installation
+
+Follow these steps to set up the development environment and run the notebooks.
+
+### 1. Create the Virtual Environment
+Ensure you have **Python 3.12** installed. Run the following command in the project root:
+
+```bash
+# Create a specific virtual environment for Python 3.12
+python3.12 -m venv .venv312
+
+source .venv312/bin/activate
+pip install -r requirements.txt
+pip install -e .  # Installs 'src' as an editable package

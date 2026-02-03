@@ -28,7 +28,7 @@ class BaseRegressionRunner(ABC):
             self.experimental_groups + 
             cat_predictors + 
             bin_predictors + 
-            [self.target_col, 'input_id']
+            [self.target_col, 'deal_text']
         )
         if extra_index_cols:
             index_cols.extend(extra_index_cols)

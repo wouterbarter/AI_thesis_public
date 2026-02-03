@@ -127,3 +127,4 @@ wcwidth==0.2.13
 widgetsnbextension==4.0.14
 xxhash==3.6.0
 yarl==1.22.0
+scikit-learn
