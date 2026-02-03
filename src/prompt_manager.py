@@ -470,7 +470,7 @@ class PromptManager:
 
         self.suites: Dict[str, PromptSuite] = {}
 
-    def load_all(self, tags_to_skip: set = set(), required_tags: set = set()) -> Dict[str, PromptSuite]:
+    def load_all(self, tags_to_skip: set = set(), required_tags: set = set(), ids_to_skip: set = set()) -> Dict[str, PromptSuite]:
         if not self.folder:
             print("Skipping file load: Manager is in memory-only mode.")
             return self.suites
@@ -485,6 +485,11 @@ class PromptManager:
                     prompt_dict = yaml.safe_load(f)
                 metadata = prompt_dict.pop('metadata')
                 ps = PromptSuite.from_dict(prompt_dict, metadata=metadata)
+
+                if ps.id in ids_to_skip:
+                    print(f"Skipping {ps.id}")
+                    continue
+
                 if not required_tags.issubset(ps.tags):
                     print(f"Skipping {ps.id}")
                     continue

@@ -82,10 +82,11 @@ def main(config: dict):
     required_tags = set()
     # tags_to_skip = set(['baseline']) # TODO WARNING HARDCODED,
     # required_tags = set(['holistic'])
+    ids_to_skip = set(['d6ac463714'])
 
     pm = PromptManager(folder=prompt_suites_dir)
     prompt_suites = pm.load_all(
-        tags_to_skip=tags_to_skip, required_tags=required_tags)
+        tags_to_skip=tags_to_skip, required_tags=required_tags, ids_to_skip=ids_to_skip)
 
     if len(prompt_suites) == 0:
         print('Prompt suites folder empty, quitting')
