@@ -1,4 +1,4 @@
-id: 3fc3c2dce92c
+id: f6db92fc03f8
 dimensions:
   Relevance:
     name: naive_Relevance
@@ -8,7 +8,7 @@ dimensions:
     - '2'
     - '3'
     - '4'
-    tags:
+    template_tags:
     - naive
     - Relevance
     - baseline
@@ -26,7 +26,7 @@ dimensions:
     - '2'
     - '3'
     - '4'
-    tags:
+    template_tags:
     - naive
     - Completeness
     - baseline
@@ -44,7 +44,7 @@ dimensions:
     - '2'
     - '3'
     - '4'
-    tags:
+    template_tags:
     - naive
     - Directness
     - baseline
@@ -54,4 +54,9 @@ dimensions:
         of the Answer provided for the Question on a scale of 1 to 4, where 1 is the
         lowest Directness and 4 is the highest Directness.
       user: "Question:\n    {question}\n\n    Answer: \n    {answer}"
-description: naive formative
+metadata:
+  description: naive formative
+  suite_tags:
+  - naive
+  - baseline
+  - scale_4

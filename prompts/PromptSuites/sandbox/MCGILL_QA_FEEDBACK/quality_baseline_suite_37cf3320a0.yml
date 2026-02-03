@@ -1,4 +1,4 @@
-id: 261acd58fe
+id: 37cf3320a0
 dimensions:
   quality:
     name: naive_quality
@@ -8,7 +8,7 @@ dimensions:
     - '2'
     - '3'
     - '4'
-    tags:
+    template_tags:
     - naive
     - quality
     - baseline
@@ -18,4 +18,10 @@ dimensions:
         of the Answer provided for the Question on a scale of 1 to 4, where 1 is the
         lowest Quality and 4 is the highest Quality.
       user: "Question:\n{question}\n\nAnswer: \n{answer}"
-description: naive holistic
+metadata:
+  description: naive holistic
+  suite_tags:
+  - naive
+  - scale_4
+  - baseline
+  - quality

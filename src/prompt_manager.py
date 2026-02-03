@@ -59,10 +59,10 @@ class PromptTemplate:
     description: str
     # TODO: throw error when len constrained_output does not match nr of output tokens
     token_constraints: list[str]
-    tags: list[str]
+    template_tags: list[str]
     system_message: str
     user_message_template: str
-    # assistant_prefix: str = "" #TODO: check if I need to pass this in this class, or whether PreparedPrompt is sufficient
+
 
     # Runtime cache for IDs (Not saved to YAML)
     _cached_constraint_ids: Optional[torch.Tensor] = field(
@@ -83,7 +83,7 @@ class PromptTemplate:
             dimension_name=data["dimension_name"],
             description=data["description"],
             token_constraints=data["constrained_output"],
-            tags=data["tags"],
+            template_tags=data["template_tags"],
             system_message=chat_template["system"],
             user_message_template=chat_template["user"]
         )
@@ -109,7 +109,7 @@ class PromptTemplate:
             dimension_name=temp_data["dimension_name"],
             description=temp_data["description"],
             token_constraints=temp_data["token_constraints"],
-            tags=temp_data["tags"],
+            template_tags=temp_data["template_tags"],
             system_message=chat_template["system"],
             user_message_template=chat_template["user"]
         )
@@ -151,7 +151,7 @@ class PromptTemplate:
             "dimension_name": self.dimension_name,
             "description": self.description,
             "token_constraints": self.token_constraints,
-            "tags": self.tags,
+            "template_tags": self.template_tags,
             # We structure the chat templates nested, matching your from_dict logic
             "template_chat": {
                 "system": self.system_message,
@@ -203,7 +203,7 @@ class PromptSuite:
     id: str
     # One or multiple templates belonging to one Latent Variable
     templates: Dict[str, PromptTemplate]
-    description: Optional[str]
+    metadata: dict = field(default_factory=dict)
 
     @property
     def dimensions(self) -> list[str]:
@@ -216,18 +216,32 @@ class PromptSuite:
         if not self.templates:
             return set()  # Return empty set if no templates exist to prevent crash
 
-        list_of_sets = [set(vals.tags) for vals in self.templates.values()]
+        list_of_sets = [set(t.template_tags) for t in self.templates.values()]
+
+        if not list_of_sets:
+            return set()
+
+
         return set.intersection(*list_of_sets)
 
     @classmethod
-    def from_list(cls, template_list: list[PromptTemplate], description: str = ''):
+    def from_list(cls, template_list: list[PromptTemplate], metadata: Optional[dict] = None):
+        if metadata is None:
+            metadata = {}
+
+        # Save templates to key:value -> dimname: template dict
         templates = {
             template.dimension_name: template for template in template_list}
+        # Save tags to metadata
+        metadata['suite_tags'] = cls._get_suite_tags_from_templates(templates)
+
         suite_id = cls.generate_suite_id(templates)
-        return cls(suite_id, templates, description)
+
+        return cls(suite_id, templates, metadata)
+
 
     @classmethod
-    def from_dict(cls, template_dict: Dict[str, Any], description: str = ''):
+    def from_dict(cls, template_dict: Dict[str, Any], metadata: dict = {}):
         templates = {}
 
         # 1. Structural Heuristic: Does it have a 'dimensions' block?
@@ -262,8 +276,19 @@ class PromptSuite:
         else:
             raise ValueError(
                 "Dictionary matches neither Suite nor Template schema.")
+        
+        metadata['suite_tags'] = cls._get_suite_tags_from_templates(templates)
 
-        return cls(suite_id, templates, description)
+        return cls(suite_id, templates, metadata)
+    
+    @staticmethod
+    def _get_suite_tags_from_templates(template_dict: dict[str, PromptTemplate]) -> list:
+        if not template_dict:
+            return list()
+        list_of_sets = [set(template.template_tags) for template in template_dict.values()]
+        return list(set.intersection(*list_of_sets))
+
+
 
     @staticmethod
     def generate_suite_id(templates: Dict[str, PromptTemplate]) -> str:
@@ -310,7 +335,7 @@ class PromptSuite:
         return {
             "id": self.id,
             "dimensions": dimensions_data,
-            'description': self.description
+            'metadata': self.metadata
         }
 
     def render(
@@ -335,7 +360,7 @@ class PromptSuite:
                 input_id=input_id,
                 token_constraints=tmpl.token_constraints,
                 constraint_ids=tmpl._cached_constraint_ids,
-                metadata={'tags': tmpl.tags}
+                metadata={'template_tags': tmpl.template_tags}
             )
             prepared_prompts.append(p_prompt)
 
@@ -458,8 +483,8 @@ class PromptManager:
             try:
                 with open(path, "r", encoding='utf-8') as f:
                     prompt_dict = yaml.safe_load(f)
-                desc = prompt_dict.pop('description')
-                ps = PromptSuite.from_dict(prompt_dict, description=desc)
+                metadata = prompt_dict.pop('metadata')
+                ps = PromptSuite.from_dict(prompt_dict, metadata=metadata)
                 if not required_tags.issubset(ps.tags):
                     print(f"Skipping {ps.id}")
                     continue
@@ -697,7 +722,7 @@ def create_chat_prompt_dict(
     description: str,
     template_chat: dict,
     token_constraints: list[str],
-    tags: list[str] | None = None,
+    template_tags: list[str] | None = None,
     dimension_name="holistic"
 ) -> dict:
     """
@@ -709,7 +734,7 @@ def create_chat_prompt_dict(
         "dimension_name": dimension_name,
         "description": description,
         "token_constraints": token_constraints,
-        "tags": tags or [],
+        "template_tags": template_tags or [],
         "template_chat": template_chat
     }
     return prompt_definition

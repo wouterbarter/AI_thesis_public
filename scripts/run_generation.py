@@ -53,7 +53,13 @@ def main(config: dict):
     # Load paths and params from config
     # Local vars
     analysis_name = config['active_analysis'].upper()
-    raw_data_path = paths.RAW_DATA_DIR / f'{analysis_name}.parquet'
+    if gen_globals['use_cleaned_data']:
+        print("Using cleaned data")
+        raw_data_path = paths.RAW_DATA_DIR / f'{analysis_name}_CLEAN.parquet'
+    else:
+        print("Using uncleaned data")
+        raw_data_path = paths.RAW_DATA_DIR / f'{analysis_name}.parquet'
+
     raw_id_col = analysis_config['keys']['raw_id_col']
 
     if not sandbox_mode:
@@ -62,6 +68,9 @@ def main(config: dict):
     else:
         output_dir = paths.RESULTS_DIR / 'sandbox' / analysis_name
         prompt_suites_dir = paths.PROMPT_SUITE_DIR / 'sandbox' / analysis_name
+
+    print(f"Output dir: {output_dir}")
+
 
     # Global vars
     models = gen_globals['models_to_run']
@@ -92,6 +101,8 @@ def main(config: dict):
     if limit:
         # TODO: Does not work properly when df has changed after previously generating partial results
         df = df[:limit]
+
+    print(len(df))
 
     torch.cuda.empty_cache()
 

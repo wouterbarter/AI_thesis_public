@@ -1,0 +1,36 @@
+id: d6ac463714
+dimensions:
+  quality:
+    name: BARS_quality
+    description: BARS prompt that measures the Quality dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    template_tags:
+    - naive
+    - quality
+    - baseline
+    - scale_5
+    template_chat:
+      system: "You will be given a Deal Text that describes a collaboration opportunity\
+        \ for creators or influencers.\nYour task is to provide a 'total rating' scoring\
+        \ how appealing, clear, and persuasive the Deal Text is for its intended audience.\n\
+        Give your answer as an integer on a scale of 1 to 5, where:\n    1: means\
+        \ the Deal Text is poorly written, unclear, or unappealing.\n    2: means\
+        \ the Deal Text is somewhat understandable but not persuasive or engaging.\n\
+        \    3: means the Deal Text is clear and moderately appealing.\n    4: means\
+        \ the Deal Text is strong, clear, and persuasive.\n    5: means the Deal Text\
+        \ is excellent, very clear, engaging, and convincing."
+      user: 'Deal Text:
+
+        {deal_text}'
+metadata:
+  description: BARS_holistic
+  suite_tags:
+  - scale_5
+  - naive
+  - baseline
+  - quality

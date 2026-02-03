@@ -271,3 +271,22 @@ def interactive_dataframe_selector(data_dict, description="Select option:"):
     display(dropdown)
     display(data_dict[dropdown.value])
 
+
+def interactive_regression_results_selector(data_dict, description="Select option:"):
+    # label -> value pairs; value is the tuple key
+    options = [k for k in data_dict.keys()]
+    dropdown = widgets.Dropdown(
+        options=options,
+        description=description,
+        style={'description_width': 'initial'},
+        layout=widgets.Layout(width='400px')
+    )
+
+    def update_table(change):
+        clear_output(wait=True)
+        display(dropdown)
+        display(data_dict[change.new].summary())
+
+    dropdown.observe(update_table, names='value')
+    display(dropdown)
+    display(data_dict[dropdown.value].summary())

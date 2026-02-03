@@ -19,10 +19,10 @@ class DataManager:
         self.models = set()
         self._tokenizer_cache = {}
 
-
     def _get_tokenizer(self, model_name: str):
         if model_name not in self._tokenizer_cache:
-            self._tokenizer_cache[model_name] = AutoTokenizer.from_pretrained(model_name)
+            self._tokenizer_cache[model_name] = AutoTokenizer.from_pretrained(
+                model_name)
         return self._tokenizer_cache[model_name]
 
     def load_all(self):
@@ -30,54 +30,55 @@ class DataManager:
         Loads all experiments in a folder from subfolders containing shards
         Returns: pd.DataFrame(metadata), dict(logits_tensor, sequences_tensor)
         '''
-        experiment_folders=[x for x in self.results_dir.iterdir() if x.is_dir()] 
+        experiment_folders = [
+            x for x in self.results_dir.iterdir() if x.is_dir()]
 
         metadata_list = []
-        tensor_dict = {'sequences': [], 'top_k_logits': [], 'top_k_indices': [], 'constrained_logits': []}
-        
+        tensor_dict = {'sequences': [], 'top_k_logits': [],
+                       'top_k_indices': [], 'constrained_logits': []}
+
         for folder in experiment_folders:
             try:
                 res = ResultsContainer.load_from_shards(folder)
                 n_rows = len(res.metadata)
-                if n_rows == 0: continue
-                #metadata
+                if n_rows == 0:
+                    continue
+                # metadata
                 metadata_list.append(res.metadata)
 
-                #data
+                # data
                 for key in tensor_dict:
                     # incoming_data = res.data.get(key, [None]*n_rows)
                     tensor_dict[key].extend(res.data[key])
             except KeyError as e:
-                print(f"⚠️ Contract Violation in {folder.name}: Missing key {e}")
+                print(
+                    f"⚠️ Contract Violation in {folder.name}: Missing key {e}")
             except Exception as e:
                 print(f"⚠️ Skipping {folder.name}: {e}")
-    
 
         self.metadata_df = pd.concat(metadata_list)
         self.models = set(self.metadata_df['model_name'].unique())
         self.tensor_dict = tensor_dict
 
         # return metadata_df, tensor_dict
-    
-
 
     def create_analysis_dataframe(self, tokenize=True) -> pd.DataFrame:
         """Create analysis dataframe with optional tokenization."""
         if tokenize and not self.models:
             print("Tokenize is true but no models have been added. Quitting.")
             return pd.DataFrame()
-        
+
         df = self.metadata_df.copy()
-        
+
         # Add tensor data as lists
         df['sequences'] = [t.tolist() for t in self.tensor_dict['sequences']]
-        
+
         # Add optional fields
         for field in ['top_k_logits', 'constrained_logits']:
             if self.tensor_dict[field]:
-                df[field] = [t.tolist() if t is not None else None 
-                            for t in self.tensor_dict[field]]
-        
+                df[field] = [t.tolist() if t is not None else None
+                             for t in self.tensor_dict[field]]
+
         # Tokenization using fast iterator (avoid iterrows)
         if tokenize:
 
@@ -93,13 +94,9 @@ class DataManager:
                 for m, ids in zip(df['model_name'], df['constrained_token_ids'])
             ]
 
-
-
-
-
             # top_k_tokens = []
             # constrained_tokens = []
-            
+
             # for model_name, top_k_ids, constrained_ids in zip(
             #     df['model_name'],
             #     self.tensor_dict['top_k_indices'],
@@ -108,39 +105,25 @@ class DataManager:
             #     tokenizer = self._get_tokenizer(model_name)
             #     top_k_tokens.append(self._tokenize_ids(tokenizer, top_k_ids))
             #     constrained_tokens.append(self._tokenize_ids(tokenizer, constrained_ids))
-            
+
             # df['top_k_tokens'] = top_k_tokens
             # df['constrained_tokens'] = constrained_tokens
-        
+
         return df
-    
 
-
-        
     def _tokenize_ids(self, tokenizer, ids):
         """Helper to tokenize a list or nested list of token IDs."""
         if ids is None:
             return None
-        
+
         # Convert tensor to list if needed
         ids_list = ids.tolist() if hasattr(ids, 'tolist') else ids
-        
+
         # Handle nested lists (like top_k_indices with shape [Seq, K])
         if ids_list and isinstance(ids_list[0], list):
             return [tokenizer.convert_ids_to_tokens(step) for step in ids_list]
         else:
             return tokenizer.convert_ids_to_tokens(ids_list)
-
-
-
-
-
-
-    
-
-
-        
-
 
 
 class DataManager_old:
@@ -168,7 +151,6 @@ class DataManager_old:
                 model_name)
         return self._tokenizer_cache[model_name]
 
-
     def load_all(
         self,
         results_dir: Optional[str | Path] = None,
@@ -188,15 +170,15 @@ class DataManager_old:
         result_files = list(dir_to_load.glob("*.pt"))
 
         if not result_files:
-            print(f"No .pt files found in {dir_to_load}. Initializing empty DataManager state.")
-            
+            print(
+                f"No .pt files found in {dir_to_load}. Initializing empty DataManager state.")
+
             # Initialize your class properties to a valid, empty state
             # This is the crucial part.
             self.master_df = pd.DataFrame()
             self.consolidated_tensors = {}
-            
-            return
 
+            return
 
         if prompts_to_analyze is None:
             # Infer the list of IDs from the prompts dictionary
@@ -208,12 +190,11 @@ class DataManager_old:
         raw_tensors_by_model = defaultdict(lambda: defaultdict(list))
         metadata_by_model = defaultdict(list)
 
-        #TODO make interface with ResultsManager.load_all()
-        ## Will load files from single experiment (now shards instead of single file)
-
+        # TODO make interface with ResultsManager.load_all()
+        # Will load files from single experiment (now shards instead of single file)
 
         # 1. Load and group all data by model name
-        for file_path in result_files: #TODO this will be file_stem_*
+        for file_path in result_files:  # TODO this will be file_stem_*
             data = torch.load(file_path, weights_only=False,
                               map_location='cpu')
             metadata = data['metadata']
@@ -239,8 +220,6 @@ class DataManager_old:
                 model_name, raw_tensors_by_model[model_name])
             # TODO: Fix for when constrained_tokens are of different length
         self.master_df = pd.concat(all_metadata_dfs, ignore_index=True)
-
-
 
     def _consolidate_tensors_for_model(self, model_name, tensor_groups):
         print(f"Consolidating tensors for model: {model_name}")

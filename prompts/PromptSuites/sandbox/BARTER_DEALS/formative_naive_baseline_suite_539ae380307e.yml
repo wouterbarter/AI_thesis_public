@@ -1,0 +1,62 @@
+id: 539ae380307e
+dimensions:
+  Clarity:
+    name: naive_Clarity
+    description: Naive prompt that measures the Clarity dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - naive
+    - Clarity
+    - baseline
+    - scale_4
+    template_chat:
+      system: You are an expert evaluator. Your task is to rate the overall Clarity
+        of the Marketing Copy on a scale of 1 to 4, where 1 is the lowest Clarity
+        and 4 is the highest Clarity.
+      user: "Marketing Copy:\n    {deal_text}"
+  Persuasiveness:
+    name: naive_Persuasiveness
+    description: Naive prompt that measures the Persuasiveness dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - naive
+    - Persuasiveness
+    - baseline
+    - scale_4
+    template_chat:
+      system: You are an expert evaluator. Your task is to rate the overall Persuasiveness
+        of the Marketing Copy on a scale of 1 to 4, where 1 is the lowest Persuasiveness
+        and 4 is the highest Persuasiveness.
+      user: "Marketing Copy:\n    {deal_text}"
+  Call-to-action strength:
+    name: naive_Call-to-action strength
+    description: Naive prompt that measures the Call-to-action strength dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - naive
+    - Call-to-action strength
+    - baseline
+    - scale_4
+    template_chat:
+      system: You are an expert evaluator. Your task is to rate the overall Call-to-action
+        strength of the Marketing Copy on a scale of 1 to 4, where 1 is the lowest
+        Call-to-action strength and 4 is the highest Call-to-action strength.
+      user: "Marketing Copy:\n    {deal_text}"
+metadata:
+  description: naive formative
+  suite_tags:
+  - naive
+  - baseline
+  - scale_4
