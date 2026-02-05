@@ -82,7 +82,7 @@ def main(config: dict):
     required_tags = set()
     # tags_to_skip = set(['baseline']) # TODO WARNING HARDCODED,
     # required_tags = set(['holistic'])
-    ids_to_skip = set(['d6ac463714'])
+    ids_to_skip = set(['d6ac463714', '539ae380307e', '9e5546bfa1'])
 
     pm = PromptManager(folder=prompt_suites_dir)
     prompt_suites = pm.load_all(

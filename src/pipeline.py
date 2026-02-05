@@ -69,7 +69,7 @@ def run_experiment(df: pd.DataFrame,
             rc = ResultsContainer.from_model_outputs(model_name, top_k, buffer)
             rc.save(output_path)
 
-            print(f" Saved checkpoint: {filename}") # Helpful logging
+            tqdm.write(f" Saved checkpoint: {filename}") # Helpful logging
             shard_index += 1
             buffer = [] # Clear memory immediately!
 
