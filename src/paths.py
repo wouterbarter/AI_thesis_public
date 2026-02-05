@@ -11,6 +11,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 CONFIG_PATH = PROJECT_ROOT / "src/configs/config.yaml"
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
+PROCESSED_DATA_DIR = DATA_DIR / "processed"
 RESULTS_DIR = PROJECT_ROOT / "results"
 PROMPT_TEMPLATE_DIR = PROJECT_ROOT / "prompts/PromptTemplates"
 PROMPT_SUITE_DIR = PROJECT_ROOT / "prompts/PromptSuites"
