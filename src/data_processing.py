@@ -15,8 +15,8 @@ import numpy as np
 # TODO: I use hashing to generate input_id, but that might lead to duplicate hashes in downstream processing which could be removed in processing
 
 
-def load_input_data(path_to_parquet: str | Path):
-    return pd.read_parquet(path_to_parquet)
+# def load_input_data(path_to_parquet: str | Path):
+#     return pd.read_parquet(path_to_parquet)
 
 
 def load_llm_results_data(path_to_llm_results: Path) -> pd.DataFrame:
@@ -426,13 +426,18 @@ def get_analysis_ready_df(full_config: dict,
                           active_analysis: Optional[str] = None,
                           use_cache: bool = False,
                           force_refresh: bool = False,
-                          return_dirty_df: bool = False) -> pd.DataFrame:
+                          return_dirty_df: bool = False
+                          ) -> pd.DataFrame:
 
-    active_analysis_name = active_analysis if active_analysis is not None else full_config[
-        'active_analysis']
+    active_analysis_name = active_analysis if active_analysis is not None else full_config['active_analysis']
+    processed_input_data = full_config['processed_input_data']
+    input_data_dir = paths.PROCESSED_DATA_DIR if processed_input_data else paths.RAW_DATA_DIR
+    analysis_config = full_config['analyses'][active_analysis_name]
+
+
     print(f"Loading files for analysis {active_analysis_name}")
     analysis_name = active_analysis_name.upper()
-    raw_data_path = paths.RAW_DATA_DIR / f'{analysis_name}.parquet'
+    input_data_path = input_data_dir / f'{analysis_config['input_filename']}.parquet'
 
     if full_config['sandbox_mode'] != 'True':
         results_dir = paths.RESULTS_DIR / analysis_name
@@ -467,15 +472,30 @@ def get_analysis_ready_df(full_config: dict,
     # I will need to extract it from the prompt template if I want to implement this
     label_order = analysis_config['model_vars'].get('label_order', None)
 
-    input_df = load_input_data(raw_data_path)
+    input_df = pd.read_parquet(input_data_path)
     evaluations_df = load_llm_results_data(results_dir)
 
     print("Finished loading experiment data")
 
     # ----- Processing
     # Combine
+    # merged_df = pd.merge(input_df, evaluations_df,
+    #                      left_on=id_col, right_on=evaluations_id_col)
+
+
     merged_df = pd.merge(input_df, evaluations_df,
-                         left_on=id_col, right_on=evaluations_id_col)
+                        left_on=id_col, right_on=evaluations_id_col,
+                        how='left',             # Keep all processed rows
+                        indicator='_merge_status' # Track success
+    )
+
+    # Explicitly check for missing evaluations
+    missing = merged_df[merged_df['_merge_status'] == 'left_only']
+    if not missing.empty:
+        print(f"⚠️ Warning: {len(missing)} rows from input data are missing LLM results.")
+        # Optional: Drop them if you can't analyze them
+        merged_df = merged_df[merged_df['_merge_status'] == 'both'].copy()
+
 
     # Clean
     # Clean first since it relies on the entire dataset to detect the garbage rows
@@ -496,8 +516,14 @@ def get_analysis_ready_df(full_config: dict,
     ratings_df = compute_ratings_from_logits(
         sorted_logits_df, sequence_index=0)
 
-    # Assemble
-    final_df = pd.concat([balanced_df, sorted_logits_df, ratings_df], axis=1)
+    # # Assemble
+    # final_df = pd.concat([balanced_df, sorted_logits_df, ratings_df], axis=1)
+
+    # Assign directly to avoid index mismatch risks
+    balanced_df[sorted_logits_df.columns] = sorted_logits_df
+    balanced_df[ratings_df.columns] = ratings_df
+    final_df = balanced_df # Rename for clarity
+
 
     # Features - Entropy (handles mixed scale sizes)
     entropy_df = compute_entropy_from_logits(

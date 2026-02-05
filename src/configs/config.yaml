@@ -5,6 +5,7 @@
 # active_analysis: 'mcgill_qa_feedback'
 active_analysis: 'barter_deals'
 sandbox_mode: 'True'
+processed_input_data: True
 
 generation_globals:
   batch_size: 2
@@ -17,6 +18,7 @@ generation_globals:
     # - 'mistralai/Ministral-8B-Instruct-2410'
     # - 'google/gemma-3-1b-it'
   use_cleaned_data: True
+  
 
 analyses:
   barter_deals:
@@ -26,6 +28,7 @@ analyses:
     keys:
       raw_id_col: 'deal_id'
       evaluations_id_col: 'input_id'
+    input_filename: 'BARTER_DEALS_CLEAN'
     filters:
       country_code: 'NLD'
     model_vars:
@@ -52,6 +55,7 @@ analyses:
     keys:
       raw_id_col: 'input_id'
       evaluations_id_col: 'input_id'
+    input_filename: 'MCGILL_QA_FEEDBACK_CLEAN'
     model_vars:
       experimental_groups: 
         - 'model_name'
