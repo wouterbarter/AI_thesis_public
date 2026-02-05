@@ -429,15 +429,17 @@ def get_analysis_ready_df(full_config: dict,
                           return_dirty_df: bool = False
                           ) -> pd.DataFrame:
 
-    active_analysis_name = active_analysis if active_analysis is not None else full_config['active_analysis']
+    active_analysis_name = active_analysis if active_analysis is not None else full_config[
+        'active_analysis']
     processed_input_data = full_config['processed_input_data']
     input_data_dir = paths.PROCESSED_DATA_DIR if processed_input_data else paths.RAW_DATA_DIR
     analysis_config = full_config['analyses'][active_analysis_name]
 
-
     print(f"Loading files for analysis {active_analysis_name}")
     analysis_name = active_analysis_name.upper()
-    input_data_path = input_data_dir / f'{analysis_config['input_filename']}.parquet'
+    filename = analysis_config['input_filename'] + ".parquet"
+    input_data_path = input_data_dir / filename
+    # input_data_path = input_data_dir / f'{analysis_config['input_filename']}.parquet'
 
     if full_config['sandbox_mode'] != 'True':
         results_dir = paths.RESULTS_DIR / analysis_name
@@ -482,20 +484,19 @@ def get_analysis_ready_df(full_config: dict,
     # merged_df = pd.merge(input_df, evaluations_df,
     #                      left_on=id_col, right_on=evaluations_id_col)
 
-
     merged_df = pd.merge(input_df, evaluations_df,
-                        left_on=id_col, right_on=evaluations_id_col,
-                        how='left',             # Keep all processed rows
-                        indicator='_merge_status' # Track success
-    )
+                         left_on=id_col, right_on=evaluations_id_col,
+                         how='left',             # Keep all processed rows
+                         indicator='_merge_status'  # Track success
+                         )
 
     # Explicitly check for missing evaluations
     missing = merged_df[merged_df['_merge_status'] == 'left_only']
     if not missing.empty:
-        print(f"⚠️ Warning: {len(missing)} rows from input data are missing LLM results.")
+        print(
+            f"⚠️ Warning: {len(missing)} rows from input data are missing LLM results.")
         # Optional: Drop them if you can't analyze them
         merged_df = merged_df[merged_df['_merge_status'] == 'both'].copy()
-
 
     # Clean
     # Clean first since it relies on the entire dataset to detect the garbage rows
@@ -522,8 +523,7 @@ def get_analysis_ready_df(full_config: dict,
     # Assign directly to avoid index mismatch risks
     balanced_df[sorted_logits_df.columns] = sorted_logits_df
     balanced_df[ratings_df.columns] = ratings_df
-    final_df = balanced_df # Rename for clarity
-
+    final_df = balanced_df  # Rename for clarity
 
     # Features - Entropy (handles mixed scale sizes)
     entropy_df = compute_entropy_from_logits(
