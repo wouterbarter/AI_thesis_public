@@ -55,10 +55,10 @@ def main(config: dict):
     analysis_name = config['active_analysis'].upper()
     if gen_globals['use_cleaned_data']:
         print("Using cleaned data")
-        raw_data_path = paths.RAW_DATA_DIR / f'{analysis_name}_CLEAN.parquet'
+        data_path = paths.PROCESSED_DATA_DIR / f'{analysis_name}_CLEAN.parquet'
     else:
         print("Using uncleaned data")
-        raw_data_path = paths.RAW_DATA_DIR / f'{analysis_name}.parquet'
+        data_path = paths.RAW_DATA_DIR / f'{analysis_name}.parquet'
 
     raw_id_col = analysis_config['keys']['raw_id_col']
 
@@ -96,7 +96,7 @@ def main(config: dict):
     # prompt_templates = pm.get_filtered_prompts(required_tags=['tokens_5'])
 
     # Load and (optionally) limit data
-    df = pd.read_parquet(raw_data_path)
+    df = pd.read_parquet(data_path)
     limit = gen_globals.get('debug_row_limit')
 
     if limit:
