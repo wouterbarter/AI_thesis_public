@@ -30,7 +30,7 @@ dimensions:
 metadata:
   description: BARS_holistic
   suite_tags:
-  - scale_5
-  - naive
   - baseline
+  - naive
+  - scale_5
   - quality

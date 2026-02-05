@@ -57,6 +57,6 @@ dimensions:
 metadata:
   description: naive formative
   suite_tags:
-  - naive
   - baseline
+  - naive
   - scale_4

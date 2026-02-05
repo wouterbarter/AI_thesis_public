@@ -290,3 +290,38 @@ def interactive_regression_results_selector(data_dict, description="Select optio
     dropdown.observe(update_table, names='value')
     display(dropdown)
     display(data_dict[dropdown.value].summary())
+
+
+
+def simple_dashboard(master_results):
+    # 1. Define Widgets
+    w_off = widgets.Dropdown(options=[None, 'log_offset'], description='Offset')
+    w_clus = widgets.Dropdown(options=[None, 'partner_id'], description='Cluster')
+    w_seg = widgets.Dropdown(description='Segment') # Options will be filled dynamically
+    output = widgets.Output()
+
+    # 2. The Logic (One function to rule them all)
+    def update(*args):
+        # Fetch the result dictionary for the current settings
+        key = (w_off.value, w_clus.value)
+        current_models = master_results.get(key, {})
+        
+        # Update Segment dropdown options based on what's available
+        w_seg.options = list(current_models.keys())
+        
+        # Display the summary
+        output.clear_output(wait=True)
+        with output:
+            if w_seg.value in current_models:
+                display(current_models[w_seg.value].summary())
+            else:
+                print("No model available for this combination.")
+
+    # 3. Link & Show
+    w_off.observe(update, 'value')
+    w_clus.observe(update, 'value')
+    w_seg.observe(update, 'value')
+    
+    # Initialize
+    update() 
+    display(w_off, w_clus, w_seg, output)

@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 from statsmodels.genmod.generalized_linear_model import GLMResults, GLMResultsWrapper
-from typing import List, Dict, Optional, Tuple, Any
+from statsmodels.discrete.discrete_model import NegativeBinomialResultsWrapper, CountResultsWrapper
+from typing import List, Dict, Optional, Tuple, Any, Union
 from abc import ABC, abstractmethod
 
 class BaseRegressionRunner(ABC):
@@ -21,7 +22,7 @@ class BaseRegressionRunner(ABC):
         bin_predictors: List[str],
         num_predictors: List[str],
         score_col: str,  # The LLM metric to pivot
-        extra_index_cols: List[str] = None
+        extra_index_cols: Optional[List[str]] = None
     ) -> Tuple[pd.DataFrame, List[str]]:
         """Pivot data from long to wide format while maintaining observation integrity."""
         unique_dims = group_df['dimension_name'].unique()
@@ -79,7 +80,10 @@ class BaseRegressionRunner(ABC):
         
         # Categorical dummy columns
         if cat_predictors:
-            X_cat = pd.get_dummies(wide_df[cat_predictors], drop_first=True, dtype=int)
+            cat_subset = wide_df[cat_predictors].copy()
+            cat_subset = cat_subset.astype(str)
+
+            X_cat = pd.get_dummies(cat_subset, drop_first=True, dtype=int)
             predictor_parts.append(X_cat)
         
         if not predictor_parts:
@@ -95,19 +99,19 @@ class BaseRegressionRunner(ABC):
             
         return X
 
-    def _estimate_alpha(self, y: pd.Series, X: pd.DataFrame, offset: Optional[pd.Series] = None) -> float:
-        """Estimate the Negative Binomial dispersion parameter (alpha)."""
-        try:
-            # Fit a discrete NB model to estimate dispersion (NB2)
-            # method='nm' (Nelder-Mead) is robust for dispersion estimation
-            if offset is not None:
-                nb_fit = sm.NegativeBinomial(y, X, offset=offset).fit(disp=0, method='nm', maxiter=500)
-            else:
-                nb_fit = sm.NegativeBinomial(y, X).fit(disp=0, method='nm', maxiter=500)
-            return max(1e-9, nb_fit.alpha)  # Ensure alpha is positive
-        except Exception:
-            # Fallback to default if estimation fails
-            return 1.0
+    # def _estimate_alpha(self, y: pd.Series, X: pd.DataFrame, offset: Optional[pd.Series] = None) -> float:
+    #     """Estimate the Negative Binomial dispersion parameter (alpha)."""
+    #     try:
+    #         # Fit a discrete NB model to estimate dispersion (NB2)
+    #         # method='nm' (Nelder-Mead) is robust for dispersion estimation
+    #         if offset is not None:
+    #             nb_fit = sm.NegativeBinomial(y, X, offset=offset).fit(disp=0, method='nm', maxiter=500)
+    #         else:
+    #             nb_fit = sm.NegativeBinomial(y, X).fit(disp=0, method='nm', maxiter=500)
+    #         return max(1e-9, nb_fit.alpha)  # Ensure alpha is positive
+    #     except Exception:
+    #         # Fallback to default if estimation fails
+    #         return 1.0
 
     @abstractmethod
     def prepare_group_data(
@@ -118,26 +122,33 @@ class BaseRegressionRunner(ABC):
         num_predictors: List[str],
         new_predictor: str,
         dims_to_exclude: Optional[List[str]] = None
-    ) -> Optional[Tuple]:
+    ) -> Optional[Dict[str, Any]]:
         """Prepare data for regression. Implementation varies by subclass.
         
         Returns:
-            Tuple containing at minimum (y, X, offset), with optional additional elements
+            Dictionary containing at minimum (y, X, offset), with optional additional elements
             Returns None if data preparation fails
         """
         pass
 
     @abstractmethod
-    def _fit_model(self, y: pd.Series, X: pd.DataFrame, offset: Optional[pd.Series], *args) -> GLMResultsWrapper:
+    def _fit_model(
+        self, 
+        y: pd.Series, 
+        X: pd.DataFrame, 
+        offset: Optional[pd.Series] = None, 
+        **kwargs
+    ) -> Union[NegativeBinomialResultsWrapper, CountResultsWrapper]:
         """Fit the GLM model. Implementation varies by subclass.
-        
         Args:
             y: Target variable
             X: Predictor matrix
             offset: Offset term (or None)
-            *args: Additional arguments (e.g., clusters for clustered errors)
+            **kwargs: Additional arguments (e.g., clusters for clustered errors)
         """
         pass
+
+
 
     def run_negative_binomial(
         self,
@@ -148,27 +159,46 @@ class BaseRegressionRunner(ABC):
         predictor_name: str,
         label_map: Optional[Dict[str, str]] = None,
         dims_to_exclude: Optional[List[str]] = None
-    ) -> Dict[str, GLMResults]:
+    ) -> Dict[str, CountResultsWrapper]:
         """Main execution loop with reliability checks."""
         grouped = df.groupby(self.experimental_groups)
         
         for group_keys, group_df in grouped:
-            prepared_data = self.prepare_group_data(
+            # prepared_data = self.prepare_group_data(
+            #     group_df, cat_vars, bin_vars, num_vars, predictor_name, dims_to_exclude
+            # )
+            data_dict = self.prepare_group_data(
                 group_df, cat_vars, bin_vars, num_vars, predictor_name, dims_to_exclude
             )
             
-            if prepared_data is None:
+            if data_dict is None:
                 continue
             
-            y, X, offset = prepared_data[:3]
-            extra_args = prepared_data[3:] if len(prepared_data) > 3 else []
+            # y, X, offset, clusters = prepared_data
 
-            if X is None or len(y) < (X.shape[1] + 2):
-                print(f"Skipping {group_keys}: Insufficient observations or singular matrix.")
+            # 2. Extract essentials for the safety check
+            y = data_dict.get('y')
+            X = data_dict.get('X')
+
+            if y is None or X is None:
+                print(f"Skipping {group_keys}: Missing y or X data.")
                 continue
 
+            if X is None or len(y) < (X.shape[1] + 2):
+                print(f"Skipping {group_keys}: Insufficient observations.")
+                continue
+
+            offset = data_dict.get('offset')
+            clusters = data_dict.get('clusters')
+
+
             try:
-                res = self._fit_model(y, X, offset, *extra_args)
+                res = self._fit_model(
+                    y=y, 
+                    X=X, 
+                    offset=offset, 
+                    clusters=clusters
+                )
                 
                 if not res.converged:
                     print(f"⚠️ Warning: Model for {group_keys} did not converge.")
@@ -183,6 +213,49 @@ class BaseRegressionRunner(ABC):
 
 
 class StandardErrorRegression(BaseRegressionRunner):
+    # def prepare_group_data(
+    #     self, 
+    #     group_df: pd.DataFrame, 
+    #     cat_predictors: List[str], 
+    #     bin_predictors: List[str], 
+    #     num_predictors: List[str],
+    #     new_predictor: str, 
+    #     dims_to_exclude: Optional[List[str]] = None
+    # ) -> Optional[Tuple[pd.Series, pd.DataFrame, Optional[pd.Series]]]:
+    #     """Prepare data for standard error regression."""
+        
+    #     wide_df, score_cols = self._pivot_data(
+    #         group_df, cat_predictors, bin_predictors, num_predictors, new_predictor
+    #     )
+        
+    #     if dims_to_exclude:
+    #         score_cols = [col for col in score_cols if col not in dims_to_exclude]
+
+    #     X = self._build_predictor_matrix(wide_df, score_cols, cat_predictors, bin_predictors, num_predictors)
+    #     if X is None:
+    #         return None
+        
+    #     y = wide_df[self.target_col]
+        
+    #     # Extract offset if specified
+    #     offset = wide_df[self.offset_col] if self.offset_col else None
+        
+    #     # Clean NaNs - include offset in alignment if it exists
+    #     if offset is not None:
+    #         combined = pd.concat([X, y, offset], axis=1).dropna()
+    #         return (
+    #             combined[self.target_col], 
+    #             combined.drop(columns=[self.target_col, self.offset_col]),
+    #             combined[self.offset_col]
+    #         )
+    #     else:
+    #         combined = pd.concat([X, y], axis=1).dropna()
+    #         return (
+    #             combined[self.target_col], 
+    #             combined.drop(columns=[self.target_col]),
+    #             None
+    #         )
+
     def prepare_group_data(
         self, 
         group_df: pd.DataFrame, 
@@ -191,9 +264,10 @@ class StandardErrorRegression(BaseRegressionRunner):
         num_predictors: List[str],
         new_predictor: str, 
         dims_to_exclude: Optional[List[str]] = None
-    ) -> Optional[Tuple[pd.Series, pd.DataFrame, Optional[pd.Series]]]:
-        """Prepare data for standard error regression."""
+    ) -> Optional[Dict[str, Any]]:
+        """Prepare data for standard error regression (No clusters)."""
         
+        # 1. Pivot & Build Initial Matrices
         wide_df, score_cols = self._pivot_data(
             group_df, cat_predictors, bin_predictors, num_predictors, new_predictor
         )
@@ -202,34 +276,40 @@ class StandardErrorRegression(BaseRegressionRunner):
             score_cols = [col for col in score_cols if col not in dims_to_exclude]
 
         X = self._build_predictor_matrix(wide_df, score_cols, cat_predictors, bin_predictors, num_predictors)
+        
         if X is None:
             return None
         
         y = wide_df[self.target_col]
         
-        # Extract offset if specified
-        offset = wide_df[self.offset_col] if self.offset_col else None
+        # 2. Build Component List Dynamically
+        # Start with the mandatory parts
+        data_components = [y, X]
         
-        # Clean NaNs - include offset in alignment if it exists
-        if offset is not None:
-            combined = pd.concat([X, y, offset], axis=1).dropna()
-            return (
-                combined[self.target_col], 
-                combined.drop(columns=[self.target_col, self.offset_col]),
-                combined[self.offset_col]
-            )
-        else:
-            combined = pd.concat([X, y], axis=1).dropna()
-            return (
-                combined[self.target_col], 
-                combined.drop(columns=[self.target_col]),
-                None
-            )
+        # Add offset ONLY if it is defined and exists in the data
+        if self.offset_col and self.offset_col in wide_df.columns:
+            data_components.append(wide_df[self.offset_col])
 
-    def _fit_model(self, y: pd.Series, X: pd.DataFrame, offset: Optional[pd.Series], *args) -> GLMResultsWrapper:
+        # 3. Single Pipeline: Concat -> Align -> DropNA
+        # This automatically aligns indices and drops rows where ANY component is NaN
+        combined = pd.concat(data_components, axis=1).dropna()
+        
+        if combined.empty:
+            return None
+
+        # 4. Return Dictionary
+        # Note: We explicitly set 'clusters' to None since this is Standard Regression
+        return {
+            'y': combined[self.target_col],
+            'X': combined[X.columns],  # Safe extraction using original column names
+            'offset': combined[self.offset_col] if self.offset_col else None,
+            'clusters': None
+        }
+
+    def _fit_model(self, y: pd.Series, X: pd.DataFrame, offset: Optional[pd.Series]=None, **kwargs) -> Union[NegativeBinomialResultsWrapper, CountResultsWrapper]:
         """Fit GLM with standard errors."""
-        glm = sm.GLM(y, X, family=sm.families.NegativeBinomial(), offset=offset)
-        return glm.fit()
+        model = sm.NegativeBinomial(y, X, loglike_method='nb2', offset=offset)
+        return model.fit(maxiter=2000, method='bfgs', disp=0)
 
 
 class ClusteredErrorRegression(BaseRegressionRunner):
@@ -237,6 +317,58 @@ class ClusteredErrorRegression(BaseRegressionRunner):
         super().__init__(target_col, experimental_groups, offset_col)
         self.cluster_col = cluster_col
 
+    # def prepare_group_data(
+    #     self, 
+    #     group_df: pd.DataFrame, 
+    #     cat_predictors: List[str], 
+    #     bin_predictors: List[str],
+    #     num_predictors: List[str], 
+    #     new_predictor: str, 
+    #     dims_to_exclude: Optional[List[str]] = None
+    # ) -> Optional[Tuple[pd.Series, pd.DataFrame, Optional[pd.Series], pd.Series]]:
+    #     """Prepare data for clustered error regression."""
+        
+    #     wide_df, score_cols = self._pivot_data(
+    #         group_df, cat_predictors, bin_predictors, num_predictors,
+    #         new_predictor, extra_index_cols=[self.cluster_col]
+    #     )
+        
+    #     if dims_to_exclude:
+    #         score_cols = [col for col in score_cols if col not in dims_to_exclude]
+
+    #     X = self._build_predictor_matrix(wide_df, score_cols, cat_predictors, bin_predictors, num_predictors)
+    #     if X is None:
+    #         return None
+        
+    #     y = wide_df[self.target_col]
+    #     clusters = wide_df[self.cluster_col]
+        
+    #     # Extract offset if specified
+    #     offset = wide_df[self.offset_col] if self.offset_col else None
+        
+    #     # Logic to handle offset existence
+    #     if self.offset_col:
+    #         # Case A: We have everything
+    #         combined = pd.concat([X, y, offset, clusters], axis=1).dropna()
+            
+    #         # Return Dict
+    #         return {
+    #             'y': combined[self.target_col],
+    #             'X': combined.drop(columns=[self.target_col, self.cluster_col, self.offset_col]),
+    #             'offset': combined[self.offset_col],
+    #             'clusters': combined[self.cluster_col] # <--- Passed safely
+    #         }
+    #     else:
+    #         # Case B: No Offset
+    #         combined = pd.concat([X, y, clusters], axis=1).dropna()
+            
+    #         return {
+    #             'y': combined[self.target_col],
+    #             'X': combined.drop(columns=[self.target_col, self.cluster_col]),
+    #             'offset': None,
+    #             'clusters': combined[self.cluster_col]
+    #         }
+        
     def prepare_group_data(
         self, 
         group_df: pd.DataFrame, 
@@ -245,9 +377,9 @@ class ClusteredErrorRegression(BaseRegressionRunner):
         num_predictors: List[str], 
         new_predictor: str, 
         dims_to_exclude: Optional[List[str]] = None
-    ) -> Optional[Tuple[pd.Series, pd.DataFrame, Optional[pd.Series], pd.Series]]:
-        """Prepare data for clustered error regression."""
+    ) -> Optional[Dict[str, Any]]:
         
+        # 1. Pivot & Build Initial Matrices
         wide_df, score_cols = self._pivot_data(
             group_df, cat_predictors, bin_predictors, num_predictors,
             new_predictor, extra_index_cols=[self.cluster_col]
@@ -259,36 +391,67 @@ class ClusteredErrorRegression(BaseRegressionRunner):
         X = self._build_predictor_matrix(wide_df, score_cols, cat_predictors, bin_predictors, num_predictors)
         if X is None:
             return None
-        
+            
         y = wide_df[self.target_col]
         clusters = wide_df[self.cluster_col]
         
-        # Extract offset if specified
-        offset = wide_df[self.offset_col] if self.offset_col else None
+        # 2. Build Component List Dynamically
+        # Start with the mandatory parts
+        data_components = [y, X, clusters]
         
-        # Clean NaNs - align all variables including offset
-        if offset is not None:
-            combined = pd.concat([X, y, clusters, offset], axis=1).dropna()
-            return (
-                combined[self.target_col], 
-                combined.drop(columns=[self.target_col, self.cluster_col, self.offset_col]),
-                combined[self.offset_col],
-                combined[self.cluster_col]
-            )
-        else:
-            combined = pd.concat([X, y, clusters], axis=1).dropna()
-            return (
-                combined[self.target_col], 
-                combined.drop(columns=[self.target_col, self.cluster_col]),
-                None,
-                combined[self.cluster_col]
-            )
+        # Add offset ONLY if it exists
+        if self.offset_col and self.offset_col in wide_df.columns:
+            data_components.append(wide_df[self.offset_col])
 
-    def _fit_model(self, y: pd.Series, X: pd.DataFrame, offset: Optional[pd.Series], *args) -> GLMResultsWrapper:
-        """Fit GLM with clustered standard errors."""
-        clusters = args[0]  # Extract clusters from args
-        glm = sm.GLM(y, X, family=sm.families.NegativeBinomial(), offset=offset)
-        return glm.fit(cov_type='cluster', cov_kwds={'groups': clusters})
+        # 3. Single Pipeline: Concat -> Align -> DropNA
+        # This automatically aligns indices and drops rows where ANY component is NaN
+        combined = pd.concat(data_components, axis=1).dropna()
+        
+        if combined.empty:
+            return None
+
+        # 4. Return Dictionary (Clean Extraction)
+        # We use X.columns to pull the predictor columns back out safely, 
+        # avoiding the need to calculate what to 'drop'.
+        return {
+            'y': combined[self.target_col],
+            'X': combined[X.columns], 
+            'clusters': combined[self.cluster_col],
+            # If offset_col was used, it's in combined; otherwise return None
+            'offset': combined[self.offset_col] if self.offset_col else None
+        }
+
+
+
+    def _fit_model(self, y, X, offset=None, **kwargs) -> Union[NegativeBinomialResultsWrapper, CountResultsWrapper]:
+        # Direct MLE estimation of Beta and Alpha
+        # We assume X already includes the constant
+
+        clusters = kwargs.get('clusters')
+
+        if clusters is None:
+            raise ValueError("ClusteredErrorRegression requires 'clusters' argument.")
+        
+        try:
+            model = sm.NegativeBinomial(y, X, loglike_method='nb2', offset=offset)
+            
+            # Use 'cluster' covariance
+            # use_t=True gives t-stats instead of z-stats (better for finite samples)
+            return model.fit(
+                cov_type='cluster', 
+                cov_kwds={'groups': clusters}, 
+                maxiter=2000,
+                disp=0,
+                use_t=True 
+            )
+        except Exception as e:
+            # Fallback for singular matrix or convergence failure
+            print(f"MLE Fit failed: {e}")
+            raise e
+    
+
+
+
 
 
 def create_regression_runner(

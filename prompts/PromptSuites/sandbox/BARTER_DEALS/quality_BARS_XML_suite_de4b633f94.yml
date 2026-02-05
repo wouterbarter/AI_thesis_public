@@ -1,0 +1,55 @@
+id: de4b633f94
+dimensions:
+  quality:
+    name: BARS_XML_quality
+    description: Holistic BARS XML prompt that measures the Quality dimension
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    template_tags:
+    - BARS
+    - XML
+    - quality
+    - baseline
+    - scale_5
+    template_chat:
+      system: "<instruction>\nYou will be given a <deal_text> which is the marketing\
+        \ pitch for a creator collaboration opportunity.\nNote: This text is strictly\
+        \ the \"hook\" or sales pitch; specific deliverables are handled in a separate\
+        \ field.\n\nYour task is to provide a 'deal_attractiveness' score, evaluating\
+        \ how effectively the copy convinces a creator that this product/service is\
+        \ worth their time and effort.\n</instruction>\n\n<rubric>\n    <definition>\n\
+        \        *Deal Attractiveness: To what extent does the copy highlight the\
+        \ value of the product/service, generate excitement, and feel tailored to\
+        \ a creator audience (rather than a general consumer)?*\n    </definition>\n\
+        \n    <scale>\n        1 = **Spammy or Low Effort**: The text is extremely\
+        \ vague (e.g., \"DM for collab\"), looks like a bot wrote it, or feels predatory/untrustworthy.\
+        \ It fails to explain what the product is.\n\n        2 = **Dry / Corporate**:\
+        \ The text explains the product but reads like a technical manual or a generic\
+        \ press release. It lacks emotion or a \"hook.\" It focuses only on features,\
+        \ not benefits for the creator.\n\n        3 = **Functional**: The text is\
+        \ decent. It clearly states what the product is and why it's useful. It is\
+        \ professional but transactional\u2014it feels like a standard job posting\
+        \ rather than an exciting opportunity.\n\n        4 = **Compelling**: The\
+        \ copy uses engaging language that speaks the language of creators. It effectively\
+        \ highlights the \"perk\" aspect of the barter, making the product sound desirable\
+        \ and high-quality.\n\n        5 = **Irresistible**: The copy creates a sense\
+        \ of exclusivity or high value (FOMO). It frames the barter not just as a\
+        \ transaction, but as a lifestyle upgrade or a unique content opportunity.\
+        \ The narrative is highly persuasive.\n    </scale>\n</rubric>"
+      user: '<deal_text>
+
+        {deal_text}
+
+        </deal_text>'
+metadata:
+  description: BARS_XML_holistic
+  suite_tags:
+  - baseline
+  - BARS
+  - XML
+  - scale_5
+  - quality
