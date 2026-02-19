@@ -1,4 +1,4 @@
 {
     "dataWrangler.defaultViewingFilterOptions": "advanced",
-    "dataWrangler.columnInsights.displayOnOpen": false
+    "dataWrangler.columnInsights.displayOnOpen": true
 }
