@@ -210,7 +210,7 @@ __marimo__/
 
 
 results/
-data/ 
+data/*
 private_data/
 venv312/
 .venv312/
