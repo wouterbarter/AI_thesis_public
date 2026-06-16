@@ -1,0 +1,386 @@
+import numpy as np
+import pandas as pd
+from src import paths
+from collections import defaultdict
+
+
+
+df_apps = pd.read_parquet(paths.RAW_DATA_DIR / 'BARTER_DEAL_APPLICATIONS.parquet')
+df_deals = pd.read_parquet(paths.INTERIM_DATA_DIR / 'BARTER_DEALS_CLEAN.parquet')
+
+country_to_iso3 = {
+    'Netherlands': 'NLD',
+    'Germany': 'DEU',
+    'Denmark': 'DNK',
+    'Portugal': 'PRT',
+    'Spain': 'ESP',
+    'Sweden': 'SWE',
+    'Belgium': 'BEL',
+    'France': 'FRA',
+    'Italy': 'ITA',
+    'United Kingdom': 'GBR',
+    'United States': 'USA', # Not in deals yet, but good for completeness
+    'Poland': 'POL',
+    'Greece': 'GRC',
+    'Malta': 'MLT',
+    'Ukraine': 'UKR'
+}
+
+# Recode creator countries to ISO3 in the unique creators dataframe
+df_apps['country_code_creators'] = df_apps['country_creators'].map(country_to_iso3)
+
+
+df_deals = pd.merge(df_deals, df_apps[['deal_id', 'company_location_id']].drop_duplicates(subset=['deal_id']), on='deal_id', how='left')
+
+# Omit old data, missing location data for many creators, will not be used in regression and we retain sufficient observations
+df_apps = df_apps[df_apps.application_created_at > "2025-01"]
+df_deals = df_deals[df_deals.created_at > "2025-01"]
+
+
+import ast
+def tolist(row):
+    try:
+        return ast.literal_eval(row)
+    except Exception as e:
+        print(e)
+
+df_apps['accepted_countries_deals'] = df_apps['accepted_countries_deals'].apply(tolist)
+
+
+
+def get_daily_uniques(target_dates_ns, event_dates, creators, window_days):
+    window_ns = pd.Timedelta(days=window_days).value
+    n_events = len(event_dates)
+    results = []
+    
+    counts = defaultdict(int)
+    unique_count = 0
+    
+    left_ptr = 0
+    right_ptr = 0
+    
+    # Iterate through each calendar day
+    for current_day_ns in target_dates_ns:
+        min_time_ns = current_day_ns - window_ns
+        
+        # EXPAND: Add events that happened before the current day
+        while right_ptr < n_events and event_dates[right_ptr] < current_day_ns:
+            inf = creators[right_ptr]
+            if counts[inf] == 0:
+                unique_count += 1
+            counts[inf] += 1
+            right_ptr += 1
+            
+        # SHRINK: Remove events that happened on or before the min_time (falling out of window)
+        while left_ptr < right_ptr and event_dates[left_ptr] <= min_time_ns:
+            inf = creators[left_ptr]
+            counts[inf] -= 1
+            if counts[inf] == 0:
+                unique_count -= 1
+            left_ptr += 1
+            
+        # Record the snapshot for this specific day
+        results.append(unique_count)
+        
+    return results
+
+
+def get_independent_actives(df, columns_list):
+    """
+    Calculates rolling active unique creators for each column independently,
+    stacking them into a single 'Category' and 'Value' format.
+    """
+    # 1. Sort the main dataframe once (CRITICAL)
+    df = df.sort_values('application_created_at').reset_index(drop=True)
+    
+    # 2. Establish the universal daily date range
+    dateranges = pd.date_range(
+        start=df['application_created_at'].min().normalize(), 
+        end=df['application_created_at'].max().normalize(), 
+        freq='D'
+    )
+    target_dates_ns = dateranges.astype('int64').values
+    
+    all_segments = []
+    
+    # 3. Loop through each column independently
+    for col in columns_list:
+        # Find the unique values for this specific column
+        unique_values = df[col].dropna().unique()
+        
+        for val in unique_values:
+            # Filter the data for just this value
+            df_subset = df[df[col] == val]
+            
+            # Extract arrays for speed
+            event_dates = df_subset['application_created_at'].astype('int64').values
+            influencers = df_subset['creator_id'].values
+            
+            # Calculate the rolling metrics
+            active_30 = get_daily_uniques(target_dates_ns, event_dates, influencers, 30)
+            active_7 = get_daily_uniques(target_dates_ns, event_dates, influencers, 7)
+            
+            # Build the Tidy DataFrame for this specific slice
+            df_temp = pd.DataFrame({
+                'date': dateranges,
+                'category': col,       # e.g., 'gender_creator' or 'country'
+                'value': val,          # e.g., 'male' or 'Germany'
+                'active_last_month': active_30,
+                'active_last_week': active_7
+            })
+            
+            all_segments.append(df_temp)
+            
+    # 4. Combine everything into one master DataFrame
+    return pd.concat(all_segments, ignore_index=True)
+
+
+
+df_apps_sorted = df_apps.sort_values('application_created_at').reset_index(drop=True)
+
+event_dates = df_apps_sorted['application_created_at'].astype('int64').values
+dateranges = pd.date_range(
+    start=df_apps_sorted['application_created_at'].min().normalize(), 
+    end=df_apps_sorted['application_created_at'].max().normalize(), 
+    freq='D'
+)
+target_dates_ns = dateranges.astype('int64').values
+
+
+creators = df_apps['creator_id'].values
+# Convert the target daily dates to nanoseconds
+df_active_creators = pd.DataFrame({'date': dateranges})
+df_active_creators['active_last_month'] = get_daily_uniques(
+    target_dates_ns, event_dates, creators, window_days=30
+)
+df_active_creators['active_last_week'] = get_daily_uniques(
+    target_dates_ns, event_dates, creators, window_days=7
+)
+
+
+
+## APPS AFTER 7 DAYS
+
+def calculate_target_vectorized(df_deals, df_apps, n=7):
+    # 1. Pre-calculate the total rows in df_apps per deal to replicate your exact 'quirk' logic
+    app_counts = df_apps.groupby('deal_id').size().reset_index(name='actual_app_count')
+    
+    # 2. Merge only the necessary columns to save memory
+    merged = df_apps[['deal_id', 'application_created_at', 'deleted_at']].merge(
+        df_deals[['deal_id', 'live_since', 'applicants_applications_count']], 
+        on='deal_id', 
+        how='inner'
+    )
+    
+    # Add our actual counts back into the merged dataframe
+    merged = merged.merge(app_counts, on='deal_id', how='left')
+
+    # 3. Calculate the days since live in one vectorized sweep
+    # (Ensure both columns are datetime objects before this step)
+    merged['days_since_live'] = (merged['application_created_at'] - merged['live_since']).dt.days
+
+    # 4. Apply the time window mask
+    time_mask = (merged['days_since_live'] >= 0) & (merged['days_since_live'] <= n)
+    
+    # 5. Apply your specific data-quirk mask (deleted_at logic)
+    quirk_mask = (merged['actual_app_count'] == merged['applicants_applications_count']) | \
+                 (merged['deleted_at'].isna())
+                 
+    # Combine masks and filter
+    valid_apps = merged[time_mask & quirk_mask]
+
+    # 6. Group by deal_id to get the final count
+    target_counts = valid_apps.groupby('deal_id').size().reset_index(name=f'apps_after_{n}_days')
+
+    # 7. Merge back to the original deals dataframe (Left merge to keep deals with 0 apps)
+    df_deals_updated = df_deals.merge(target_counts, on='deal_id', how='left')
+    
+    # Fill NaN values with 0 (deals that received no valid applications in the window)
+    df_deals_updated[f'apps_after_{n}_days'] = df_deals_updated[f'apps_after_{n}_days'].fillna(0).astype(int)
+    
+    return df_deals_updated
+
+
+df_deals = calculate_target_vectorized(df_deals, df_apps, n=7)
+
+
+# Eligible users: Location/Geography
+## Online deals
+active_by_country = get_independent_actives(df_apps, ['country_code_creators']).sort_values('date')
+df_active_wide = active_by_country.pivot(index='date', columns=['value'], values=['active_last_month', 'active_last_week'])
+df_active_wide.columns = [f"{metric}_{country}" for metric, country in df_active_wide.columns]
+df_active_wide = df_active_wide.reset_index()
+
+
+df_deals_wactives = pd.merge_asof(df_deals.sort_values('created_at'),
+              df_active_wide.sort_values('date'),
+              left_on='created_at',
+              right_on='date')
+
+
+country_creators_list = df_apps.country_code_creators.unique()
+
+def return_actives(row):
+    accepted_countries = [x for x in row['accepted_countries'] if x in country_creators_list] 
+    
+    week_cols = [f"active_last_week_{x}" for x in accepted_countries]
+    month_cols = [f"active_last_month_{x}" for x in accepted_countries]
+
+    # return [row[month_cols].sum(), row[week_cols].sum()]
+
+    return pd.Series(
+        {"eligible_last_week": row[week_cols].sum(),
+         "eligible_last_month": row[month_cols].sum()}
+         )
+
+df_deals_wactives.apply(return_actives, axis=1)
+df_deals_wactives[['online_eligible_last_week', 'online_eligible_last_month']] = df_deals_wactives.apply(return_actives, axis=1)
+df_deals_wactives.loc[df_deals_wactives['deal_type'] == 'physical', ['online_eligible_last_week', 'online_eligible_last_month']] = 0
+
+df_deals = df_deals_wactives.drop(columns=df_active_wide.columns)
+
+
+
+
+## Physical deals
+def calculate_haversine_vectorized(lat1, lon1, lat2, lon2):
+    """
+    Calculates the great-circle distance between two points 
+    on the Earth surface in kilometers using NumPy arrays.
+    """
+    # Earth radius in kilometers
+    R = 6371.0 
+    
+    # Convert degrees to radians (NumPy trig functions require radians)
+    lat1_rad = np.radians(lat1)
+    lon1_rad = np.radians(lon1)
+    lat2_rad = np.radians(lat2)
+    lon2_rad = np.radians(lon2)
+    
+    # Calculate differences
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+    
+    # Apply the Haversine formula
+    a = np.sin(dlat / 2.0)**2 + np.cos(lat1_rad) * np.cos(lat2_rad) * np.sin(dlon / 2.0)**2
+    
+    # arcsin is mathematically equivalent to arctan2 for this and often slightly faster in numpy
+    c = 2 * np.arcsin(np.sqrt(a)) 
+    
+    # Return distance in kilometers
+    return R * c
+
+
+# Filter for physical deals with valid locations
+df_locs = df_apps[~df_apps['company_location_id'].isna() & (df_apps['deal_type_deals'] == 'physical')]
+
+# 2. Unique Deals/Company Locations 
+# Grouped by deal_id (to easily merge back to df_deals later)
+df_unique_deals = df_locs[['deal_id', 'latitude_company_locations', 'longitude_company_locations', 'country_code_creators']].drop_duplicates(subset=['deal_id'])
+
+# 1. Unique Company Locations (1014 rows)
+df_unique_locations = df_locs[[
+    'company_location_id', 
+    'latitude_company_locations', 
+    'longitude_company_locations'
+]].drop_duplicates(subset=['company_location_id'])
+
+# 2. Unique Creators (6696 rows)
+df_unique_creators = df_locs[[
+    'creator_id', 
+    'latitude_creators', 
+    'longitude_creators',
+    'country_code_creators'
+]].drop_duplicates(subset=['creator_id'])
+
+
+# Handle the <NA> or unmapped values: we can't assume eligibility if we don't know the country
+## Large amount of missingness, but only before approx. 2025, so we can ignore it (make sure to drop data before 2025 for regression)
+df_unique_creators = df_unique_creators.dropna(subset=['country_code_creators'])
+
+# 3. The Leaner Cross-Join (~6.79 million rows)
+df_spatial_grid = df_unique_locations.merge(df_unique_creators, how='cross')
+
+# 4. Calculate Distances Vectorially
+df_spatial_grid['distance_km'] = calculate_haversine_vectorized(
+    df_spatial_grid['latitude_company_locations'].values,
+    df_spatial_grid['longitude_company_locations'].values,
+    df_spatial_grid['latitude_creators'].values,
+    df_spatial_grid['longitude_creators'].values
+)
+
+
+# Immediately Filter by Radius (e.g., 50km) and drop coordinates
+radius_km = 50.0
+df_spatial_grid = df_spatial_grid[df_spatial_grid['distance_km'] <= radius_km]
+# df_spatial_grid = df_spatial_grid[['company_location_id', 'creator_id', 'distance_km', 'creator_country_code']]
+
+# Map the Spatial Matches Back to the Deals
+# We merge the pruned spatial grid with your deals metadata to re-attach the deal_id 
+# and the highly crucial created_at timestamp needed for the next step.
+df_deals_spatial = df_deals[['deal_id', 'company_location_id', 'created_at', 'accepted_countries']].merge(
+    df_spatial_grid, 
+    on='company_location_id', 
+    how='inner' # Inner join ensures we only keep deals that have creators within the radius
+)
+
+
+
+# 3. Optimized Eligibility Filter
+# Use a list comprehension for high-speed membership checking
+df_deals_spatial['is_eligible'] = [
+    code in accepted_list if isinstance(accepted_list, list) else True
+    for code, accepted_list in zip(df_deals_spatial['country_code_creators'], df_deals_spatial['accepted_countries'])
+]
+
+# 4. Final Pruning
+df_deals_spatial = df_deals_spatial[df_deals_spatial['is_eligible']]
+df_deals_spatial = df_deals_spatial.drop(columns=['is_eligible', 'country_code_creators', 'accepted_countries'])
+
+
+df_model = df_deals.copy()
+# 1. Prepare a clean activity log (just IDs and timestamps)
+df_activity = df_apps[['creator_id', 'application_created_at']].drop_duplicates()
+
+# 2. Merge spatial matches with the activity log
+# This creates a "Possibility" table
+df_liquidity = df_deals_spatial.merge(df_activity, on='creator_id', how='inner')
+
+# 3. Calculate the time window (Vectorized)
+# Ensure both are datetime objects
+df_liquidity['days_diff'] = (df_liquidity['created_at'] - df_liquidity['application_created_at']).dt.days
+
+# 4. Filter for activity in the last 30 days PRIOR to the deal creation
+# (diff >= 0 means activity happened before or on the day of the deal)
+
+for daysdiff in [7, 30]:
+    mask = (df_liquidity['days_diff'] >= 0) & (df_liquidity['days_diff'] <= daysdiff)
+    df_active_liquidity = df_liquidity[mask]
+
+    # 5. Final Aggregation: Count unique creators per deal
+    liquidity_feature = df_active_liquidity.groupby('deal_id')['creator_id'].nunique().reset_index(name=f'physical_active_creators_{daysdiff}d_50km')
+
+    # 6. Map back to your main model dataframe
+    df_model = df_model.merge(liquidity_feature, on='deal_id', how='left')
+    df_model[f'physical_active_creators_{daysdiff}d_50km'] = df_model[f'physical_active_creators_{daysdiff}d_50km'].fillna(0).astype(int)
+
+
+# 1. Sort your model dataframe by the deal creation time
+df_model = df_model.sort_values('created_at')
+# Ensure the daily dataframe is sorted by date
+df_active_creators = df_active_creators.sort_values('date')
+
+# 2. Use merge_asof to align the daily marketplace metrics to the deal timestamp
+df_model = pd.merge_asof(
+    df_model, 
+    df_active_creators, 
+    left_on='created_at', 
+    right_on='date', 
+    direction='backward' # Looks for the most recent preceding daily record
+)
+
+# 3. Clean up the extra 'date' column from the merge
+df_model = df_model.drop(columns=['date'])
+
+
+df_model.to_parquet(paths.PROCESSED_DATA_DIR/'BARTER_DEALS_FEATURES.parquet')

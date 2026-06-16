@@ -8,15 +8,15 @@ from src import paths
 from pandas.util import hash_pandas_object
 import os
 from pathlib import Path
-from src.analysis.metrics import compute_entropy, calculate_reliability_gap, compute_validity_mass
+from src.general_analysis.metrics import compute_entropy, calculate_reliability_gap, compute_validity_mass
 import numpy as np
 
 # TODO: Make sure that the Suite Metadata is also included in the final_df
 # TODO: I use hashing to generate input_id, but that might lead to duplicate hashes in downstream processing which could be removed in processing
 
 
-def load_input_data(path_to_parquet: str | Path):
-    return pd.read_parquet(path_to_parquet)
+# def load_input_data(path_to_parquet: str | Path):
+#     return pd.read_parquet(path_to_parquet)
 
 
 def load_llm_results_data(path_to_llm_results: Path) -> pd.DataFrame:
@@ -88,62 +88,6 @@ def _reorder_logits_row(
     )
 
 
-# def create_sorted_logits(df: pd.DataFrame, label_order: Optional[list] = None) -> pd.DataFrame:
-#     """
-#     Applies logic to sort the 'constrained_tokens' and 'constrained_logits' columns.
-
-#     label_order: An optional list defining the desired sort order
-#                  (e.g., ['1', '2', '3', '4', '5']).
-#     """
-#     print("Reordering logits...")
-
-#     # The .apply() call *already* returns the new DataFrame
-#     # with 'sorted_tokens' and 'sorted_logits'
-#     sorted_df = df.apply(
-#         _reorder_logits_row,  # (Your helper function)
-#         axis=1,
-#         label_order=label_order
-#     )
-
-#     return sorted_df
-
-# # --- Private Helper Function ---
-
-# def _reorder_logits_row(row, label_order=None):
-#     """
-#     Helper function to sort logits for a single row.
-#     """
-#     tokens = row['constrained_tokens']
-#     logits = row['constrained_logits']
-#     if hasattr(logits, 'tolist'):
-#         logits = logits.tolist()
-
-#     zipped_pairs = list(zip(tokens, logits))
-
-#     if not zipped_pairs:
-#         return pd.Series([[], []], index=['sorted_tokens', 'sorted_logits'])
-
-#     # Sorting logic
-#     if label_order:
-#         # Create a lookup map for the desired order
-#         # e.g., {'1': 0, '2': 1, '3': 2, ...}
-#         order_map = {token: i for i, token in enumerate(label_order)}
-
-#         # Sort using the map. Use .get() for safety.
-#         # Push any unknown tokens to the end.
-#         sorted_pairs = sorted(
-#             zipped_pairs,
-#             key=lambda pair: order_map.get(pair[0], float('inf'))
-#         )
-#     else:
-#         # Default to alphabetical/numeric sort if no order is given
-#         sorted_pairs = sorted(zipped_pairs)
-
-#     sorted_tokens, sorted_logits = zip(*sorted_pairs)
-#     return pd.Series([list(sorted_tokens), list(sorted_logits)],
-#                      index=['sorted_tokens', 'sorted_logits'])
-
-
 # Data cleaning
 
 def remove_garbage_rows(df: pd.DataFrame, input_vars: list[str], data_col: str = 'top_1000_tokens'):
@@ -181,7 +125,7 @@ def remove_garbage_rows(df: pd.DataFrame, input_vars: list[str], data_col: str =
     # --- Step 2: Create the "blocklist" of problematic experimental keys ---
     #
     # Define the columns that uniquely identify an experimental trial
-    trial_cols = ['input_id', 'prompt_id', 'assistant_prefix']
+    trial_cols = ['model_name', 'input_id', 'prompt_id', 'assistant_prefix']
 
     # Get the keys of trials that failed at least once
     tainted_trials = df.loc[is_garbage_mask, trial_cols].drop_duplicates()
@@ -384,60 +328,6 @@ def compute_ratings_from_logits(
 
     return results_df
 
-# def compute_ratings_from_logits(
-#     df: pd.DataFrame,
-#     weights: Optional[List[float]] | torch.Tensor = None
-# ) -> pd.DataFrame:
-#     """
-#     Calculates mean and mode ratings from a DataFrame column of logits.
-
-#     This is a convenience wrapper around the core _compute_ratings_from_tensors.
-
-#     Args:
-#         df: The DataFrame containing the logit data.
-#         logits_col: The name of the column with the sorted logits.
-#         weights: A list of weights (e.g., [1, 2, 3, 4, 5]).
-#                  If None, defaults to this 1-5 scale.
-
-#     Returns:
-#         A new DataFrame with 'mean_rating' and 'mode_rating' columns.
-#     TODO: Fix for when len(constrained_tokens) is not equal for all data!!!
-#         - Will have to groupby len(constrained_tokens) (and maybe more)
-#     """
-#     # --- 1. Handle Defaults and Data Prep ---
-#     if weights is None:
-#         weights = [1.0, 2.0, 3.0, 4.0]
-
-#     weights_tensor = torch.tensor(weights, dtype=torch.float32)
-
-#     # Extract data from pandas
-#     logits_tensor = torch.tensor(
-#         df['sorted_logits'].tolist(), dtype=torch.float32)
-
-#     # --- 2. Call the Core Logic Function ---
-#     mean_rating_tensor, mode_rating_tensor = _compute_ratings_from_tensors(
-#         logits_tensor, weights_tensor
-#     )
-
-#     # --- SAFETY CHECK: Ensure 1-to-1 mapping ---
-#     batch_size = len(df)
-
-#     # If the tensor is [Batch, 1], this check passes.
-#     # If it is [Batch, N], this fails before you hit the confusing Pandas error.
-#     if mean_rating_tensor.numel() != batch_size:
-#         raise ValueError(
-#             f"Shape Mismatch! DataFrame has {batch_size} rows, but "
-#             f"mean_rating_tensor has {mean_rating_tensor.numel()} elements "
-#             f"(Shape: {mean_rating_tensor.shape}). "
-#             "Did you forget to reduce a dimension?"
-#         )
-
-#     # --- 3. Package Results for Pandas ---
-#     return pd.DataFrame({
-#         'mean_rating': mean_rating_tensor.flatten().tolist(),
-#         'mode_rating': mode_rating_tensor.flatten().tolist()
-#     }, index=df.index)
-
 
 def _compute_ratings_from_tensors(
     logits_tensor: torch.Tensor,
@@ -452,9 +342,6 @@ def _compute_ratings_from_tensors(
     softmax_logits = torch.softmax(logits_tensor, dim=-1)
 
     # Calculate mean rating (weighted average)
-    # print(softmax_logits.shape)
-    # print(weights_tensor.shape)
-
     mean_rating = softmax_logits @ weights_tensor
 
     # Calculate mode rating
@@ -464,80 +351,123 @@ def _compute_ratings_from_tensors(
     return mean_rating, mode_rating_label
 
 
-# def _compute_ratings_from_tensors(
-#     logits_tensor: torch.Tensor,
-#     weights_tensor: torch.Tensor
-#     ) -> tuple[torch.Tensor, torch.Tensor]:
-#     """
-#     Core logic: Calculates mean and mode ratings from tensors.
+def compute_entropy_from_logits(
+    df: pd.DataFrame,
+    sequence_index: int = 0,
+    normalize: bool = True
+) -> pd.DataFrame:
+    """
+    Computes entropy from logits, handling mixed scale sizes.
 
-#     Returns:
-#         A tuple of (mean_rating_tensor, mode_rating_tensor)
-#     """
-#     softmax_logits = torch.softmax(logits_tensor, dim=1)
+    Args:
+        df: DataFrame with 'sorted_logits' column containing tensors
+        sequence_index: Which position in the sequence to use
+        normalize: Whether to normalize entropy by log(scale_size)
 
-#     # Calculate mean rating (weighted average)
-#     mean_rating = torch.matmul(softmax_logits, weights_tensor)
+    Returns:
+        DataFrame with 'entropy', 'normalized_entropy', and 'scale_size' columns
+    """
+    df = df.copy()
 
-#     # Calculate mode rating
-#     mode_rating_index = softmax_logits.argmax(dim=1)
-#     mode_rating_label = weights_tensor[mode_rating_index]
+    # Determine scale size for each row
+    df['_scale_size'] = df['sorted_logits'].apply(
+        lambda x: len(x[sequence_index]))
 
-#     return mean_rating, mode_rating_label
+    scale_sizes = df['_scale_size'].unique()
+    print(
+        f"Computing entropy for {len(scale_sizes)} different scale sizes: {sorted(scale_sizes)}")
 
-# def compute_ratings_from_logits(
-#     df: pd.DataFrame,
-#     weights: Optional[List[float]]| torch.Tensor = None
-#     ) -> pd.DataFrame:
-#     """
-#     Calculates mean and mode ratings from a DataFrame column of logits.
+    results_list = []
 
-#     This is a convenience wrapper around the core _compute_ratings_from_tensors.
+    for scale_size in scale_sizes:
+        # Get subset for this scale size
+        mask = df['_scale_size'] == scale_size
+        df_subset = df[mask]
 
-#     Args:
-#         df: The DataFrame containing the logit data.
-#         logits_col: The name of the column with the sorted logits.
-#         weights: A list of weights (e.g., [1, 2, 3, 4, 5]).
-#                  If None, defaults to this 1-5 scale.
+        if len(df_subset) == 0:
+            continue
 
-#     Returns:
-#         A new DataFrame with 'mean_rating' and 'mode_rating' columns.
-#     TODO: Fix for when len(constrained_tokens) is not equal for all data!!!
-#         - Will have to groupby len(constrained_tokens) (and maybe more)
-#     """
-#     # --- 1. Handle Defaults and Data Prep ---
-#     if weights is None:
-#         weights = [1.0, 2.0, 3.0, 4.0, 5.0]
+        # Extract logits from the sequence position
+        logits_list = df_subset['sorted_logits'].apply(
+            lambda x: x[sequence_index].tolist() if torch.is_tensor(
+                x) else x[sequence_index]
+        ).tolist()
 
-#     weights_tensor = torch.tensor(weights, dtype=torch.float32)
+        # Convert to tensor and apply softmax
+        logits_tensor = torch.tensor(logits_list, dtype=torch.float32)
+        softmax_probs = torch.softmax(logits_tensor, dim=-1)
 
-#     # Extract data from pandas
-#     logits_tensor = torch.tensor(df['sorted_logits'].tolist(), dtype=torch.float32)
+        # Compute entropy
+        entropy_values = compute_entropy(softmax_probs)
 
-#     # --- 2. Call the Core Logic Function ---
-#     mean_rating_tensor, mode_rating_tensor = _compute_ratings_from_tensors(
-#         logits_tensor, weights_tensor
-#     )
+        # Create results for this group
+        group_results = pd.DataFrame({
+            'entropy': entropy_values,
+            'scale_size': scale_size
+        }, index=df_subset.index)
 
-#     # --- 3. Package Results for Pandas ---
-#     # We preserve the index here, as you wanted
-#     return pd.DataFrame({
-#         'mean_rating': mean_rating_tensor.numpy(),
-#         'mode_rating': mode_rating_tensor.numpy()
-#     }, index=df.index)
+        # Add normalized entropy if requested
+        if normalize:
+            group_results['normalized_entropy'] = entropy_values / \
+                np.log(scale_size)
+
+        results_list.append(group_results)
+        print(
+            f"  Processed {len(df_subset)} rows with scale_size={scale_size}")
+
+    # Combine and restore original order
+    results_df = pd.concat(results_list)
+    results_df = results_df.loc[df.index]
+
+    return results_df
+
+
+class DataResolver:
+    def __init__(self, full_config: dict):
+        self.config = full_config
+        self.use_processed = full_config['generation_globals']['use_processed_data']
+
+    def get_path(self, analysis_name: str) -> Path:
+        analysis_cfg = self.config['analyses'][analysis_name]
+
+        # The logic lives here and ONLY here
+        base_dir = paths.PROCESSED_DATA_DIR if self.use_processed else paths.RAW_DATA_DIR
+        key = 'processed_data_filename' if self.use_processed else 'raw_data_filename'
+
+        return base_dir / f"{analysis_cfg[key]}.parquet"
 
 
 def get_analysis_ready_df(full_config: dict,
                           active_analysis: Optional[str] = None,
                           use_cache: bool = False,
                           force_refresh: bool = False,
-                          return_dirty_df: bool = False) -> pd.DataFrame:
+                          return_dirty_df: bool = False
+                          ) -> pd.DataFrame:
 
     active_analysis_name = active_analysis if active_analysis is not None else full_config[
         'active_analysis']
+
+    resolver = DataResolver(full_config)
+    input_data_path = resolver.get_path(active_analysis_name)
+
+    analysis_config = full_config['analyses'][active_analysis_name]
+
+    # use_cleaned_data = full_config['generation_globals']['use_cleaned_data']
+    mode = 'processed' if full_config['generation_globals']['use_processed_data'] else 'raw'
+
+    # input_data_dir = paths.PROCESSED_DATA_DIR if use_cleaned_data else paths.RAW_DATA_DIR
+    filename = analysis_config['targets']['processed_data_filename'] if use_cleaned_data else analysis_config['targets']['raw_data_filename']
+    filename += '.parquet'
+
+    # filename = analysis_config['input_filename'] + ".parquet"
+    # print(f"FILENAME: {filename}")
+    # input_data_path = input_data_dir / filename
+    print(f"input_data_path: {input_data_path}")
+
+    # input_data_path = input_data_dir / f'{analysis_config['input_filename']}.parquet'
+
     print(f"Loading files for analysis {active_analysis_name}")
     analysis_name = active_analysis_name.upper()
-    raw_data_path = paths.RAW_DATA_DIR / f'{analysis_name}.parquet'
 
     if full_config['sandbox_mode'] != 'True':
         results_dir = paths.RESULTS_DIR / analysis_name
@@ -572,20 +502,29 @@ def get_analysis_ready_df(full_config: dict,
     # I will need to extract it from the prompt template if I want to implement this
     label_order = analysis_config['model_vars'].get('label_order', None)
 
-    input_df = load_input_data(raw_data_path)
+    input_df = pd.read_parquet(input_data_path)
     evaluations_df = load_llm_results_data(results_dir)
 
     print("Finished loading experiment data")
 
-    # ---- Variable dependent vars
-    # TODO: Now only works when entire dataset is constrained to n tokens, not for varying token constraints.
-    # n_labels = len(evaluations_df['constrained_tokens'].iloc[0])
-    # label_weights = torch.arange(1, n_labels + 1, dtype=torch.float32)
-
     # ----- Processing
     # Combine
+    # merged_df = pd.merge(input_df, evaluations_df,
+    #                      left_on=id_col, right_on=evaluations_id_col)
+
     merged_df = pd.merge(input_df, evaluations_df,
-                         left_on=id_col, right_on=evaluations_id_col)
+                         left_on=id_col, right_on=evaluations_id_col,
+                         how='left',             # Keep all processed rows
+                         indicator='_merge_status'  # Track success
+                         )
+
+    # Explicitly check for missing evaluations
+    missing = merged_df[merged_df['_merge_status'] == 'left_only']
+    if not missing.empty:
+        print(
+            f"⚠️ Warning: {len(missing)} rows from input data are missing LLM results.")
+        # Optional: Drop them if you can't analyze them
+        merged_df = merged_df[merged_df['_merge_status'] == 'both'].copy()
 
     # Clean
     # Clean first since it relies on the entire dataset to detect the garbage rows
@@ -601,21 +540,25 @@ def get_analysis_ready_df(full_config: dict,
     else:
         balanced_df = clean_df
 
-    # Feature engineering
-    sorted_logits_df = create_sorted_logits(balanced_df, label_order)
-    ratings_df = compute_ratings_from_logits(sorted_logits_df)
-
-    # Assemble
-    final_df = pd.concat([balanced_df, sorted_logits_df, ratings_df], axis=1)
-
     # Features
-    # Probabilities
-    softmax_logits = torch.softmax(torch.tensor(
-        final_df['sorted_logits'].tolist()), dim=-1)
+    sorted_logits_df = create_sorted_logits(balanced_df, label_order)
+    ratings_df = compute_ratings_from_logits(
+        sorted_logits_df, sequence_index=0)
 
-    final_df['entropy'] = compute_entropy(softmax_logits)
-    # TODO make n=4 dependent on len of constrained tokens
-    final_df['normalized_entropy'] = final_df['entropy'] / np.log(4)
+    # # Assemble
+    # final_df = pd.concat([balanced_df, sorted_logits_df, ratings_df], axis=1)
+
+    # Assign directly to avoid index mismatch risks
+    balanced_df.loc[:, sorted_logits_df.columns] = sorted_logits_df
+    balanced_df.loc[:, ratings_df.columns] = ratings_df
+    final_df = balanced_df  # Rename for clarity
+
+    # Features - Entropy (handles mixed scale sizes)
+    entropy_df = compute_entropy_from_logits(
+        final_df, sequence_index=0, normalize=True)
+    final_df['entropy'] = entropy_df['entropy']
+    final_df['normalized_entropy'] = entropy_df['normalized_entropy']
+    # Note: scale_size is already added by compute_ratings_from_logits
 
     # Dataset-specific pre-processing steps
     if active_analysis == 'mcgill_qa_feedback':

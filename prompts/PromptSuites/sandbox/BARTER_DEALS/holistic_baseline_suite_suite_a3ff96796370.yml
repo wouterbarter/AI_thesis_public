@@ -1,0 +1,45 @@
+id: a3ff96796370
+dimensions:
+  deal_holistic_attractiveness:
+    name: rubric_deal_holistic_attractiveness
+    description: Evaluates overall application propensity based on the complete deal
+      (Title + Text)
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - holistic
+    - overall_attractiveness
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal based on its\
+        \ Overall Attractiveness.\nThis measures how compelling and valuable the overall\
+        \ deal is to a creator, considering the attractiveness of the offer, the quality\
+        \ of the pitch, and its relevance to a creator's lifestyle.\n\nScale definition:\n\
+        1: The creator is highly unlikely to apply.\n2: The creator is somewhat unlikely\
+        \ to apply.\n3: The creator is somewhat likely to apply.\n4: The creator is\
+        \ highly likely to apply.\n\nOutput only the integer score."
+      user: 'Deal Title:
+
+        {deal_title}
+
+
+        Deal Text:
+
+        {deal_text}'
+metadata:
+  description: Holistic baseline measuring overall deal attractiveness for incremental
+    validity testing.
+  suite_tags:
+  - overall_attractiveness
+  - propensity
+  - scale_4
+  - holistic
+  - rubric

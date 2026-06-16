@@ -1,0 +1,159 @@
+# -----------------
+# config.yaml
+# -----------------
+
+# active_analysis: 'mcgill_qa_feedback'
+active_analysis: 'barter_deals'
+sandbox_mode: True
+
+
+generation_globals:
+  batch_size: 3
+  # debug_row_limit: 1000
+  top_k: 500
+  models_to_run:
+    # - 'Qwen/Qwen3-4B-Instruct-2507'
+    - 'Qwen/Qwen3.5-4B'
+    # - 'google/gemma-4-E2B-it'
+    # - 'meta-llama/Llama-3.2-3B-Instruct'
+    # - 'techwithsergiu/Qwen3.5-text-9B'
+    # - 'google/gemma-3-4b-it'
+    # - 'mistralai/Ministral-8B-Instruct-2410'
+    # - 'google/gemma-3-1b-it'
+  use_processed_data: True
+  shards_per_save: 10
+  
+
+analyses:
+  barter_deals:
+    name: "Barter Deals Analysis"
+    # variable_names:
+    #   - 'deal_text'
+    keys:
+      raw_id_col: 'deal_id'
+      evaluations_id_col: 'input_id'
+    input_filenames:
+      processed_data_filename: 'BARTER_DEALS_MODEL_READY'
+      raw_data_filename: 'BARTER_DEALS'
+    filters:
+      country_code: 'NLD'
+    model_vars:
+      model_type: 'OLS'
+      target: 'apps_after_7_days'
+      cluster_col: 'partner_id'
+      experimental_groups: 
+        - 'model_name'
+        - 'prompt_id'
+        - 'dimension_name'
+      categorical_predictors:
+        - 'deal_type'
+        - 'first_content_type'
+      binary_predictors:
+        - 'accepts_international'
+      # target: 'applications_till_day_7'
+      var_of_interest: 'mean_rating'
+    general_cleaning_thresholds:
+      min_online_days: 7
+      max_spam_title_words: 2
+      max_spam_text_words: 5
+      max_spam_apps: 10
+      max_duplicate_apps: 5
+
+    feature_engineering:
+      # min_date: '2025-01-01'
+      target_days: 7
+      # spatial_radius_km: 50.0
+      spatial_radii_km:
+        - 20.0
+        - 50.0
+      lookback_windows: 
+        - 7
+        - 30
+      country_to_iso3:
+        'Netherlands': 'NLD'
+        'Germany': 'DEU'
+        'Denmark': 'DNK'
+        'Portugal': 'PRT'
+        'Spain': 'ESP'
+        'Sweden': 'SWE'
+        'Belgium': 'BEL'
+        'France': 'FRA'
+        'Italy': 'ITA'
+        'United Kingdom': 'GBR'
+        'United States': 'USA'
+        'Poland': 'POL'
+        'Greece': 'GRC'
+        'Malta': 'MLT'
+        'Ukraine': 'UKR'
+    model_prep_thresholds:
+      START_DATE: "2025-04"
+      MIN_CATEGORY_OBSERVATIONS: 30
+      LEGACY_PARTNER_IDS_TO_REMOVE: [85, 4]
+      PARTNER_IDS_TO_REMOVE: ['01992995-27fe-0065-4f9e-db8ec1e66a27']
+      diff_total_apps_7_days_floor: 10
+      MIN_APPS_TOTAL: 0
+      min_apps_after_7_days: -1
+      max_follower_requirement: 25000
+      LOG_TRANSFORM_COLS: 
+        - 'apps_after_7_days'
+        - 'deal_value'
+        - 'online_active_0_7d'
+        - 'online_active_7_30d'
+        - 'phys_active_0_7d_0_20km'
+        - 'phys_active_0_7d_20_50km'
+        - 'phys_active_7_30d_0_20km'
+        - 'phys_active_7_30d_20_50km'
+        - 'global_active_0_7d'
+        - 'global_active_7_30d'
+    generation:
+        prompts:
+          # ids_to_skip: ['de4b633f94', 'd6ac463714', '9e5546bfa1', '539ae380307e']
+          ids_to_skip: []
+          ids_to_include: ['d23aac70a751']
+          required_tags: []
+          tags_to_skip: []
+        data:
+          filtering:
+            # cats_to_subset: ['Lifestyle', 'Lifestyle_Luxury', 'Beauty_UGC', 'Beauty_Fashion']
+
+  mcgill_qa_feedback:
+    name: "McGill Feedback Analysis"
+    variable_names:
+      - 'question'
+      - 'answer'
+    keys:
+      raw_id_col: 'input_id'
+      evaluations_id_col: 'input_id'
+    input_filenames:
+      processed_data_filename: 'MCGILL_QA_FEEDBACK_V1'
+      raw_data_filename: 'MCGILL_QA_FEEDBACK'
+    model_vars:
+      experimental_groups: 
+        - 'model_name'
+        - 'prompt_id'
+        - 'dimension_name'
+    generation:
+      prompts:
+        ids_to_skip: []
+        ids_to_include: []
+        required_tags: []
+        tags_to_skip: []
+      data:
+        filtering:
+
+
+
+output_paths:
+  # The "raw results" from the RUN step
+  # This is a DIRECTORY
+  raw_results_dir: 'reports/raw_results'
+  
+  # The "compiled results" from the COMPILE step
+  # This is a FILE
+  compiled_results_csv: 'reports/comparison_summary.csv'
+  
+  # The directory for saving all plots
+  figures_dir: 'reports/figures'
+  
+  # The final, "analysis-ready" data (from data_processing)
+  analysis_ready_data: 'data/processed/analysis_ready.parquet'

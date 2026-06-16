@@ -1,4 +1,4 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM, LogitsProcessor, BitsAndBytesConfig
+from transformers import AutoTokenizer, AutoModelForCausalLM, LogitsProcessor, BitsAndBytesConfig, AutoConfig
 import torch
 import torch.nn.functional as F
 import pandas as pd
@@ -9,7 +9,6 @@ from transformers.generation.utils import GenerateOutput
 from typing import Union
 from typing import Optional
 from dataclasses import dataclass
-
 
 
 @dataclass
@@ -29,13 +28,13 @@ class LogitsContainer:
     @property
     def is_sparse(self) -> bool:
         return self.indices is not None
-    
 
 
 @dataclass
 class ModelOutput:
     prompt: PreparedPrompt  # The Passthrough: The original input object
     sequence: torch.Tensor
+    formatted_prompt: str
     input_length: int
     logits: Optional[LogitsContainer] = None
     # Optional: error state if something crashed for this specific item
@@ -59,21 +58,21 @@ class Modeler:
     Wrapper around a Hugging Face causal LM for constrained generation and logit inspection.
     """
 
-    def __init__(self, 
-                 model_name: str | None = None, 
-                 model=None, 
-                 tokenizer=None, 
-                 device=None, 
+    def __init__(self,
+                 model_name: str | None = None,
+                 model=None,
+                 tokenizer=None,
+                 device=None,
                  quantize=True,
                  constrained_generation=False):
         """
         Initialize the modeler with a given model name or existing model/tokenizer.
         """
-        self._has_warned_constraints = False # Initialize flag
-        self.constrained_generation = constrained_generation # Applies token_constraints from PromptSuite[PromptTemplate]
+        self._has_warned_constraints = False  # Initialize flag
+        # Applies token_constraints from PromptSuite[PromptTemplate]
+        self.constrained_generation = constrained_generation
         # TODO: I am batch streaming which makes it difficult to apply true constrained generation.
-        ## For now it is much easier to just slice the 'constrained tokens' from the ModelOutput
-
+        # For now it is much easier to just slice the 'constrained tokens' from the ModelOutput
 
         # Choose device
         if device is None:
@@ -94,32 +93,179 @@ class Modeler:
             self.model = model.to(self.device)
             self.tokenizer = tokenizer
         elif model_name is not None:
-            if quantize:
-                # quantization_config = BitsAndBytesConfig(load_in_8bit=True)
-                quantization_config = BitsAndBytesConfig(
-                    load_in_4bit=True,
-                    bnb_4bit_quant_type="nf4",
-                    bnb_4bit_compute_dtype=torch.float32,  # Use float16 for 2070 Super
-                    bnb_4bit_use_double_quant=True,     # Saves a bit more memory
-                )
-                self.model = AutoModelForCausalLM.from_pretrained(
-                    model_name,
-                    quantization_config=quantization_config,
-                    dtype = torch.float32,
-                    device_map="auto"  # This is essential for bitsandbytes
-                )
+
+            # --- AWQ Detection Logic ---
+            is_awq = "awq" in model_name.lower()
+
+            # Gemma has a quirk where it does not compute the logits when dtype=float16
+            # weights_dtype = torch.float16
+            # if model_name == 'google/gemma-3-4b-it':
+            #     weights_dtype = torch.bfloat16
+
+            if model_name == 'google/gemma-3-4b-it':
+                weights_dtype = torch.bfloat16
+                compute_dtype = torch.bfloat16   # Turing can handle this natively
             else:
+                weights_dtype = torch.float16
+                compute_dtype = torch.float16
+
+            print(f"WEIGHTS DTYPE: {weights_dtype}")
+            print(f"COMPUTE DTYPE: {compute_dtype}")
+
+            if is_awq:
+                print(
+                    f"⚡ AWQ model detected. Bypassing BitsAndBytes and loading directly...")
                 self.model = AutoModelForCausalLM.from_pretrained(
                     model_name,
-                    dtype=torch.float32
-                ).to(self.device)
+                    dtype=weights_dtype,
+                    device_map="auto",
+                    attn_implementation="sdpa",
+                    trust_remote_code=True
+                )
+            elif quantize:
+                if "bnb-4bit" in model_name:
+                    # Use the TEXT-ONLY pre-quantized model to save VRAM
+
+                    print(f"📦 Loading Text-Only pre-quantized 4-bit model directly...")
+                    self.model = AutoModelForCausalLM.from_pretrained(
+                        model_name,
+                        # Notice we completely removed quantization_config here!
+                        # Hugging Face will automatically use the one inside the downloaded model.
+                        dtype=weights_dtype,
+                        device_map={"": 0},              # STRICTLY GPU 0
+                        attn_implementation="sdpa",
+                        trust_remote_code=True
+                    )
+                elif model_name == 'google/gemma-4-E2B-it' or model_name == 'google/gemma-4-E4B-it':
+                    print("🔪 Amputating Audio and Vision towers from Gemma 4...")
+
+                    # 1. Intercept the config
+                    config = AutoConfig.from_pretrained(
+                        model_name, trust_remote_code=True)
+
+                    # 2. THE AMPUTATION
+                    config.vision_config = None
+                    config.audio_config = None
+
+                    # 3. The Bfloat16 Ghost fix (applied directly to config in memory)
+                    config.torch_dtype = torch.float16
+                    if hasattr(config, 'text_config') and config.text_config is not None:
+                        config.text_config.dtype = "float16"
+
+                    # 4. Quantization Setup
+                    quantization_config = BitsAndBytesConfig(
+                        load_in_4bit=True,
+                        bnb_4bit_quant_type="nf4",
+                        bnb_4bit_compute_dtype=torch.float16,
+                        bnb_4bit_use_double_quant=True,
+                    )
+
+                    # 5. Load the amputated model
+                    self.model = AutoModelForCausalLM.from_pretrained(
+                        model_name,
+                        config=config,                                # Pass our hacked config
+                        quantization_config=quantization_config,
+                        torch_dtype=torch.float16,
+                        device_map="auto",
+                        # Keep the safety cap
+                        max_memory={0: "6.8GiB", "cpu": "32GiB"},
+                        # Your **kwargs patch makes this work now
+                        llm_int8_enable_fp32_cpu_offload=True,
+                        trust_remote_code=True
+                    )
+
+                    # print(
+                    #     f"📦 Loading base model with BitsAndBytes 4-bit quantization...")
+                    # quantization_config = BitsAndBytesConfig(
+                    #     load_in_4bit=True,
+                    #     bnb_4bit_quant_type="nf4",
+                    #     bnb_4bit_compute_dtype=compute_dtype,  # Use float16 for 2070 Super
+                    #     bnb_4bit_use_double_quant=True,        # Saves a bit more memory
+                    # )
+                    # max_memory = {0: "6.5GiB", "cpu": "32GiB"}
+                    # self.model = AutoModelForCausalLM.from_pretrained(
+                    #     model_name,
+                    #     quantization_config=quantization_config,
+                    #     dtype=weights_dtype,             # Fixed from dtype=torch.float32
+                    #     device_map="auto",                     # Essential for bitsandbytes
+                    #     attn_implementation="sdpa",
+                    #     trust_remote_code=True,
+                    #     max_memory=max_memory,
+                    #     llm_int8_enable_fp32_cpu_offload=True
+                    # )
+                else:
+                    print(
+                        f"📦 Loading base model with BitsAndBytes 4-bit quantization...")
+                    quantization_config = BitsAndBytesConfig(
+                        load_in_4bit=True,
+                        bnb_4bit_quant_type="nf4",
+                        bnb_4bit_compute_dtype=compute_dtype,  # Use float16 for 2070 Super
+                        bnb_4bit_use_double_quant=True,        # Saves a bit more memory
+                    )
+                    self.model = AutoModelForCausalLM.from_pretrained(
+                        model_name,
+                        quantization_config=quantization_config,
+                        dtype=weights_dtype,             # Fixed from dtype=torch.float32
+                        device_map="auto",                     # Essential for bitsandbytes
+                        attn_implementation="sdpa",
+                        trust_remote_code=True
+                    )
+                    print(self.model.dtype)
+            else:
+                print(f"🧠 Loading base model in unquantized FP16...")
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    model_name,
+                    dtype=weights_dtype,
+                    device_map="auto",                     # Let HF handle device mapping safely
+                    trust_remote_code=True,
+                    attn_implementation="sdpa"
+                )
 
             self.tokenizer = AutoTokenizer.from_pretrained(
-                model_name, padding_side='left')
+                model_name,
+                padding_side='left',
+                trust_remote_code=True)
             print(f"Padding side: {self.tokenizer.padding_side}")
         else:
             raise ValueError(
                 "Provide either (model_name) or (model, tokenizer) pair.")
+
+        # if model is not None and tokenizer is not None:
+        #     self.model = model.to(self.device)
+        #     self.tokenizer = tokenizer
+        # elif model_name is not None:
+        #     if quantize:
+        #         # quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+        #         quantization_config = BitsAndBytesConfig(
+        #             load_in_4bit=True,
+        #             bnb_4bit_quant_type="nf4",
+        #             bnb_4bit_compute_dtype=torch.float16,  # Use float16 for 2070 Super
+        #             bnb_4bit_use_double_quant=True,     # Saves a bit more memory
+        #         )
+        #         self.model = AutoModelForCausalLM.from_pretrained(
+        #             model_name,
+        #             quantization_config=quantization_config,
+        #             dtype = torch.float16,
+        #             device_map="auto",  # This is essential for bitsandbytes
+        #             attn_implementation="sdpa",
+        #             trust_remote_code=True  # Add this line!
+        #         )
+        #     else:
+        #         self.model = AutoModelForCausalLM.from_pretrained(
+        #             model_name,
+        #             dtype=torch.float16,
+        #             trust_remote_code=True,  # Add this line!
+        #             attn_implementation="sdpa"
+        #         ).to(self.device)
+
+        #     self.tokenizer = AutoTokenizer.from_pretrained(
+        #         model_name,
+        #         padding_side='left',
+        #         trust_remote_code=True)
+        #     print(f"Padding side: {self.tokenizer.padding_side}")
+        # else:
+        #     raise ValueError(
+        #         "Provide either (model_name) or (model, tokenizer) pair.")
 
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
@@ -146,10 +292,10 @@ class Modeler:
         self.allowed_tokens = allowed_tokens
         tokenized = self.tokenizer.convert_tokens_to_ids(allowed_tokens)
         self.allowed_token_ids = sorted(list(set(tokenized)))
-        self.allowed_ids_tensor = torch.tensor(self.allowed_token_ids, device=self.device)
+        self.allowed_ids_tensor = torch.tensor(
+            self.allowed_token_ids, device=self.device)
 
         self.logits_processor = LogitsMask(self.allowed_token_ids)
-
 
     def clear_token_constraints(self):
         """
@@ -158,8 +304,7 @@ class Modeler:
         self.logits_processor = None
         self.allowed_token_ids = []
 
-
-    def generate_chat(self, prompts: list[PreparedPrompt], max_new_tokens: int = 1, top_k: Optional[int] = None, **gen_kwargs)-> list[ModelOutput]:
+    def generate_chat(self, prompts: list[PreparedPrompt], max_new_tokens: int = 1, top_k: Optional[int] = None, **gen_kwargs) -> list[ModelOutput]:
         """
         Generates a response using the model's chat template for instruction-following.
 
@@ -170,9 +315,11 @@ class Modeler:
         if not self._has_warned_constraints and self.logits_processor is None:
             print("Warning, token constraints not set!")
             self._has_warned_constraints = True
-        
+
         if top_k is None:
             print("Warning, top_k not set, saving full logits tensor.")
+
+        template_kwargs = gen_kwargs.pop("chat_template_kwargs", {})
 
         # 1. Apply the chat template to each conversation
         # This formats the conversation history with all the necessary special tokens.
@@ -181,7 +328,8 @@ class Modeler:
             self.tokenizer.apply_chat_template(
                 prompt.conversation,
                 tokenize=False,
-                add_generation_prompt=True
+                add_generation_prompt=True,
+                **template_kwargs
             ) + prompt.assistant_prefix
             for prompt in prompts
         ]
@@ -202,76 +350,79 @@ class Modeler:
             "max_new_tokens": max_new_tokens,
             "do_sample": False,
             "output_logits": True,
-            "return_dict_in_generate": True, # Should always be True
+            "return_dict_in_generate": True,  # Should always be True
+            # TODO: To Silence EOS Token warning
+            "pad_token_id": self.tokenizer.pad_token_id,
             **gen_kwargs
         }
 
         if self.logits_processor is not None:
             # Note: The Hugging Face API requires this to be a list
             generate_kwargs["logits_processor"] = [self.logits_processor]
-        
 
         hf_output = self.model.generate(**generate_kwargs)
-        
+
         input_length = model_inputs['input_ids'].shape[-1]
 
-        return self._process_model_outputs(hf_output=hf_output,
-                                    prompts = prompts,
-                                    input_length = input_length,
-                                    top_k = top_k)
-    
-    
+        result = self._process_model_outputs(hf_output=hf_output,
+                                             prompts=prompts,
+                                             formatted_prompts=formatted_prompts,
+                                             input_length=input_length,
+                                             top_k=top_k)
+        del hf_output
+        torch.cuda.empty_cache()
+
+        return result
 
     def _process_model_outputs(
-        self, 
-        hf_output, 
-        prompts: list[PreparedPrompt], 
-        input_length: int, 
+        self,
+        hf_output,
+        prompts: list[PreparedPrompt],
+        formatted_prompts: list[str],
+        input_length: int,
         top_k: Optional[int]
-            ) -> list[ModelOutput]:
+    ) -> list[ModelOutput]:
         """
         Internal helper to unbind tensors, apply constraints/compression, 
-        and package results into ModelOutput objects.
+        and package results into ModelOutput objects memory-safely.
         """
-        
-        # 1. Unbind Sequences (Batch -> List)
-        batch_sequences = torch.unbind(hf_output.sequences, dim=0)
-
-        # 2. Prepare Logits containers
+        batch_sequences = torch.unbind(
+            hf_output.sequences.detach().cpu(), dim=0)
         batch_logits_containers = []
-        
+
         if hasattr(hf_output, 'logits') and hf_output.logits:
-            # Stack to [Batch, Time, Vocab]
+
+            # --- SUPER FAST VECTORIZED BATCH STACKING ---
+            # This does the entire batch in one blazing fast C++ operation
             stacked_logits = torch.stack(hf_output.logits, dim=1)
-            
+
             # --- A. Top-K Logic (Batch Operation) ---
             if top_k:
-                # Optimized: Run topk on the whole batch at once
                 tk_vals, tk_idxs = torch.topk(stacked_logits, k=top_k, dim=-1)
-                list_tk_vals = torch.unbind(tk_vals, dim=0)
-                list_tk_idxs = torch.unbind(tk_idxs, dim=0)
+
+                # BULK CPU TRANSFER: Move the whole batch out of VRAM instantly
+                list_tk_vals = torch.unbind(tk_vals.detach().cpu(), dim=0)
+                list_tk_idxs = torch.unbind(tk_idxs.detach().cpu(), dim=0)
             else:
-                # Dense Mode
-                list_tk_vals = torch.unbind(stacked_logits, dim=0)
+                list_tk_vals = torch.unbind(
+                    stacked_logits.detach().cpu(), dim=0)
                 list_tk_idxs = [None] * len(prompts)
 
             # --- B. Constraint Logic (Per-Row Operation) ---
-            # We iterate to handle the "Ragged" nature of constraints
             for i, prompt in enumerate(prompts):
-                
-                # 1. Extract Constraints (if any)
-                c_vals = None
-                c_idxs = None
-                
+                c_vals, c_idxs = None, None
+
                 if prompt.constraint_ids is not None:
                     # Move target IDs to device
                     targets = prompt.constraint_ids.to(self.device)
-                    # Slice the specific row [Seq, V] -> [Seq, C]
-                    c_vals = stacked_logits[i].index_select(dim=-1, index=targets)
-                    c_idxs = targets # Store the IDs that generated these values
+                    # Fast slice from the stacked batch tensor
+                    c_vals = stacked_logits[i].index_select(
+                        dim=-1, index=targets)
 
-                # 2. Create the Container for this row
-                # We have the Top-K parts from the list, and Constrained parts from this loop
+                    # IMMEDIATELY move the extracted constraints to CPU to prevent VRAM leak
+                    c_vals = c_vals.detach().cpu()
+                    c_idxs = targets.detach().cpu()
+
                 container = LogitsContainer(
                     values=list_tk_vals[i],
                     indices=list_tk_idxs[i],
@@ -279,24 +430,24 @@ class Modeler:
                     constrained_indices=c_idxs
                 )
                 batch_logits_containers.append(container)
-        
+
+            del stacked_logits
+
         else:
-            # Fallback if no logits returned
             batch_logits_containers = [None] * len(prompts)
 
-        # 3. Final Packaging
-        results = []
-        for prompt, seq, log_container in zip(prompts, batch_sequences, batch_logits_containers):
-            results.append(ModelOutput(
-                prompt=prompt,
-                sequence=seq,
-                logits=log_container,
+        return [
+            ModelOutput(
+                prompt=p,
+                sequence=s,
+                formatted_prompt=fp,
+                logits=c,
                 input_length=input_length
-            ))
-            
-        return results
+            )
+            for p, s, fp, c in zip(prompts, batch_sequences, formatted_prompts, batch_logits_containers)
+        ]
 
-    def decode(self, model_outputs: list[ModelOutput], 
+    def decode(self, model_outputs: list[ModelOutput],
                skip_special_tokens: bool = True) -> list[str]:
         """
         Decode generated sequences into strings.
@@ -305,15 +456,14 @@ class Modeler:
         #     raise ValueError("No model output found. Run generate() first.")
 
         generated_token_list = [
-                out.sequence[out.input_length :] 
-                for out in model_outputs
-            ]
+            out.sequence[out.input_length:]
+            for out in model_outputs
+        ]
 
         return self.tokenizer.batch_decode(
-                    generated_token_list, 
-                    skip_special_tokens=skip_special_tokens
-                )
-
+            generated_token_list,
+            skip_special_tokens=skip_special_tokens
+        )
 
     def get_rating(self, model_output) -> str:
         """
@@ -324,22 +474,6 @@ class Modeler:
         last_token = decoded.split()[-1]
         return last_token
 
-    # def get_logits(self) -> torch.Tensor:
-    #     """
-    #     Return the raw logits tensor from the last generation.
-    #     """
-    #     if not hasattr(self, "model_output"):
-    #         raise ValueError("No model output found. Run generate() first.")
-    #     return self.model_output.logits
-
-    # def get_logits(self) -> torch.Tensor:
-    #     """
-    #     Return the raw logits tensor from the last generation.
-    #     """
-    #     if not hasattr(self, "model_output"):
-    #         raise ValueError("No model output found. Run generate() first.")
-    #     return self.model_output.logits
-    
     def get_logits(self, model_output) -> torch.Tensor:
         """
         Return the raw logits tensor from the last generation.
@@ -350,7 +484,8 @@ class Modeler:
         """
         Return the logits for only the allowed tokens at the final generation step.
         """
-        logits = self.get_logits(model_output)[0]  # TODO: incorrect for multiple token generation!
+        logits = self.get_logits(model_output)[
+            0]  # TODO: incorrect for multiple token generation!
         # shape: (batch, seq_len, vocab)
         relevant_logits = logits[:, self.allowed_token_ids].detach().cpu()
 
@@ -359,7 +494,7 @@ class Modeler:
 
         # return {token: float(value) for token, value in zip(self.allowed_tokens, last_logits)}
         return relevant_logits
-    
+
     def get_relevant_logits_dict(self, model_output, normalize: bool = False):
         """
         Return the logits for only the allowed tokens at the FIRST generation step.
@@ -375,9 +510,11 @@ class Modeler:
         # shape: (batch, vocab_size)
         first_logits = self.get_logits(model_output)[0]
         # shape: (batch, num_allowed_tokens)
-        relevant_logits_batch = first_logits[:, self.allowed_token_ids].detach().cpu()
+        relevant_logits_batch = first_logits[:,
+                                             self.allowed_token_ids].detach().cpu()
 
-        relevant_tokens = [self.tokenizer.convert_ids_to_tokens(id) for id in self.allowed_token_ids]
+        relevant_tokens = [self.tokenizer.convert_ids_to_tokens(
+            id) for id in self.allowed_token_ids]
 
         if normalize:
             relevant_logits_batch = torch.softmax(relevant_logits_batch, dim=1)
@@ -386,7 +523,7 @@ class Modeler:
         for logit_row in relevant_logits_batch:
             # Zip the allowed tokens with the logit values for that single sample
             logit_dict = {
-                token: float(value) 
+                token: float(value)
                 for token, value in zip(relevant_tokens, logit_row)
             }
             results.append(logit_dict)

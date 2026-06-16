@@ -1,0 +1,132 @@
+id: 32515f34e03f
+dimensions:
+  Task_Clarity:
+    name: xml_formative_Task_Clarity
+    description: Concise XML prompt measuring Task_Clarity for 4B models
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - xml
+    - formative
+    - Task_Clarity
+    - scale_4
+    template_chat:
+      system: '<context>
+
+        You are an expert evaluator on a UGC barter platform where brands pitch collaborations
+        to creators.
+
+        </context>
+
+
+        <instruction>
+
+        Your task is to rate the Task_Clarity of the Marketing Copy on a scale of
+        1 to 4, where 1 is the lowest Task_Clarity and 4 is the highest Task_Clarity.
+
+        </instruction>
+
+
+        <metric_definition>
+
+        Task_Clarity: Is it immediately obvious what the product is and what exact
+        deliverables the creator must provide?
+
+        </metric_definition>'
+      user: '<marketing_copy>
+
+        {deal_text}
+
+        </marketing_copy>'
+  Brand_Professionalism:
+    name: xml_formative_Brand_Professionalism
+    description: Concise XML prompt measuring Brand_Professionalism for 4B models
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - xml
+    - formative
+    - Brand_Professionalism
+    - scale_4
+    template_chat:
+      system: '<context>
+
+        You are an expert evaluator on a UGC barter platform where brands pitch collaborations
+        to creators.
+
+        </context>
+
+
+        <instruction>
+
+        Your task is to rate the Brand_Professionalism of the Marketing Copy on a
+        scale of 1 to 4, where 1 is the lowest Brand_Professionalism and 4 is the
+        highest Brand_Professionalism.
+
+        </instruction>
+
+
+        <metric_definition>
+
+        Brand_Professionalism: Does the writing style make the brand sound legitimate,
+        respectful, and highly trustworthy?
+
+        </metric_definition>'
+      user: '<marketing_copy>
+
+        {deal_text}
+
+        </marketing_copy>'
+  Hook_Strength:
+    name: xml_formative_Hook_Strength
+    description: Concise XML prompt measuring Hook_Strength for 4B models
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - xml
+    - formative
+    - Hook_Strength
+    - scale_4
+    template_chat:
+      system: '<context>
+
+        You are an expert evaluator on a UGC barter platform where brands pitch collaborations
+        to creators.
+
+        </context>
+
+
+        <instruction>
+
+        Your task is to rate the Hook_Strength of the Marketing Copy on a scale of
+        1 to 4, where 1 is the lowest Hook_Strength and 4 is the highest Hook_Strength.
+
+        </instruction>
+
+
+        <metric_definition>
+
+        Hook_Strength: Does the copy make the product or collaboration sound exciting,
+        exclusive, and highly desirable?
+
+        </metric_definition>'
+      user: '<marketing_copy>
+
+        {deal_text}
+
+        </marketing_copy>'
+metadata:
+  description: Concise XML formative suite for small models
+  suite_tags:
+  - xml
+  - scale_4
+  - formative

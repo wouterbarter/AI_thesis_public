@@ -1,0 +1,74 @@
+id: d52396d360bf
+dimensions:
+  Task_Clarity:
+    name: rubric_Task_Clarity
+    description: Rubric-grounded prompt measuring Task_Clarity
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - Task_Clarity
+    - scale_4
+    template_chat:
+      system: "You are an expert evaluator of B2B creator briefs. \n    Your task\
+        \ is to rate the Marketing Copy specifically on its Task_Clarity.\n    This\
+        \ measures how unambiguously the text explains what the creator actually has\
+        \ to do (the deliverables).\n\n    Scale definition:\n1: Unacceptable. Vague,\
+        \ confusing, or unprofessional.\n2: Subpar. Understandable, but requires effort\
+        \ to decipher or sounds slightly amateurish.\n3: Good. Clear, professional,\
+        \ and easy to read.\n4: Excellent. Highly precise, instantly understandable,\
+        \ and professionally engaging.\n\n    Output only the integer score."
+      user: "Marketing Copy:\n    {deal_text}"
+  Brand_Professionalism:
+    name: rubric_Brand_Professionalism
+    description: Rubric-grounded prompt measuring Brand_Professionalism
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - Brand_Professionalism
+    - scale_4
+    template_chat:
+      system: "You are an expert evaluator of B2B creator briefs. \n    Your task\
+        \ is to rate the Marketing Copy specifically on its Brand_Professionalism.\n\
+        \    This measures how legitimate, respectful, and premium the brand sounds\
+        \ based purely on their writing style.\n\n    Scale definition:\n1: Unacceptable.\
+        \ Vague, confusing, or unprofessional.\n2: Subpar. Understandable, but requires\
+        \ effort to decipher or sounds slightly amateurish.\n3: Good. Clear, professional,\
+        \ and easy to read.\n4: Excellent. Highly precise, instantly understandable,\
+        \ and professionally engaging.\n\n    Output only the integer score."
+      user: "Marketing Copy:\n    {deal_text}"
+  Hook_Strength:
+    name: rubric_Hook_Strength
+    description: Rubric-grounded prompt measuring Hook_Strength
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - Hook_Strength
+    - scale_4
+    template_chat:
+      system: "You are an expert evaluator of B2B creator briefs. \n    Your task\
+        \ is to rate the Marketing Copy specifically on its Hook_Strength.\n    This\
+        \ measures how well the copy sells the experiential or creative value of the\
+        \ collaboration (excluding money/requirements).\n\n    Scale definition:\n\
+        1: Unacceptable. Vague, confusing, or unprofessional.\n2: Subpar. Understandable,\
+        \ but requires effort to decipher or sounds slightly amateurish.\n3: Good.\
+        \ Clear, professional, and easy to read.\n4: Excellent. Highly precise, instantly\
+        \ understandable, and professionally engaging.\n\n    Output only the integer\
+        \ score."
+      user: "Marketing Copy:\n    {deal_text}"
+metadata:
+  description: rubric-grounded formative suite
+  suite_tags:
+  - scale_4
+  - rubric

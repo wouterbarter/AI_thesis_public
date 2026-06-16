@@ -49,7 +49,7 @@ metadata:
   description: BARS_XML_holistic
   suite_tags:
   - baseline
-  - BARS
-  - XML
   - scale_5
+  - BARS
   - quality
+  - XML

@@ -1,0 +1,266 @@
+id: 9e0112dd10d4
+dimensions:
+  deal_title_product_universality:
+    name: rubric_deal_title_product_universality
+    description: Evaluates application propensity conditional on product_universality
+      for Deal Title
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_title
+    - product_universality
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its product universality.\nThis measures how broad the appeal of the\
+        \ product or service is to a general audience versus a highly niche demographic.\n\
+        \nScale definition:\n1: The creator is highly unlikely to apply.\n2: The creator\
+        \ is somewhat unlikely to apply.\n3: The creator is somewhat likely to apply.\n\
+        4: The creator is highly likely to apply.\n\nOutput only the integer score."
+      user: 'Deal Title:
+
+        {deal_title}'
+  deal_title_hook_strength:
+    name: rubric_deal_title_hook_strength
+    description: Evaluates application propensity conditional on hook_strength for
+      Deal Title
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_title
+    - hook_strength
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its hook strength.\nThis measures how well the text uses sensory words,\
+        \ trendy concepts, or emotional appeals to drive clicks and curiosity.\n\n\
+        Scale definition:\n1: The creator is highly unlikely to apply.\n2: The creator\
+        \ is somewhat unlikely to apply.\n3: The creator is somewhat likely to apply.\n\
+        4: The creator is highly likely to apply.\n\nOutput only the integer score."
+      user: 'Deal Title:
+
+        {deal_title}'
+  deal_title_creator_brand_alignment:
+    name: rubric_deal_title_creator_brand_alignment
+    description: Evaluates application propensity conditional on creator_brand_alignment
+      for Deal Title
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_title
+    - creator_brand_alignment
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its creator brand alignment.\nThis measures how well the deal aligns\
+        \ with aesthetic or lifestyle identities typical of creators (e.g., beauty,\
+        \ fashion, culinary, travel).\n\nScale definition:\n1: The creator is highly\
+        \ unlikely to apply.\n2: The creator is somewhat unlikely to apply.\n3: The\
+        \ creator is somewhat likely to apply.\n4: The creator is highly likely to\
+        \ apply.\n\nOutput only the integer score."
+      user: 'Deal Title:
+
+        {deal_title}'
+  deal_text_product_universality:
+    name: rubric_deal_text_product_universality
+    description: Evaluates application propensity conditional on product_universality
+      for Deal Text
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_text
+    - product_universality
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its product universality.\nThis measures how broad the appeal of the\
+        \ product or service is to a general audience versus a highly niche demographic.\n\
+        \nScale definition:\n1: The creator is highly unlikely to apply.\n2: The creator\
+        \ is somewhat unlikely to apply.\n3: The creator is somewhat likely to apply.\n\
+        4: The creator is highly likely to apply.\n\nOutput only the integer score."
+      user: 'Deal Text:
+
+        {deal_text}'
+  deal_text_hook_strength:
+    name: rubric_deal_text_hook_strength
+    description: Evaluates application propensity conditional on hook_strength for
+      Deal Text
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_text
+    - hook_strength
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its hook strength.\nThis measures how well the text uses sensory words,\
+        \ trendy concepts, or emotional appeals to drive clicks and curiosity.\n\n\
+        Scale definition:\n1: The creator is highly unlikely to apply.\n2: The creator\
+        \ is somewhat unlikely to apply.\n3: The creator is somewhat likely to apply.\n\
+        4: The creator is highly likely to apply.\n\nOutput only the integer score."
+      user: 'Deal Text:
+
+        {deal_text}'
+  deal_text_creator_brand_alignment:
+    name: rubric_deal_text_creator_brand_alignment
+    description: Evaluates application propensity conditional on creator_brand_alignment
+      for Deal Text
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_text
+    - creator_brand_alignment
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its creator brand alignment.\nThis measures how well the deal aligns\
+        \ with aesthetic or lifestyle identities typical of creators (e.g., beauty,\
+        \ fashion, culinary, travel).\n\nScale definition:\n1: The creator is highly\
+        \ unlikely to apply.\n2: The creator is somewhat unlikely to apply.\n3: The\
+        \ creator is somewhat likely to apply.\n4: The creator is highly likely to\
+        \ apply.\n\nOutput only the integer score."
+      user: 'Deal Text:
+
+        {deal_text}'
+  creators_requirement_workload_volume:
+    name: rubric_creators_requirement_workload_volume
+    description: Evaluates application propensity conditional on workload_volume for
+      Creator Requirements
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - creators_requirement
+    - workload_volume
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its workload volume.\nThis measures the sheer amount of deliverables\
+        \ required, including the number of posts, cross-platform publishing, or long-term\
+        \ commitments.\n\nScale definition:\n1: The creator is highly unlikely to\
+        \ apply.\n2: The creator is somewhat unlikely to apply.\n3: The creator is\
+        \ somewhat likely to apply.\n4: The creator is highly likely to apply.\n\n\
+        Output only the integer score."
+      user: 'Creator Requirements:
+
+        {creators_requirement}'
+  creators_requirement_creative_micromanagement:
+    name: rubric_creators_requirement_creative_micromanagement
+    description: Evaluates application propensity conditional on creative_micromanagement
+      for Creator Requirements
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - creators_requirement
+    - creative_micromanagement
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its creative micromanagement.\nThis measures the degree to which the\
+        \ brand dictates strict scripts, exact video lengths, specific aesthetic guidelines,\
+        \ or requires content approval before posting.\n\nScale definition:\n1: The\
+        \ creator is highly unlikely to apply.\n2: The creator is somewhat unlikely\
+        \ to apply.\n3: The creator is somewhat likely to apply.\n4: The creator is\
+        \ highly likely to apply.\n\nOutput only the integer score."
+      user: 'Creator Requirements:
+
+        {creators_requirement}'
+  creators_requirement_logistical_and_financial_friction:
+    name: rubric_creators_requirement_logistical_and_financial_friction
+    description: Evaluates application propensity conditional on logistical_and_financial_friction
+      for Creator Requirements
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - creators_requirement
+    - logistical_and_financial_friction
+    - scale_4
+    - propensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. Deals are\
+        \ posted by companies and are targeted at creators, who are expected to make\
+        \ content in exchange for the product specified in the deal. \nYour task is\
+        \ to evaluate how likely the creator is to apply to the deal conditional strictly\
+        \ on its logistical and financial friction.\nThis measures external barriers\
+        \ to creating the content, such as mandatory travel to a physical location,\
+        \ strict turnaround times (e.g., 48 hours), or financial risk (e.g., pay upfront\
+        \ and get refunded).\n\nScale definition:\n1: The creator is highly unlikely\
+        \ to apply.\n2: The creator is somewhat unlikely to apply.\n3: The creator\
+        \ is somewhat likely to apply.\n4: The creator is highly likely to apply.\n\
+        \nOutput only the integer score."
+      user: 'Creator Requirements:
+
+        {creators_requirement}'
+metadata:
+  description: Comprehensive formative suite across Title, Text, and Requirements
+  suite_tags:
+  - scale_4
+  - rubric
+  - propensity

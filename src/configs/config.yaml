@@ -4,31 +4,120 @@
 
 # active_analysis: 'mcgill_qa_feedback'
 active_analysis: 'barter_deals'
-sandbox_mode: 'True'
-processed_input_data: True
+sandbox_mode: False
+
 
 generation_globals:
-  batch_size: 2
+  batch_size: 4
   # debug_row_limit: 1000
-  top_k: 1000
+  top_k: 500
   models_to_run:
-    # - 'google/gemma-3-4b-it'
+    - 'Qwen/Qwen3.5-4B'
     - 'Qwen/Qwen3-4B-Instruct-2507'
-    # - 'meta-llama/Llama-3.2-3B-Instruct'
+    - 'google/gemma-4-E2B-it'
+    - 'meta-llama/Llama-3.2-3B-Instruct'
+    # - 'google/gemma-4-E4B-it'
+    # - 'rodrigomt/Qwen3.5-4B-Uncensored-Aggressive'
+    # - 'techwithsergiu/Qwen3.5-text-9B'
+    # - 'google/gemma-3-4b-it'
     # - 'mistralai/Ministral-8B-Instruct-2410'
     # - 'google/gemma-3-1b-it'
-  use_cleaned_data: True
+  use_processed_data: True
+  # shards_per_save: 10
+  items_per_shard: 100
   
 
 analyses:
   barter_deals:
     name: "Barter Deals Analysis"
-    variable_names:
-      - 'deal_text'
+    active_analysis_name: "barter_deals"
+    # variable_names:
+    #   - 'deal_text'
     keys:
       raw_id_col: 'deal_id'
       evaluations_id_col: 'input_id'
-    input_filename: 'BARTER_DEALS_CLEAN'
+    input_filenames:
+      processed_data_filename: 'BARTER_DEALS_MODEL_READY'
+      raw_data_filename: 'BARTER_DEALS'
+    generation:
+      prompts:
+        # ids_to_skip: ['de4b633f94', 'd6ac463714', '9e5546bfa1', '539ae380307e']
+        ids_to_skip: []
+        ids_to_include: ['dbadc59142e9', '38c4714f0e3a', '1e1ff82a28e2']
+        # ids_to_include: ['aaed425bb6d8']
+        required_tags: []
+        tags_to_skip: []
+      data:
+        filtering:
+          # cats_to_subset: ['Lifestyle', 'Lifestyle_Luxury', 'Beauty_UGC', 'Beauty_Fashion']
+    data_loading:
+      prompts:
+        # ids_to_include: ['f162d59256cc', '6faa8a8b031c', '698a82f5d8a3', '1e1ff82a28e2']
+        ids_to_include: ['dbadc59142e9', '38c4714f0e3a', '1e1ff82a28e2']
+        # models_to_include: ['Qwen-Qwen3.5-4B', 'Qwen-Qwen3-4B-Instruct-2507', 'google-gemma-4-E2B-it', 'meta-llama-Llama-3.2-3B-Instruct']
+        # models_to_include: ['Qwen-Qwen3.5-4B', 'meta-llama-Llama-3.2-3B-Instruct']
+        models_to_include: []
+
+    general_cleaning_thresholds:
+      min_online_days: 7
+      max_spam_title_words: 2
+      max_spam_text_words: 5
+      max_spam_apps: 10
+      max_duplicate_apps: 5
+      min_online_hours: 160 
+
+    feature_engineering:
+      # min_date: '2025-01-01'
+      target_days: 7
+      # spatial_radius_km: 50.0
+      spatial_radii_km:
+        - 20.0
+        - 50.0
+      lookback_windows: 
+        - 7
+        - 30
+      country_to_iso3:
+        'Netherlands': 'NLD'
+        'Germany': 'DEU'
+        'Denmark': 'DNK'
+        'Portugal': 'PRT'
+        'Spain': 'ESP'
+        'Sweden': 'SWE'
+        'Belgium': 'BEL'
+        'France': 'FRA'
+        'Italy': 'ITA'
+        'United Kingdom': 'GBR'
+        'United States': 'USA'
+        'Poland': 'POL'
+        'Greece': 'GRC'
+        'Malta': 'MLT'
+        'Ukraine': 'UKR'
+    model_prep_thresholds:
+      START_DATE: "2025-04"
+      MIN_CATEGORY_OBSERVATIONS: 30
+      LEGACY_PARTNER_IDS_TO_REMOVE: [85, 4]
+      PARTNER_IDS_TO_REMOVE: ['01992995-27fe-0065-4f9e-db8ec1e66a27']
+      diff_total_apps_7_days_floor: 10
+      MIN_APPS_TOTAL: 0
+      min_apps_after_7_days: -1
+      max_follower_requirement: 25000
+      LOG_TRANSFORM_COLS: 
+        - 'apps_after_7_days'
+        - 'deal_value'
+        - 'title_word_count'
+        - 'text_word_count'
+        - 'requirements_word_count'
+        - 'competitor_density'
+        # - 'online_active_0_7d'
+        # - 'online_active_7_30d'
+        # - 'phys_active_0_7d_0_20km'
+        # - 'phys_active_0_7d_20_50km'
+        # - 'phys_active_7_30d_0_20km'
+        # - 'phys_active_7_30d_20_50km'
+        # - 'global_active_0_7d'
+        # - 'global_active_7_30d'
+
+
     filters:
       country_code: 'NLD'
     model_vars:
@@ -49,22 +138,36 @@ analyses:
 
   mcgill_qa_feedback:
     name: "McGill Feedback Analysis"
+    active_analysis_name: "mcgill_qa_feedback"
     variable_names:
       - 'question'
       - 'answer'
     keys:
       raw_id_col: 'input_id'
       evaluations_id_col: 'input_id'
-    input_filename: 'MCGILL_QA_FEEDBACK_CLEAN'
+    input_filenames:
+      # processed_data_filename: 'MCGILL_QA_FEEDBACK_V1'
+      processed_data_filename: 'MCGILL_FEEDBACKQA_V2'
+      raw_data_filename: 'MCGILL_QA_FEEDBACK'
     model_vars:
       experimental_groups: 
         - 'model_name'
         - 'prompt_id'
         - 'dimension_name'
-    # paths:
-    #   raw_data: 'data/raw/MCGILL_QA_FEEDBACK.csv'
-    #   results_logs_dir: 'results/MCGILL_QA_FEEDBACK/'
-
+    generation:
+      prompts:
+        ids_to_skip: []
+        # ids_to_include: ['1dfe8cb6857a', '946e242b933f']
+        ids_to_include: ['f926cb88b5c8', 'f1ea5fbc4957', '83fb9645af53']
+        required_tags: []
+        tags_to_skip: []
+      data:
+        filtering:
+    data_loading:
+      prompts:
+        # ids_to_include: ['be0f22b3913e', '770268391b2b', '1dfe8cb6857a']
+        ids_to_include: ['f926cb88b5c8', 'f1ea5fbc4957', '83fb9645af53']
+        models_to_include: []
 
 
 output_paths:

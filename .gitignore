@@ -211,6 +211,7 @@ __marimo__/
 
 results/
 data/*
+data_backup/*
 private_data/
 venv312/
 .venv312/

@@ -5,17 +5,18 @@ import math
 import hashlib
 from typing import List, Dict, Any
 
-import torch
-import torch.nn.functional as F
+# import torch
+# import torch.nn.functional as F
 
+import matplotlib.pyplot as plt
 import ipywidgets as widgets
 from IPython.display import display, clear_output
 
 from src.prompt_manager import PreparedPrompt
-from .modeler import Modeler, ModelOutput # Use relative import to access the Modeler class
+# Use relative import to access the Modeler class
+from .modeler import Modeler, ModelOutput
 import itertools
 from collections.abc import Iterator
-
 
 
 def generate_content_id(row, columns_to_hash):
@@ -27,9 +28,9 @@ def generate_content_id(row, columns_to_hash):
     return hashlib.sha256(combined_string.encode('utf-8')).hexdigest()[:16]
 
 
-def generate_in_batches(modeler: Modeler, 
-                        conversations: list[PreparedPrompt], 
-                        batch_size: int, 
+def generate_in_batches(modeler: Modeler,
+                        conversations: list[PreparedPrompt],
+                        batch_size: int,
                         **kwargs) -> list[ModelOutput]:
     """
     A wrapper function that runs generation in batches and returns processed output objects.
@@ -37,7 +38,8 @@ def generate_in_batches(modeler: Modeler,
     model_output_list = []
 
     n_batches = math.ceil(len(conversations) / batch_size)
-    print(f"Processing {len(conversations)} prompts in {n_batches} batches of size {batch_size}...")
+    print(
+        f"Processing {len(conversations)} prompts in {n_batches} batches of size {batch_size}...")
 
     for i in tqdm(range(0, len(conversations), batch_size), desc="Generating Batches"):
         batch_prompts = conversations[i:i + batch_size]
@@ -56,31 +58,30 @@ def chunked_generator(iterable, size):
         # Chain the first item back with the next (size-1) items
         yield list(itertools.chain([first], itertools.islice(iterator, size - 1)))
 
+
 def generate_stream(modeler: Modeler, prompt_iterator: Iterator[PreparedPrompt], batch_size: int, **kwargs):
     """
     Yields batches of ModelOutput objects as they are computed.
     """
     batch_gen = chunked_generator(prompt_iterator, batch_size)
-    
+
     for batch_prompts in batch_gen:
         # This is where the work happens
         batch_results = modeler.generate_chat(batch_prompts, **kwargs)
-        
+
         # We yield the whole list of results for this batch
         yield batch_results
 
 
-
-
 def create_interactive_viewer(
-    data_dict: Dict[tuple, pd.DataFrame], 
+    data_dict: Dict[tuple, pd.DataFrame],
     group_keys: List[str],
     title: str = "Interactive DataFrame Viewer"
 ):
     """
     Creates an interactive viewer with multiple dropdowns that
     correctly displays the rich, interactive pandas DataFrame.
-    
+
     This works by using the "clear_output(wait=True)" method,
     which forces a full, clean re-render of the DataFrame.
 
@@ -91,12 +92,12 @@ def create_interactive_viewer(
                     as your groupby.
                     e.g., ['model_name', 'mode_rating', 'prompt_id']
     """
-    
+
     all_keys_tuples = list(data_dict.keys())
     if not all_keys_tuples:
         print("Warning: The provided dictionary is empty.")
         return
-        
+
     if len(all_keys_tuples[0]) != len(group_keys):
         print(f"Error: Mismatch between key length ({len(all_keys_tuples[0])}) "
               f"and group_keys length ({len(group_keys)}).")
@@ -112,34 +113,34 @@ def create_interactive_viewer(
             style={'description_width': 'initial'},
             layout={'width': 'auto'}
         )
-        
+
     # --- 2. Create the HBox for controls ---
     controls_box = widgets.HBox(list(dropdowns.values()))
 
     # --- 3. Define the update function (based on your working logic) ---
-    def update_display(change): # 'change' is unused, but required by .observe
-        
+    def update_display(change):  # 'change' is unused, but required by .observe
+
         # A. Build the key from all dropdowns
         current_key_tuple = tuple(
             dd.value for dd in dropdowns.values()
         )
-        
+
         # B. Get the dataframe
         df_to_show = data_dict.get(current_key_tuple)
 
         # C. Manually clear and redraw *everything*
         # This is the "brute force" method from your working function.
         clear_output(wait=True)
-        
+
         # D. Re-display the title and controls
         print(f"--- {title} ---")
         display(controls_box)
-        
+
         # E. Display the new dataframe
         if df_to_show is not None:
             # This call is now at the "top level" of the cell
             # and should render the full, interactive DataFrame.
-            display(df_to_show) 
+            display(df_to_show)
         else:
             print(f"No data for this combination: {current_key_tuple}")
 
@@ -152,7 +153,7 @@ def create_interactive_viewer(
     # Manually draw the title and controls just once to start
     print(f"--- {title} ---")
     display(controls_box)
-    
+
     # Manually call the update function to draw the *first* dataframe
     update_display(None)
 
@@ -252,9 +253,28 @@ def view_statsmodels_summaries(results_dict: dict, title: str = "Interactive Mod
 #     display(data_dict[dropdown.value])
 
 
+# def interactive_dataframe_selector_old(data_dict, description="Select option:"):
+#     # label -> value pairs; value is the tuple key
+#     options = [(f"rating {k[0]} | prompt {k[1]}", k) for k in data_dict.keys()]
+#     dropdown = widgets.Dropdown(
+#         options=options,
+#         description=description,
+#         style={'description_width': 'initial'},
+#         layout=widgets.Layout(width='400px')
+#     )
+
+#     def update_table(change):
+#         clear_output(wait=True)
+#         display(dropdown)
+#         display(data_dict[change.new])
+
+#     dropdown.observe(update_table, names='value')
+#     display(dropdown)
+#     display(data_dict[dropdown.value])
+
 def interactive_dataframe_selector(data_dict, description="Select option:"):
     # label -> value pairs; value is the tuple key
-    options = [(f"rating {k[0]} | prompt {k[1]}", k) for k in data_dict.keys()]
+    options = [k for k in data_dict.keys()]
     dropdown = widgets.Dropdown(
         options=options,
         description=description,
@@ -270,6 +290,49 @@ def interactive_dataframe_selector(data_dict, description="Select option:"):
     dropdown.observe(update_table, names='value')
     display(dropdown)
     display(data_dict[dropdown.value])
+
+
+def interactive_plot_viewer(data_dict, plot_func, description="Select option:"):
+    """
+    A generalized interactive widget that takes a dictionary and a plotting function.
+
+    Parameters:
+    - data_dict: Dictionary where keys are dropdown options and values are the data.
+    - plot_func: A callable function that takes (key, data) and renders the plot/output.
+    - description: Text to display next to the dropdown.
+    """
+    options = list(data_dict.keys())
+    dropdown = widgets.Dropdown(
+        options=options,
+        description=description,
+        style={'description_width': 'initial'},
+        layout=widgets.Layout(width='400px')
+    )
+
+    out = widgets.Output()
+
+    def update_plot(change):
+        selected_key = change.new
+        selected_data = data_dict[selected_key]
+
+        with out:
+            clear_output(wait=True)
+            # Call your custom plotting function
+            plot_func(selected_key, selected_data)
+            plt.show()  # Ensure matplotlib renders correctly in the output widget
+
+    # Attach the observer
+    dropdown.observe(update_plot, names='value')
+
+    # Display the UI
+    display(dropdown)
+
+    # Initialize the very first plot
+    with out:
+        plot_func(dropdown.value, data_dict[dropdown.value])
+        plt.show()
+
+    display(out)
 
 
 def interactive_regression_results_selector(data_dict, description="Select option:"):
@@ -292,12 +355,14 @@ def interactive_regression_results_selector(data_dict, description="Select optio
     display(data_dict[dropdown.value].summary())
 
 
-
 def simple_dashboard(master_results):
     # 1. Define Widgets
-    w_off = widgets.Dropdown(options=[None, 'log_offset'], description='Offset')
-    w_clus = widgets.Dropdown(options=[None, 'partner_id'], description='Cluster')
-    w_seg = widgets.Dropdown(description='Segment') # Options will be filled dynamically
+    w_off = widgets.Dropdown(
+        options=[None, 'log_offset'], description='Offset')
+    w_clus = widgets.Dropdown(
+        options=[None, 'partner_id'], description='Cluster')
+    # Options will be filled dynamically
+    w_seg = widgets.Dropdown(description='Segment')
     output = widgets.Output()
 
     # 2. The Logic (One function to rule them all)
@@ -305,10 +370,10 @@ def simple_dashboard(master_results):
         # Fetch the result dictionary for the current settings
         key = (w_off.value, w_clus.value)
         current_models = master_results.get(key, {})
-        
+
         # Update Segment dropdown options based on what's available
         w_seg.options = list(current_models.keys())
-        
+
         # Display the summary
         output.clear_output(wait=True)
         with output:
@@ -321,7 +386,7 @@ def simple_dashboard(master_results):
     w_off.observe(update, 'value')
     w_clus.observe(update, 'value')
     w_seg.observe(update, 'value')
-    
+
     # Initialize
-    update() 
+    update()
     display(w_off, w_clus, w_seg, output)

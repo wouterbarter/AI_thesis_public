@@ -1,0 +1,81 @@
+id: 4f8baa233704
+dimensions:
+  reward_explicitness:
+    name: rubric_reward_explicitness
+    description: Rubric-grounded prompt measuring Reward_Explicitness for Deal Titles
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - reward_explicitness
+    - title_evaluation
+    - scale_4
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \n    Your\
+        \ task is to rate the Deal Title specifically on its Reward_Explicitness.\n\
+        \    This measures how explicitly the reward is stated, focusing on exact\
+        \ monetary values or power words like 'FREE' or 'GRATIS'.\n\n    Scale definition:\n\
+        \    1: Hidden. No reward mentioned (e.g., \"Looking for creator\").\n2: Vague.\
+        \ Reward is implied but not specified (e.g., \"Try our brand\").\n3: Clear.\
+        \ The specific product/service is stated clearly.\n4: Highly Explicit. Uses\
+        \ exact monetary values (e.g., \"\u20AC50\") or capitalization emphasizing\
+        \ cost-free (e.g., \"GRATIS\", \"FREE\").\n\n    Output only the integer score."
+      user: "Deal Title:\n    {deal_title}"
+  product_universality:
+    name: rubric_product_universality
+    description: Rubric-grounded prompt measuring Product_Universality for Deal Titles
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - product_universality
+    - title_evaluation
+    - scale_4
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \n    Your\
+        \ task is to rate the Deal Title specifically on its Product_Universality.\n\
+        \    This measures how broad the appeal of the product or service is to a\
+        \ general audience versus a highly niche demographic.\n\n    Scale definition:\n\
+        \    1: Extremely Niche. Requires a highly specific life event or uncommon\
+        \ asset (e.g., getting married, owning a pet).\n2: Specific Demographic. Appeals\
+        \ only to a specific gender, age, or localized area.\n3: Broad Appeal. Useful\
+        \ to most people, but might not excite everyone.\n4: Universal. Food, general\
+        \ gifts, or household items that almost any creator could use or desire immediately.\n\
+        \n    Output only the integer score."
+      user: "Deal Title:\n    {deal_title}"
+  emotional_hook:
+    name: rubric_emotional_hook
+    description: Rubric-grounded prompt measuring Emotional_Hook for Deal Titles
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - emotional_hook
+    - title_evaluation
+    - scale_4
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \n    Your\
+        \ task is to rate the Deal Title specifically on its Emotional_Hook.\n   \
+        \ This measures how well the title uses sensory words, trendy concepts, or\
+        \ emotional appeals to drive clicks and curiosity.\n\n    Scale definition:\n\
+        \    1: Clinical/Dry. Sounds like a medical procedure or a corporate task.\n\
+        2: Informational. States the product plainly with no exciting adjectives.\n\
+        3: Engaging. Uses appealing adjectives, emojis, or trendy buzzwords.\n4: Irresistible.\
+        \ Uses highly emotive language, sensory descriptions, or concepts of unlimited\
+        \ abundance (e.g., \"All You Can\").\n\n    Output only the integer score."
+      user: "Deal Title:\n    {deal_title}"
+metadata:
+  description: formative suite for deal titles
+  suite_tags:
+  - scale_4
+  - title_evaluation
+  - rubric
