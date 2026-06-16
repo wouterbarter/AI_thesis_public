@@ -1,0 +1,57 @@
+id: 6faa8a8b031c
+dimensions:
+  deal_pitch_holistic_deal_attractiveness:
+    name: rubric_deal_pitch_holistic_deal_attractiveness
+    description: Evaluates the intensity of holistic_deal_attractiveness on the Deal
+      Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - holistic_deal_attractiveness
+    - deal_pitch
+    - informed_holistic
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ holistic deal attractiveness.\nEvaluate the overall attractiveness, fairness,\
+        \ and quality of this barter deal from the perspective of a professional content\
+        \ creator. Consider the 'Gestalt' or total balance of the offer: is the perceived\
+        \ reward (the product and brand) worth the required cost (the workload and\
+        \ rules)?\n\nScale definition:\n1: Extremely Unattractive/Exploitative\n2:\
+        \ Very Unattractive\n3: Unattractive\n4: Neutral/Average Deal\n5: Attractive\n\
+        6: Very Attractive\n7: Extremely Attractive/Premium Deal\n\nOutput only the\
+        \ integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+metadata:
+  description: Holistic Informed Quality V2, scale 7, includes requirements, SPV2
+  suite_tags:
+  - trait_intensity
+  - rubric
+  - deal_pitch
+  - scale_7
+  - holistic_deal_attractiveness
+  - informed_holistic

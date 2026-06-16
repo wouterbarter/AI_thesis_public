@@ -1,0 +1,44 @@
+id: 0eaeb6c665d8
+dimensions:
+  deal_pitch_holistic_deal_attractiveness:
+    name: rubric_deal_pitch_holistic_deal_attractiveness
+    description: Evaluates the intensity of holistic_deal_attractiveness on the Holistic
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - holistic_deal_attractiveness
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Holistic Deal Pitch conditional strictly on\
+        \ its holistic deal attractiveness.\nThis measures You are measuring 'Holistic\
+        \ Deal Attractiveness.' This construct evaluates the overall, generalized\
+        \ appeal and economic viability of the barter opportunity from the perspective\
+        \ of a typical content creator. It measures the continuum between a fundamentally\
+        \ unappealing offer with a deeply negative subjective value exchange that\
+        \ strongly discourages participation, up to a highly coveted, premium opportunity\
+        \ with an overwhelmingly positive value exchange.\n\nScale definition:\n1:\
+        \ Weak\n2: Fair\n3: Good\n4: Excellent\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+metadata:
+  description: Holistic Baseline Test
+  suite_tags:
+  - deal_pitch
+  - holistic_deal_attractiveness
+  - scale_4
+  - trait_intensity
+  - rubric

@@ -1,0 +1,58 @@
+id: be0f22b3913e
+dimensions:
+  qa_pair_informed_answer_quality:
+    name: rubric_qa_pair_informed_answer_quality
+    description: Evaluates the intensity of informed_answer_quality on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - informed_answer_quality
+    - qa_pair
+    - feedback_qa
+    - informed_baseline
+    template_chat:
+      system: "You are an expert evaluator of Question and Answer (Q&A) pairs for\
+        \ a public health information platform. \nIn this ecosystem, individuals ask\
+        \ questions regarding the COVID-19 pandemic, and an informational text passage\
+        \ is provided as the answer. Your evaluation must be grounded in this specific\
+        \ context of health-related information exchange.\n\nYour task is to evaluate\
+        \ the provided Q&A Pair conditional strictly on its informed answer quality.\n\
+        This evaluates the overall objective informational quality and structural\
+        \ integrity of the answer provided in response to the user's question. To\
+        \ determine this overall quality, you must simultaneously consider and synthesize\
+        \ four underlying factors into a single judgment:\n1. Topical Relevance: The\
+        \ degree to which the answer directly addresses the core entity and obeys\
+        \ contextual constraints.\n2. Information Completeness: The depth and comprehensiveness\
+        \ of the answer.\n3. Structural Clarity: The compositional logic and syntactic\
+        \ organization of the text.\n4. Actionability & Utility: The functional and\
+        \ practical directives contained within the response.\n\nAssess the total\
+        \ informational value and composition of the text based on these aggregated\
+        \ factors\u2014ranging from a fundamentally deficient, low-quality answer\
+        \ with severely degraded informational and structural value (Bad), up to an\
+        \ exceptionally sound, high-quality answer with perfect informational and\
+        \ structural integrity (Excellent).\n\nScale definition:\n1: Bad\n2: Could\
+        \ be Improved\n3: Acceptable\n4: Excellent\n\nOutput only the integer score."
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+metadata:
+  description: Holistic Informed Baseline FeedbackQA, Scale 4, SPV1
+  suite_tags:
+  - informed_baseline
+  - informed_answer_quality
+  - trait_intensity
+  - qa_pair
+  - scale_4
+  - rubric
+  - feedback_qa

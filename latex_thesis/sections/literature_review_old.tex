@@ -1,0 +1,359 @@
+% !TEX root = ../main.tex
+
+\section{Related Work}
+
+Metrics are useful, but they are not measurement.
+
+\subsection{From Similarity Metrics to Multi-dimensional Evaluation}
+
+"System outputs that are more similar to the references are deemed better." \citep{gehrmann2023repairing}
+
+% Early methods for automated text evaluation centered on lexical overlap, with the most common measures being the BiLingual Evaluation Understudy (BLEU) \citep{papineni_bleu_2001} and Recall-Oriented Understudy for Gisting Evaluation (ROUGE) \citep{lin_rouge_2004}. These metrics were among the first automated evaluation methods to show meaningful correlations with human judgments in their respective evaluation tasks. BLEU was originally developed for automated machine translation and measures modified $n$-gram precision between a candidate translation and one or more reference translations. The underlying intuition is that high-quality translations should reuse many of the same words (unigrams) and word sequences ($n$-grams) as human reference translations. ROUGE was developed for automatic summarization and follows the same overlap-based intuition, but is typically recall-oriented: it measures how much of the reference summary's lexical content is recovered by the candidate summary.
+
+Early methods for automated text evaluation centered on lexical overlap, most prominently the BiLingual Evaluation Understudy (BLEU) \citep{papineni_bleu_2001} and Recall-Oriented Understudy for Gisting Evaluation (ROUGE) \citep{lin_rouge_2004}. BLEU was developed for machine translation and evaluates candidate translations by measuring modified (n)-gram precision against human references, while ROUGE was developed for summarization and measures how much reference content is recovered by a candidate summary. Both metrics therefore operationalize quality through surface-level similarity to reference texts.
+
+
+
+
+However, the efficacy of metrics based on lexical overlap is limited. Surface-level textual features do not capture rich semantic information inherent to language, limiting their validity as measures of text quality \citep{reiter2018structured}. This motivated the development of embedding-based evaluation methods such as BERTScore \citep{zhang_bertscore_2020}, BLEURT \citep{sellam_bleurt_2020}, and MoverScore \citep{zhao_moverscore_2019}, which use contextual embeddings to estimate semantic similarity between candidate and reference texts.
+
+% A central limitation of reference-based similarity metrics is that they require reference texts against which candidate outputs can be compared, which are often written by humans and therefore expensive to collect. Although extensive efforts have been made to circumvent this limitation through reference-free evaluation methods \citep{louis2013automatically, vasilyev2020fill}, \citet{deutsch2022limitations} show that such metrics can exhibit systematic biases that limit their reliability as general-purpose evaluators.
+
+% maybe start out by stating how NLG model development moved faster than the metrics, which made it difficult to actually compare the models
+One major limitation of similarity-based metrics is that they may not capture all relevant information needed to assess the evaluation target. As \citet{gehrmannRepairingCrackedFoundation2022} note, quality differences between advanced NLG models are not reflected in surface-level textual features. This led to the development of more fine-grained evaluation methods which decompose the evaluation target into multiple criteria. In a seminal paper, \citet{fabbri_summeval_2021} introduce an elaborate benchmark for summarization models, where they decompose "summary quality" into the subdimensions \textit{coherence}, \textit{consistency}, \textit{fluency} and \textit{relevance}. They re-evaluate a wide array of summarization models on these dimensions by using expert annotators, exposing specific failure modes: pre-trained language models correlated highly with human ratings on consistency and fluency, while extractive models struggled with coherence and relevance, highlighting their known shortcomings. 
+
+% introduce an elaborate evaluation framework to quantify "summary quality", in which they decompose into the subdimensions \textit{coherence}, \textit{consistency}, \textit{fluency} and \textit{relevance}. The \textit{SummEval} dataset contains expert annotations on each subdimension, 
+
+% introduce the elaborate benchmark dataset \textit{SummEval}, co
+
+
+% and propose an evaluation framework for summaries in which they decompose "summary quality" into \textit{coherence}, \textit{consistency}, \textit{fluency} and \textit{relevance}. By performing multi-dimensional measurement, they exposed specific failure modes in summarization models: pre-trained language models performed especially well on consistency and fluency, while extractive models struggled with coherence and relevance, highlighting their known shortcomings. 
+
+\subsection{Automated Multi-dimensional Evaluators}
+
+The discussion sparked by \citet{fabbri_summeval_2021} led to the development of automated multi-dimensional text evaluators. Early studies develop dimension-specific evaluators, such as for \textit{factual consistency} in summarization \citep{kryscinskiEvaluatingFactualConsistency2020, wangAskingAnsweringQuestions2020}, or \textit{coherence} in dialogue generation \citep{dziriEvaluatingCoherenceDialogue2019, yeQuantifiableDialogueCoherence2021}. Later studies worked towards unified measurement, such as \citet{zhong_towards_2022}, who propose a method to quantify any arbitrary dimension using transformer models. 
+
+Although their method correlates highly with expert annotations, it requires a costly pre-training stage and reference documents. The introduction of LLMs, known for their general problem-solving capabilities, offered a possible solution to these two problems. Early research into using LLMs as reference-free NLG evaluators \citep{fuGPTScoreEvaluateYou2023, wangChatGPTGoodNLG2023} exhibited lower correlations with expert judgments compared to neural evaluators such as \citet{zhong_towards_2022}. However, with the release of GPT-4, \citet{liu_g-eval_2023} outperformed both reference-based and reference-free baselines by a substantial amount. \citet{zheng_judging_2023} introduce novel benchmarks to analyse NLG model performance on open-ended NLG tasks and show that LLM evaluations obtain an agreement with human preferences comparable to human-to-human agreement, solidifying the use of LLMs as general-purpose evaluators. 
+
+% \subsection{Textual Quantification Beyond Benchmarking}
+\subsection{Textual Quantification in the Social Sciences}
+
+The potential of LLMs for quantifying textual attributes is not limited to benchmarking NLG models. Given the function of language as a means for expression, linguistic analysis offers a window into human behavior. Text data analysis is used in psychology to study human behavioral traits, such as personality \citep{boydLanguagebasedPersonalityNew2017}, psychological well-being \citep{guntukuDetectingDepressionMental2017}, and emotional states \citep{kahnMeasuringEmotionalExpression2007}; in economics, to study stock market dynamics using text from news and social media \citep{manelaNewsImpliedVolatility2017}; and in political science, to study partisanship using congressional speeches \citep{gentzkowMeasuringGroupDifferences2019}. Given the abundance of text data and the costliness of manual annotation, NLP methods are therefore a natural choice to facilitate the measurement of complex constructs from text. 
+
+The social sciences faced similar limitations as the NLG community. Dictionary methods, which consider basic features such as word count, are cheap to implement, but often too superficial to answer complex research questions. Representation-based methods, such as embedding models, are expensive to deploy, and most suitable for answering narrow research questions. LLMs again offered the potential for a one-size-fits-all solution: \citet{rathjeGPTEffectiveTool2024} show that GPT models can accurately measure numerous psychological constructs from texts in multiple different languages, and \citet{lemensUncoveringSemanticsConcepts2023} use GPT-4 to quantify semantical properties of texts, both studies achieving state-of-the-art performance. More generally, \citet{yangLLMMeasureGeneratingValid2024} propose a method to measure arbitrary concepts from text data leveraging the LLMs internal concept representation. 
+
+% \subsection{From Metrics to Measurement: Meaningful Multi-Dimensional Quantification}
+\subsection{Conditions for Meaningful Measurement}
+
+The current LLM-based methods for measuring constructs from text in the social sciences show many similarities to the evaluation of the capabilities of NLG models in ML: Both fields define measurement targets which they operationalize through LLM scoring. However, as a consequence of their measurement assumptions, they differ in the interpretations that the measurements permit.
+
+The considerations in \citet{fabbri_summeval_2021} are mostly pragmatic. They observed that a single holistic similarity score did not sufficiently cover the quality differences between summarization systems, so they proposed to measure subdimensions that expose these differences. For evaluating models on these specific criteria, this is sufficient. However, their procedure falls short of permitting general claims about summary quality and summarization capabilities. 
+
+As \citet{salaudeenMeasurementMeaningValidityCentered2025} argue, this inferential leap requires justifying the relationship between the measurements and the object of the claim; in this case, the relationship between criterion scores and the construct of "summarization ability." This practice is standard in the social sciences: \citet{boydLanguagebasedPersonalityNew2017, guntukuDetectingDepressionMental2017, kahnMeasuringEmotionalExpression2007, manelaNewsImpliedVolatility2017, gentzkowMeasuringGroupDifferences2019, rathjeGPTEffectiveTool2024, lemensUncoveringSemanticsConcepts2023, yangLLMMeasureGeneratingValid2024} all operate within a framework where the target constructs are theoretically defined, and where measurements are validated against established measures or theoretically relevant external criteria. Because of this, their measurements are not just criterion-level scores, but construct measurements whose interpretation is anchored in the broader theoretical frameworks of their respective fields.
+
+\subsection{Meaningful Multi-Dimensional Measurement}
+
+"Decomposition without recomposition is not enough for construct measurement."
+
+Meanwhile, a growing number of studies have recognized the need for validity-guided workflows based on the principles of measurement theory and psychometrics for designing benchmarks for general-purpose AI models such as LLMs \citep{xiaoEvaluatingEvaluationMetrics2023, linPromptsConstructsDualValidity2025, binetteImprovingValidityPractical2024, beanMeasuringWhatMatters2025, salaudeenMeasurementMeaningValidityCentered2025, wangEvaluatingGeneralPurposeAI, kardanovaNovelPsychometricsBasedApproach2024, federiakinImprovingLLMLeaderboards2025, PDFModernLLM2026, feuerWhenJudgmentBecomes2025, alaaMedicalLargeLanguage2025}. Yet, advanced benchmarks do not immediately solve the problem of automated evaluation, particularly for open-ended language generation tasks, for which the set of possible correct answers is large and often unknown \citep{freitagExpertsErrorsContext2021}. 
+
+As it stands, the focus in automated NLG evaluation still predominantly revolves around theory-agnostic multi-dimensional measurement protocols, where criteria are measured in isolation and the relationship between the measurement and the evaluation target is underspecified. As \citet{arias2025statistical} point out, this holds for 88\% of the papers published in NLP evaluation as of 2024, while only 7.6\% employ true multicriteria methods, even though linguistic quality is inherently multi-dimensional. This distinction marks the central problem for meaningful multi-dimensional measurement: decomposition is necessary, but not sufficient; additionally, the criteria must be related back to the target construct.
+
+Importantly, this relationship defines the level at which the claims are made: at the system level, or at the artefact level. Benchmarks concern system-level claims, as they attempt to measure some latent model ability. Psychometric methods lend themselves well to this, as many have been developed for this specific purpose. For example, in the same way that latent writing ability can be inferred from grading an essay on multiple criteria, LLMs can be used as scorers to achieve the same goal \citep{wang2025evaluating}. However, these methods are not designed for artefact-level claims. A high score on writing ability does not automatically imply that every single text it produces is of high quality, nor does it highlight what needs to be improved. For diagnostic purposes, therefore, different methods are required.
+
+The field has proposed several approaches, with varying measurement assumptions. For automated evaluation of a dialogue generation task, \citet{hashemi_llm-rubric_2024} propose a method to model rater idiosyncrasies using multi-dimensional LLM scores. They collect data from 24 humans who annotate an average of 31 dialogues on their overall quality. By using criterion-level LLM scores and fitting them to the holistic human ratings using a calibration network, they can accurately model individual rater behavior, enabling them to model for example expert annotators. However, they explicitly take the stance that they model subjective rating behavior, not some ground truth. \citet{kolaSAJASimpleApproach2026} take a similarly pragmatic approach, where they reuse the same six evaluation criteria for evaluation across multiple distinct evaluation tasks, achieving state-of-the-art alignment with human ratings. They argue that the multi-dimensional LLM ratings contain all required information, and a lightweight calibration head is sufficient to extract it. 
+
+
+\citet{hashemi_llm-rubric_2024} and \citet{kolaSAJASimpleApproach2026} are examples of the frontier of multi-dimensional evaluation for diagnostic purposes. However, the pragmatism of their methods limits their utility. First of all, they both use calibration heads as their recomposition function. Although this might improve alignment with human ratings, it lacks explainability. Because of this, although the accuracy of their single predicted holistic quality score might be high, it is difficult to determine which dimensions contributed to this score, and how. Moreover, their approaches explicitly model human idiosyncrasies. This is not necessarily wrong; human annotations are often considered the gold standard for alignment research. However, it is also widely acknowledged that human labels are imperfect approximations of the ground truth \citep{zhaoChallengesTrustworthyHuman}, some recent papers even suggesting that LLMs can outperform expert coders on difficult annotation tasks \citep{tornbergLargeLanguageModels2025}. 
+
+\citet{bang_transforming_2025} take an important step in this direction by using AHP as an explicit recomposition function, making criterion weights transparent rather than hiding aggregation in a calibration network. However, transparent recomposition is not yet the same as construct-specified measurement: AHP can specify how criteria are weighted, but not why these criteria adequately represent the target construct or what validity claims the resulting score supports. We therefore argue that artefact-level evaluation should be treated as a measurement-model problem: the criteria should be theoretically specified, their relation to the target construct made explicit, and their recomposition evaluated against relevant validity evidence.
+
+
+% We argue that these limitations can be addressed more directly by treating artifact-level evaluation as a measurement-model problem: the criteria should be theoretically specified, their relation to the target construct made explicit, and their recomposition evaluated against relevant validity evidence. \citet{bang_transforming_2025} take strides in this direction by using AHP as their recomposition function, which estimates criterion-level weights, but their measurement model is theoretically underspecified. 
+
+
+
+
+The argument:
+- they model human idiosyncrasies; this is not bad, it is one type of validity. But, humans are imperfect, Hashemi acknowledge this, but that means that meaningful measurement involves more than human alignment. If human annotations are one approximation of the ground truth, then why force alignment with it? It requires a broader validity argument. They themselves acknowledge that 
+- their methods are opaque, and text revision requires explainability
+- 
+
+(explain that they do not model ground truth, but human idiosyncrasies; )
+
+% \citet{kolaSAJASimpleApproach2026} expose why this might be problematic. Their approach is strictly pragmatic: They propose that the same six dimensions can be re-used across many different NLG evaluation tasks, and that they can all be measured in the same prompt, despite known anchoring effects where later ratings are influenced by earlier ratings in the same output \citet{stureborgLargeLanguageModels2024}. Despite this, they obtain state-of-the-art alignment with human raters, arguing that the multi-dimensional ratings contain all required information, and a lightweight calibration head is sufficient to extract it. 
+
+
+
+
+
+
+\newpage
+
+
+
+They adopt a pragmatic approach: they define six criteria dimensions which they reuse across 
+
+However, they explicitly state that the calibration network does not produce ground truth, taking the stance that disagreement is signal, not noise. 
+
+Byu having 24 humans annotate an average of 31 dialogues on their quality. Using 24 humans that annotate an average of 31 dialogues, they calibrate the criterion-level LLM scores with 
+
+, which they recompose into a single holistic score using a calibration network. 
+
+Although they achieve state-of-the-art alignment with human annotators, they explicitly assume there to be no measurable ground truth, instead considering human disagreement as signal. 
+
+show that using multi-dimensional LLM scores and recomposing them through a calibration network is 
+
+LLMs are increasingly being used for artefact-level diagnostics of open-ended language generation tasks. 
+
+
+
+
+
+
+Existing psychometric approaches largely formalize measurement at the level of latent capabilities. IRT, generalizability theory, and many-facet Rasch models have been used to infer traits from observed responses, whether these traits concern model capabilities or human writing ability. These approaches are valuable when the object of measurement is the producer of the response. However, they do not directly address artifact-level diagnostic measurement, where the goal is not to infer a general capability from many outputs, but to assign interpretable scores to an individual text.
+
+
+Numerous papers support system-level claims by using LLMs as automated evaluators in conjunction with psychometric methods. \citet{choiDiagnosingReliabilityLLMasaJudge2026, robertsonIdentityLinkIRTLabelFree2025} use Item Response Theory (IRT) to analyze latent traits from observed responses \citep{embretsonItemResponseTheory2013}, a method which is widely used in psychology to measure latent abilities such as abstract reasoning or reading comprehension. Similarly, \citet{wang2025evaluating} use generalizability theory and many-facet Rasch models to systematize the use LLMs for automated essay scoring (AES), allowing them to assess students' writing abilities. 
+
+% However, due to the lack of theory-grounded research, artefact-level claims remain undersupported. \citep{hashemi_llm-rubric_2024}, \citep{bang_transforming_2025}, \citep{kolaSAJASimpleApproach2026}
+
+
+asdf
+
+
+
+
+
+
+
+
+
+
+
+
+Existing multidimensional LLM evaluators move toward this problem by decomposing text evaluation into criteria and, in some cases, recomposing these criteria into overall scores. However, these methods typically treat recomposition as a calibration or prediction problem rather than as an explicit measurement-model decision. The present thesis addresses this gap by examining whether artifact-level LLM evaluations become more valid and interpretable when the criteria are derived from a theoretically specified construct.
+
+Measuring several criteria may improve diagnostic resolution, 
+
+but it does not by itself specify what the overall evaluation means. For multidimensional scores to support construct-level interpretation, the criteria must be related back to the target construct through some account of recomposition.
+
+The crux is in the recomposition function: How do the individual criteria relate to the target construct? For example, for a summary, are \textit{coherence} and \textit{relevance} equally important, or should they be weighted differently? \citet{xiaoEvaluatingEvaluationMetrics2023} warn for the possibility of high inter-dimensional correlations between theoretically distinct dimensions; what are the consequences for the validity of the measurements?
+
+\citet{liu_g-eval_2023} already highlighted the potential of using LLMs for automatic multi-criteria evaluation, and many papers after have found high correspondence with human ratings. However, only few papers have apply recomposition. 
+
+
+As it stands, automated NLG evaluation still predominantly revolves around theory-agnostic multidimensional protocols, where criteria are measured in isolation and the relationship between these criteria and the evaluation target remains underspecified. This limitation is made explicit by \citet{arias2025statistical}, who distinguish between merely reporting multiple metrics and conducting true multicriteria evaluation: as of 2024, 88\% of NLP evaluation papers evaluated multiple metrics individually, while only 7.6\% employed true multicriteria methods. This distinction marks the central problem for meaningful multidimensional measurement. Decomposition alone does not determine what is being measured. Once multiple criteria are elicited, the validity of the resulting evaluation depends on how these criteria are related back to the target construct. Some approaches avoid this problem by refusing to impose a single aggregation function, as in GSD-based dominance analysis. However, when the goal is to assign an interpretable score to an individual text, recomposition cannot be avoided. The aggregation function then becomes the measurement model: it specifies which criteria matter, how they combine, and what construct the resulting score can be interpreted as measuring.
+
+As it stands, automated NLG evaluation still predominantly revolves around theory-agnostic multidimensional protocols, where criteria are measured in isolation and the relationship between the measurement and the evaluation target remains underspecified. This limitation is made explicit by \citet{arias2025statistical}, who distinguish between merely reporting multiple metrics and conducting true multicriteria evaluation: as of 2024, 88\% of NLP evaluation papers evaluated multiple metrics individually, while only 7.6\% employed true multicriteria methods. This distinction captures the central problem for meaningful multidimensional measurement. Once an evaluation target is decomposed into multiple criteria, the relevant question is no longer only whether these criteria can be measured, but how their scores should be interpreted jointly. Decomposition produces diagnostic information; recomposition determines whether this information can support an interpretable measurement of the target construct.
+
+% And what are the consequences for validity when theoretically distinct dimensions exhibit high correlations? 
+
+
+
+
+
+To address these issues, using LLMs to evaluate text quality on multiple dimensions, 
+
+multi-dimensional evaluation has increasingly become the norm. However, introduction of psychometric-the
+
+Move back to multi-dimensional measurent, models without recomposition function, which means they cannot make construct validity claims: what is the target variable? Same theoretical limbo as \citet{fabbri_summeval_2021}. 
+
+Validity requires recomposition (latent variable models), then we arrive at theoretical assumptions: locus is model or artefact. We study the artefact. 
+
+
+
+
+LLM meta-evaluation, the self-evaluation of LLMs, has therefore also shifted towards using psychometric methods \citep{choiDiagnosingReliabilityLLMasaJudge2026}
+
+
+
+Although  \citet{liu_g-eval_2023} and \citet{zheng_judging_2023} showed that LLMs offer a promising solution, they also exhibit systematic biases \citep{chehbouniNeitherValidReliable2025, shi_judging_2025, saito_verbosity_2023, stureborgLargeLanguageModels2024, panicksseryLLMEvaluatorsRecognize2024, feuerStyleOutweighsSubstance2025}, calling into question their suitability as replacements for expert annotators to assess NLG output quality.
+
+
+and The challenge in NLG evaluation, therefore, is its inherent subjectivity. 
+
+Since \citet{liu_g-eval_2023} and \citet{zheng_judging_2023}, meta-evaluation of LLM evaluators has been evolving 
+
+
+
+
+Evaluations produced by LLMs exhibit systematic biases: 
+
+A growing number of studies have suggested to use principles/conceptual framework from measurement theory for valid evaluations. 
+\citep{xiaoEvaluatingEvaluationMetrics2023, binetteImprovingValidityPractical2024, beanMeasuringWhatMatters2025, salaudeenMeasurementMeaningValidityCentered2025, wangEvaluatingGeneralPurposeAI, kardanovaNovelPsychometricsBasedApproach2024, federiakinImprovingLLMLeaderboards2025, PDFModernLLM2026}, systematic review \citep{yeLargeLanguageModel2025}, with the primary goal of drawing inferences about the unobservable capabilities at specific NLG tasks, and gaining insight into the model's capabilities in future tasks in the same domain \citep{xiaoEvaluatingEvaluationMetrics2023}. 
+LLms are good at this (find the citations). 
+
+
+The argument:
+Maybe sneak in recomposition somewhere, I liked that.
+Confirm that the field has called for validity-guided evaluation workflows, inspired by measurement theory. This is now being applied using LLMs, and the results are promising \citep{raoAutorubricUnifiedFramework2026, robertsonIdentityLinkIRTLabelFree2025}. Maybe cite Wang here \citep{wang2025evaluating}, who use IRT methods for automated essay scoring. Introduce the crucial distiction: evaluating ability is conceptually different from evaluating artefacts (the text that is produced). Explain the crucial distinction between reflective and formative in layman's terms; reflective implies that the same model would perform similarly on repeated execution of the same task. However, this interpretation does not pertain to the quality of the artefact itself, this requires a different measurement model. We have papers like \citet{hashemi_llm-rubric_2024} and \citet{kolaSAJASimpleApproach2026} which perform artefact-level diagnostics, but (1) their methods are not explainable, and (2) they do not assume a measurement model, so the interpretations their scores permit are limited. However, their results indicate that multidimensional measurement improves alignment, indicating increased validity. \citet{bang_transforming_2025} use explainable multi-dimensional artefact-level measurement, and though they make strides, they also do not define a measurement model, and AHP kinda sucks. So here it is, my thesis, about formative measurement with alignment using regressions. Maybe even bring in \citet{yangLLMMeasureGeneratingValid2024} to say that he should try formative measurement instead.
+
+\paragraph{Quotes}
+
+This development reframes automated evaluation. Classical metrics such as BLEU and ROUGE operationalized text quality through fixed, narrow proxies, while multidimensional evaluators introduced more interpretable criterion-level scores. LLM-based evaluators extend this trajectory by making automated evaluation flexible: the same model can be prompted to score many different dimensions across many different text domains. However, this flexibility shifts the central validity problem from metric design to construct specification. If LLMs can instantiate many possible rubrics, then the meaning of their scores depends on whether the selected criteria and their recomposition adequately represent the intended construct. The present thesis therefore treats LLM-based automated evaluation as a problem of construct-specified measurement, testing whether theoretically decomposed prompts produce more valid and interpretable artifact-level scores than holistic or weakly specified alternatives.
+
+Wang et al. are useful as a reflective/reliability-oriented reference point. Bang et al. are formative-adjacent because they explicitly aggregate criterion scores into a composite, but they use an AHP/JSD weighting procedure and do not fully diagnose when the dimensions support valid formative recomposition. Bang’s method is explicitly designed to convert criterion-specific LLM scores into interpretable weights, but it does not solve the broader measurement-model problem
+
+
+Prior work establishes the usefulness of LLMs for automated evaluation and the value of decomposing text quality into dimensions. However, it has not fully specified when decomposed evaluation becomes formative measurement. Existing approaches either stop at dimension-level benchmarking, use decomposed scores as features for pragmatic calibration, or provide interpretable aggregation without a systematic account of construct coverage, recomposition, and diagnostic failure modes.
+
+This thesis treats decomposed LLM evaluation as a measurement problem. It asks whether a target construct is better measured holistically or through theoretically specified formative components, and under what conditions these components can be recomposed into an interpretable construct score.
+
+
+\citet{hashemi_llm-rubric_2024} 
+
+
+
+
+
+
+
+
+% \subsection{REST}
+
+
+
+
+% However, the purpose of the scores is vastly different. In NLG evaluation, the main purpose is automated benchmarking, enabling us to determine NLG model capabilities. In the social sciences, the main purpose is obtaining meaningful insights into human behavior expressed through language. Crucially, the interpretation of the measurements of the former approach is limited to model performance and inter-model comparisons, while the latter approach attempts to form and test theories about behavioral processes that generalize beyond the measurement.
+
+% There are numerous studies that operate at the intersection of both fields, and decomposition into sub-dimensions is applied with varying purposes. \citet{hashemi_llm-rubric_2024} 
+
+
+
+% Unspecified recomposition function (no evidence of increased validity, when adopting a construct validity approach; when conducting meaningful measurement as opposed to benchmarking), unspecified measurement model (curve-fitting pragmatists), specified measurement model (Wang et al., reflective). 
+
+
+
+% \begin{itemize}
+%     \item SummEval as a crossroads
+%     \item Benchmarking asks the question whether model capabilities are good
+%     \item But, that is a statement at the model-level, not the artefact level
+%     \item How to measure quality at the artefact level?
+%     \item How to relate this to Hashemi, SAJA, Bang, Wang?
+%     \item 
+% \end{itemize}
+
+
+
+
+
+
+% \subsection{LLMs as Automated Evaluators}
+
+
+% \subsection{From Metrics to Measurement: The Psychometric Pivot}
+
+
+
+% Main critique of SAJA: it makes no attempt to discuss content validity. "How does SAJA still achieve high performance if their rubric is theoretically invalid? They admit the trick in Appendix G: they just let the machine learning head fix it." That means, they exhaust the information from the criterion measurements by modelling a high-dimensional construct, but they can make no claim as to what the meaning is of that construct. This is an interesting position to be in, because by assumption, alignment with 'ground truth' labels has often been considered as evidence for alignment with the ground truth. However, as Hashemi et al point out, human ratings are error-ridden idiosyncratic measurements of some ground truth, which means that alignment can only partially establish validity; their research is an expose of how alignment can improve my modelling idiosyncratic error as opposed to some underlying ground truth, and for this reason, they explicitly state that they do not even presuppose the existence of such a ground truth. If no explicit statements/assumptions are made about the ontology of the latent variable, then what do the measurements even mean?
+
+% The central point of acknowledging the formative specification is precisely this: If we specify only a number of dimensions, correlate them with human ratings, and call it a day when the correlation is sufficient, we are exposing ourselves to a major theoretical blind spot: we know that the model is, on average, right, but we don't know when or whether the model is systematically wrong (omitted variable bias?). This might be unproblematic for reflective specifications, because the indicators are all assumed to be manifestations of some underlying causal construct, but when the variable is formative, the risk of introducing systematic bias is serious. 
+
+% Also, we see that for the explainable AHP paper that they fail to test for divergent validity. As \citet{xiaoEvaluatingEvaluationMetrics2023} argue, inter-dimensional correlation can point towards lack of criterion separability. Although the convergent validity might still be high, this exposes a problem for explainability, as the intended criteria might never have been measured, which under a formative specification has direct consequences for construct validity. 
+
+
+
+
+% \subsection{Operationalizing Formative Measurement with Small Language Models}
+
+% Current advancements in multi-dimensional evaluation branch into two distinct paradigms. The emulation paradigm, typified by Hashemi et al. (2024), aggregates multi-dimensional LLM distributions via supervised neural networks to predict subjective human preferences. Conversely, the psychometric paradigm, exemplified by Wang et al. (2025), evaluates LLM scoring consistency using a reflective stance, treating evaluation dimensions as interchangeable manifestations of a latent capability.  While effective for their respective goals, both paradigms present significant barriers for scalable, diagnostic deployment in operational settings. Emulation networks require costly human-annotated calibration datasets (the cold-start problem) and obscure the structural weights necessary for targeted NLG editing. Reflective psychometric models are theoretically misaligned with commercial propositions, where variables like "Deal Attractiveness" are not inherent traits, but composite indices generated by independent, manipulable features. Furthermore, modern evaluation frameworks heavily rely on massive parameter models and Chain-of-Thought (CoT) reasoning to process complex rubrics. However, CoT introduces generation stochasticity, violating the fundamental requirement of reproducibility in measurement science.To resolve these operational and theoretical constraints, this thesis operationalizes evaluation as a deterministic, zero-shot formative measurement problem. By exhaustively defining the target variable as a formative construct, we enforce strict architectural isolation—evaluating each causal dimension through independent, single-token logit extraction. This isolation eliminates the need for stochastic CoT reasoning and complex internal aggregation, enabling small, cost-effective language models (sub-4B parameters) to function as highly stable measurement instruments. Finally, by bypassing supervised human calibration and regressing these transparent indicators directly against an external behavioral KPI, this research establishes the predictive validity of small-scale LLMs, proving their capacity to abstract general market rules from text without reliance on stated human preference.
+
+
+% Drafting the Argument (For your Methods or Literature Review):
+% "While recent commercial frameworks like SAJA (Kola et al., 2025) advocate for consolidating multi-dimensional rubrics into a single LLM prompt to reduce API inference costs , this approach introduces severe endogeneity into the measurement process. As Stureborg et al. (2024) demonstrate, evaluating multiple criteria within a single autoregressive generation induces an anchoring effect, where subsequent judgments are causally biased by preceding tokens .  While algorithmic calibration heads (e.g., Random Forests) can absorb these entangled features to maximize predictive fit , this autoregressive coupling destroys the structural independence of the criteria. For formal econometric modeling, such endogeneity severely inflates multicollinearity, rendering the partial coefficients ($\gamma_i$) uninterpretable for diagnostic intervention. Consequently, this thesis enforces strict architectural isolation. By extracting each formative dimension through an independent, isolated prompt, we eliminate autoregressive contamination. This guarantees that the resulting covariance matrix reflects genuine textual relationships rather than token-generation artifacts, preserving the absolute parameter independence required for valid Negative Binomial estimation."
+
+% \subsection{Triangulating Measurement Theory, Prediction, and Interpretability}
+
+% The current landscape of multi-dimensional LLM evaluation forces a series of methodological trade-offs between theoretical rigor, predictive utility, and parameter transparency.When formal measurement theory is applied to automated text assessment, it is predominantly utilized to evaluate inherent human capabilities. For example, Wang et al. (2025) successfully deploy Generalizability Theory and Many-Facet Rasch Models (MFRM) to evaluate LLM scoring consistency . However, this psychometric rigor relies on a reflective stance, treating analytical criteria as interchangeable manifestations of a latent psychological trait . While appropriate for educational essay scoring, reflective ontologies cannot be applied to operational or commercial constructs—such as marketing propositions—which require a formative specification where independent attributes causally generate the construct.  Conversely, when multi-dimensional evaluation is used for predictive modeling, frameworks typically sacrifice theoretical specification and interpretability for predictive fit. Hashemi et al. (2024) demonstrate that decomposed LLM criteria successfully predict overall user satisfaction, but they aggregate these dimensions using a supervised neural calibration network . Passing dimensional scores through opaque hidden layers obscures the structural weights of individual text properties, rendering the model incapable of providing the explicit diagnostic feedback required for programmatic text revision.  Recent literature has attempted to resolve this opacity under the strict latency constraints of web deployment. Bang et al. (2026) utilize Small Language Models (SLMs) to generate criterion-specific scores, aggregating them linearly to maintain interpretability . However, their approach suffers from theoretical underspecification; by treating text properties as arbitrary "user-defined criteria" rather than components of a formal formative index, their aggregation strategy lacks econometric grounding. Observing that SLMs operating at deterministic temperatures produce discrete, compressed integer outputs, Bang et al. conclude that Likert-scale LLM scores violate continuous regression assumptions . As a result, they abandon statistical parameter estimation entirely in favor of heuristic Multi-Criteria Decision Analysis matrices (AHP) .  2.6 The Proposed Approach: Formative Logit-ExtractionThis thesis bridges the gaps between the psychometric rigor of Wang et al., the predictive utility of Hashemi et al., and the operational transparency of Bang et al.We explicitly ground our evaluation architecture in a formative measurement paradigm. This psychometric specification justifies the use of transparent linear aggregation, circumventing the diagnostic opacity of neural calibration networks. Furthermore, we resolve the discretization penalty observed by Bang et al. without abandoning statistical regression. By shifting the measurement mechanism from the text-generation layer to direct logit extraction, we obtain the Expected Value (EV) of the token distribution. For appropriately calibrated models (e.g., Qwen 3.5), this extraction yields the continuous, variance-rich data required to satisfy regression assumptions. This enables the use of rigorous parameter estimation (Negative Binomial regression) to map isolated text properties directly to a downstream behavioral KPI, establishing predictive validity while maintaining absolute diagnostic transparency.
+
+% \subsection{Notes}
+
+% "While gradient-based ascent can theoretically be applied to neural calibration networks to estimate desired shifts in dimension scores , translating these gradients into discrete text revisions requires complex estimations of the latent text manifold . In contrast, a linear formative specification provides explicit, deterministic parameter weights ($\gamma_i$), offering immediate diagnostic transparency for programmatic NLG interventions without the need for high-dimensional gradient approximations."
+
+% Feuerriegel et al. establish NLP-based construct annotation as a legitimate behavioural-science methodology, but they do not specify the measurement model linking construct definitions, indicator scores, and downstream validity evidence. The present thesis addresses this gap by treating LLM evaluation as a construct-measurement problem and comparing holistic and formative operationalizations
+
+
+
+
+% Where SummEval fits in your literature review
+
+% I would position it as:
+
+% SummEval and related multidimensional benchmarks represent an important transition from holistic metric scores toward analytic evaluation. They implicitly recognize that quality cannot be adequately represented by a single similarity score and that dimensions such as coherence, consistency, fluency, and relevance capture distinct desiderata. However, their primary role remains benchmarking: they evaluate whether systems or metrics align with human judgments on predefined dimensions. They do not provide a general theory of formative recomposition.
+
+% This makes them a precursor, not a competitor.
+
+% The best phrasing
+
+% You can write:
+
+% SummEval-style benchmarks are formative in their content logic but metric-oriented in their use. They define quality through multiple desiderata, which resembles a formative decomposition of the target construct. However, because the dimensions are primarily used for system-level benchmarking and are not recomposed into a validated construct score, they do not yet constitute a full formative measurement framework.
+
+
+
+
+% \section{Related Work}
+
+
+
+
+% \subsection{Traditional NLP evaluation methods}
+
+ 
+
+% \subsection{LLM-as-a-Judge}
+
+
+
+% "Recent advancements in LLM-as-a-judge methodologies, notably Wang et al. (2025), have demonstrated that utilizing the full judgment distribution (Expected Value) yields superior alignment with human preferences compared to greedy decoding (Argmax). However, the downstream econometric consequences of this discretization penalty—specifically, how argmax extraction impacts parameter estimation and causal inference in multivariate regression models—remain unexplored."
+
+% \subsection{Measurements through Analytic Decomposition}
+
+
+% Prior work provides evidence that analytic decomposition can improve rater reliability or agreement on the decomposed dimensions, but it rarely tests whether aggregating decomposed judgments yields a superior measurement of the corresponding holistic construct compared to a direct holistic evaluation. 
+
+
+% \subsection{The Frontier of Dimensional Evaluation}
+
+% Recognizing the limitations of holistic scoring, recent literature has begun exploring multi-dimensional evaluation. Foundational to this shift is the G-Eval framework \citep{liu_g-eval_2023}, which demonstrated that extracting the continuous probability distribution (logits) of rating tokens yields a significantly more stable measurement than standard greedy decoding. 
+
+% Building upon this, recent work from Microsoft \citep{microsoft_citation_here} explicitly tackles the problem of combining multiple dimensional ratings. They successfully demonstrate that evaluation is a composite process, showing that LLM-as-a-judge performance improves when dimensions are combined to estimate specific evaluator behavior. However, their methodology approaches evaluation as a fundamentally \textit{idiosyncratic} process. By fitting rater-unique curves and dynamically optimizing the weights of subdimensions for individual human annotators, their approach models rater heterogeneity rather than the underlying construct itself.
+
+% While modeling idiosyncratic variance is highly effective for individual alignment tasks, it does not yield a generalized measurement instrument. In operational business contexts, evaluation requires a stable definition of quality that transcends individual subjectivity. 
+
+% \subsection{Evaluation as a Nomothetic Specification Problem}
+
+% To bridge the gap between individual rater estimation and scalable measurement, this thesis argues that LLM evaluation must be treated as a \textit{nomothetic} construct specification problem. Rather than fitting unique weights to individual annotators, we seek to reverse-engineer the shared mechanisms that define a target construct across a population. 
+
+% In this nomothetic framework, we do not model individual idiosyncrasies. Instead, we model a generalized 'ideal' evaluator (e.g., the consensus expert in FeedbackQA) or an aggregate population (e.g., the collective creator behavior in Barter Deals). By explicitly decomposing the target variable into a predefined set of formative dimensions, we aim to capture the shared structural logic of the domain. 
+
+% Consequently, this approach shifts the objective from fitting subjective annotator curves to performing rigorous construct representation. Because this framework treats the LLM as a standardized measurement instrument, its efficacy must be validated using established psychometric protocols. Therefore, this thesis applies formal construct validity testing—convergent validity against expert consensus and predictive validity against aggregate market behavior—to test the proposed formative framework.
+
+
+% "Building upon this, recent work from Hashemi et al. (2024) explicitly tackles the problem of combining multiple dimensional ratings. They employ a calibration network that combines judge-independent (nomothetic) parameters with judge-specific (idiosyncratic) parameters. While the authors do test a 'depersonalized' ablation of this network, they approach dimensional evaluation strictly as a machine learning optimization problem rather than a psychometric measurement problem.  
+
+% This machine learning paradigm introduces two fundamental limitations for operational measurement. First, by combining the dimensional logits via the hidden layers of a neural network, the structural weights of the individual dimensions become opaque. While this maximizes predictive accuracy against human labels, it destroys the interpretability required for diagnostic feedback (e.g., explaining exactly why a specific marketing copy failed). Second, their framework validates the dimensional ensemble solely against subjective human proxy labels.  
+
+% This thesis argues that to solve the fatal flaw of holistic evaluation—the implicit, erroneous assumption of a reflective measurement model—we must transition from opaque feature engineering to explicit construct specification. By embedding the LLM's dimensional logits within a formal formative measurement model, we maintain the strict structural independence of the criteria. Furthermore, rather than optimizing the model to mimic subjective human proxies, this thesis assesses the validity of the formative construct by evaluating its predictive validity against an aggregate, downstream behavioral KPI (market liquidity). This shifts the evaluation paradigm from idiosyncratic imitation to generalized econometric prediction."
+
+
+
+
+% \subsection{The Frontier of Dimensional Evaluation}
+
+% Recognizing the limitations of holistic scoring, recent literature has begun exploring multi-dimensional evaluation. Foundational to this shift is the G-Eval framework \citep{liu_g-eval_2023}, which demonstrated that extracting the continuous probability distribution (logits) of rating tokens yields significantly more stable measurements than standard greedy decoding. 
+
+% Building upon this, recent work introduces calibration networks to explicitly tackle the problem of combining multiple dimensional ratings. For example, \citet{hashemi_llm-rubric_2024} employ a mixed-effects feed-forward neural network that combines judge-independent parameters with judge-specific parameters to predict individual annotator variance. While this successfully proves that evaluating finer-grained criteria improves the prediction of overall quality, this supervised machine learning paradigm introduces two fundamental limitations for operational measurement. 
+
+% First, fitting such a calibration network requires substantial human annotation data, with models converging only after collecting hundreds of multidimensional evaluations. For many operational platforms, this "cold start" annotation cost is computationally and financially prohibitive. 
+
+% Second, this approach optimizes the combination of dimensions solely to predict subjective human proxy labels (e.g., user satisfaction)[cite: 13, 222]. While one could theoretically use such a network to generate predicted human scores and subsequently use those scores as inputs to an econometric model to predict downstream market behavior, this two-stage approach forces the dimensional weights to be optimized for the human proxy rather than the actual downstream Key Performance Indicator (KPI). 
+
+% \subsection{Evaluation as a Formative Specification Problem}
+
+% To bridge the gap between supervised curve-fitting and scalable measurement, this thesis argues that LLM evaluation must transition to an explicit \textit{formative construct specification problem}. 
+
+% Rather than treating the LLM's dimensional logits as features for an opaque neural network trained on human labels, we embed them directly within a formal formative measurement model. By maintaining the strict structural independence of the criteria through isolated logit extraction, we bypass the need for a supervised calibration network and its associated annotation costs. 
+
+% Crucially, this approach shifts the target of optimization. Instead of combining dimensions to mimic individual annotators, we regress the independent formative indicators directly against an aggregate behavioral KPI (e.g., market liquidity). This allows the empirical market data—rather than subjective human proxies—to determine the functional weight of each dimension. To validate this framework, this thesis applies formal construct validity testing, assessing both its convergent validity against expert consensus and its predictive validity against empirical market behavior.

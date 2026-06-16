@@ -21,7 +21,7 @@ dimensions:
 metadata:
   description: naive holistic
   suite_tags:
-  - quality
-  - baseline
-  - naive
   - scale_4
+  - naive
+  - baseline
+  - quality

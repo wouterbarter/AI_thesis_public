@@ -1,0 +1,252 @@
+id: 83fb9645af53
+dimensions:
+  qa_pair_topical_alignment:
+    name: rubric_qa_pair_topical_alignment
+    description: Evaluates the intensity of topical_alignment on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - topical_alignment
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Topical Alignment.
+
+
+        Dimension Definition:
+
+        Topical Alignment evaluates the degree to which the answer addresses the issue
+        and stated constraints of the question. It concerns whether the answer matches
+        the subject matter, target case, and requested context expressed in the question.
+        This ranges from an answer that addresses a different issue or misses the
+        requested context to an answer that directly matches the issue and constraints
+        of the question.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Good
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_information_coverage:
+    name: rubric_qa_pair_information_coverage
+    description: Evaluates the intensity of information_coverage on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - information_coverage
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Information Coverage.
+
+
+        Dimension Definition:
+
+        Information Coverage evaluates the degree to which the answer provides enough
+        relevant information to serve as a full answer. It concerns the completeness
+        of the relevant content provided in relation to the question. This ranges
+        from an answer that leaves major informational gaps to an answer that covers
+        the relevant aspects needed for a full answer.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Good
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_topical_concentration:
+    name: rubric_qa_pair_topical_concentration
+    description: Evaluates the intensity of topical_concentration on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - topical_concentration
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Topical Concentration.
+
+
+        Dimension Definition:
+
+        Topical Concentration evaluates the degree to which the answer remains centered
+        on the asked issue throughout the passage. It concerns how consistently the
+        content stays on the requested topic without drifting into extra material.
+        This ranges from an answer with substantial off-topic or unnecessary content
+        to an answer that stays tightly centered on the asked issue.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Good
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_communicative_clarity:
+    name: rubric_qa_pair_communicative_clarity
+    description: Evaluates the intensity of communicative_clarity on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - communicative_clarity
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Communicative Clarity.
+
+
+        Dimension Definition:
+
+        Communicative Clarity evaluates the degree to which the answer is expressed
+        in a clear, well-organized, and easy-to-follow way. It concerns how readily
+        a reader can understand the information from the wording and structure of
+        the passage. This ranges from an answer that is difficult to follow or poorly
+        expressed to an answer that is clearly written and easy to understand.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Good
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+metadata:
+  description: Formative v3, scale 4, system prompt V1, user prompt V1, rubric V2
+  suite_tags:
+  - feedback_qa
+  - trait_intensity
+  - formative
+  - rubric
+  - scale_4
+  - qa_pair

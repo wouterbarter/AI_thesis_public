@@ -1,0 +1,158 @@
+id: 5f7ea2deacb8
+dimensions:
+  deal_pitch_aspirational_framing:
+    name: rubric_deal_pitch_aspirational_framing
+    description: Evaluates the intensity of aspirational_framing on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - aspirational_framing
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its aspirational\
+        \ framing.\nThis measures how well the text elevates a mundane or standard\
+        \ product into a highly desirable, aesthetic lifestyle experience that a creator\
+        \ would want to associate with their personal brand.\n\nScale definition:\n\
+        1: Dry & Functional (Describes the product strictly by its physical traits\
+        \ or utility, reading like a catalog entry. E.g., 'We sell scented cleaning\
+        \ products').\n2: Mildly Appealing (Hints at a positive outcome or feeling,\
+        \ but lacks immersive storytelling or strong lifestyle cues).\n3: Lifestyle-Oriented\
+        \ (Actively frames the product within a relatable, aesthetically pleasing\
+        \ scenario, e.g., 'Perfect for your cozy autumn evenings').\n4: Highly Aspirational\
+        \ (Masterfully sells a vibe, feeling, or elevated status. It makes the product\
+        \ feel like an essential part of an idealized, 'high-end' or romanticized\
+        \ lifestyle, making the creator want to live that narrative).\n\nOutput only\
+        \ the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+  deal_pitch_creator_validation:
+    name: rubric_deal_pitch_creator_validation
+    description: Evaluates the intensity of creator_validation on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - creator_validation
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its creator\
+        \ validation.\nThis measures whether the brand treats the creator as a respected\
+        \ creative partner versus an interchangeable advertising metric.\n\nScale\
+        \ definition:\n1: Transactional / Cattle Call (Addresses a generic audience,\
+        \ reads like a standard consumer ad, or demands labor without acknowledging\
+        \ the creator's skill or niche).\n2: Standard Brief (Polite but clinical.\
+        \ Lacks personal warmth or recognition of the creator's unique value).\n3:\
+        \ Collaborative & Welcoming (Uses inclusive, relational language. Acknowledges\
+        \ the creator's specific niche, e.g., 'Perfect for creators who share beauty\
+        \ routines').\n4: Highly Validating & Exclusive (Strokes the creator's ego.\
+        \ Frames the deal as a selective partnership, validating their expertise,\
+        \ aesthetic eye, or community influence. Makes them feel hand-picked and highly\
+        \ valued).\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+  deal_pitch_creative_autonomy:
+    name: rubric_deal_pitch_creative_autonomy
+    description: Evaluates the intensity of creative_autonomy on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - creative_autonomy
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its creative\
+        \ autonomy.\nThis measures how much psychological ownership the creator feels\
+        \ they will have over the content, versus feeling restricted by a rigid corporate\
+        \ brief.\n\nScale definition:\n1: Highly Prescriptive / Restrictive (Demands\
+        \ strict adherence to specific talking points, scripts, or leaves no room\
+        \ for personal interpretation).\n2: Ambiguous Autonomy (Mentions deliverables\
+        \ but is unclear about how much creative freedom the creator actually has).\n\
+        3: Encourages Authenticity (Explicitly asks the creator to share their genuine\
+        \ experience, personal routine, or honest review).\n4: Full Creative Ownership\
+        \ (Actively champions the creator's unique style. Uses phrases like 'in your\
+        \ own unique way,' 'your authentic voice,' or encourages them to build a personal\
+        \ story around the product).\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+  deal_pitch_cognitive_friction:
+    name: rubric_deal_pitch_cognitive_friction
+    description: Evaluates the intensity of cognitive_friction on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - cognitive_friction
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its cognitive\
+        \ friction.\nThis measures the psychological weight of parsing the deal. High\
+        \ friction means the creator has to hunt for deliverables, value, or location\
+        \ requirements, causing decision fatigue. LOW friction means the text is highly\
+        \ structured for a rapid 'give and get' assessment.\n\nScale definition:\n\
+        1: High Friction (Dense blocks of text, buried requirements, vague compensation,\
+        \ or missing crucial logistics like location requirements).\n2: Moderate Friction\
+        \ (Information is present but requires reading through standard paragraphs\
+        \ to find the exact deliverables and rewards).\n3: Low Friction (Uses clear\
+        \ spacing or lists to separate the product description from the campaign requirements).\n\
+        4: Zero Friction / Instantly Scannable (Masterful use of formatting\u2014\
+        bullet points, bold text, emojis\u2014to instantly communicate exactly what\
+        \ the creator must do and exactly what they receive in return. Decision can\
+        \ be made in 3 seconds).\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+metadata:
+  description: Diagnostic Gatekeeper suite for Negative Binomial regression
+  suite_tags:
+  - deal_pitch
+  - scale_4
+  - trait_intensity
+  - rubric

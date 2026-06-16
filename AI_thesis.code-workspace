@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"name": "AI_thesis",
+			"path": "."
+		}
+	],
+	"settings": {
+		"dataWrangler.defaultViewingFilterOptions": "advanced",
+		"dataWrangler.columnInsights.displayOnOpen": true
+	}
+}

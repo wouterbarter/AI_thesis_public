@@ -1,0 +1,25 @@
+,model_name,prompt_name,dimension_name,calibration_corr
+0,Qwen/Qwen3-4B-Instruct-2507,Formative,qa_pair_communicative_clarity,0.03527323841211755
+1,Qwen/Qwen3-4B-Instruct-2507,Formative,qa_pair_information_coverage,0.06606651785713846
+2,Qwen/Qwen3-4B-Instruct-2507,Formative,qa_pair_topical_alignment,0.09471013077518423
+3,Qwen/Qwen3-4B-Instruct-2507,Formative,qa_pair_topical_concentration,0.09185913257549867
+4,Qwen/Qwen3-4B-Instruct-2507,Holistic Informed,qa_pair_overall_answer_quality,0.11502263992022713
+5,Qwen/Qwen3-4B-Instruct-2507,Holistic Naive,qa_pair_overall_answer_quality,0.12146620962664664
+6,Qwen/Qwen3.5-4B,Formative,qa_pair_communicative_clarity,0.05644777584816024
+7,Qwen/Qwen3.5-4B,Formative,qa_pair_information_coverage,0.19639504721893164
+8,Qwen/Qwen3.5-4B,Formative,qa_pair_topical_alignment,0.13943346207212814
+9,Qwen/Qwen3.5-4B,Formative,qa_pair_topical_concentration,0.11435893349173719
+10,Qwen/Qwen3.5-4B,Holistic Informed,qa_pair_overall_answer_quality,0.16503705131383473
+11,Qwen/Qwen3.5-4B,Holistic Naive,qa_pair_overall_answer_quality,0.1796809246121228
+12,google/gemma-4-E2B-it,Formative,qa_pair_communicative_clarity,0.024597403615280282
+13,google/gemma-4-E2B-it,Formative,qa_pair_information_coverage,0.09549692700505256
+14,google/gemma-4-E2B-it,Formative,qa_pair_topical_alignment,0.0759270390104015
+15,google/gemma-4-E2B-it,Formative,qa_pair_topical_concentration,0.04808013644290791
+16,google/gemma-4-E2B-it,Holistic Informed,qa_pair_overall_answer_quality,0.06731314151264241
+17,google/gemma-4-E2B-it,Holistic Naive,qa_pair_overall_answer_quality,0.04074843021653054
+18,meta-llama/Llama-3.2-3B-Instruct,Formative,qa_pair_communicative_clarity,0.051154654174090236
+19,meta-llama/Llama-3.2-3B-Instruct,Formative,qa_pair_information_coverage,0.08091285650564742
+20,meta-llama/Llama-3.2-3B-Instruct,Formative,qa_pair_topical_alignment,0.10659067110872522
+21,meta-llama/Llama-3.2-3B-Instruct,Formative,qa_pair_topical_concentration,0.07301677070066379
+22,meta-llama/Llama-3.2-3B-Instruct,Holistic Informed,qa_pair_overall_answer_quality,0.06720087089912063
+23,meta-llama/Llama-3.2-3B-Instruct,Holistic Naive,qa_pair_overall_answer_quality,0.05715036028052752

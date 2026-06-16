@@ -1,0 +1,463 @@
+id: f162d59256cc
+dimensions:
+  deal_pitch_formative_brand_prestige:
+    name: rubric_deal_pitch_formative_brand_prestige
+    description: Evaluates the intensity of formative_brand_prestige on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_brand_prestige
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative brand prestige.\nEvaluate the established market presence, corporate\
+        \ trust, and overall footprint associated with the brand entity offering the\
+        \ deal.\n\nScale definition:\n1: Unknown/Suspicious\n2: Very Low\n3: Low\n\
+        4: Average/Niche\n5: High\n6: Very High\n7: Top-Tier/Global Leader\n\nOutput\
+        \ only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_perceived_economic_value:
+    name: rubric_deal_pitch_formative_perceived_economic_value
+    description: Evaluates the intensity of formative_perceived_economic_value on
+      the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_perceived_economic_value
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative perceived economic value.\nEvaluate the estimated retail value\
+        \ and premium nature of the physical product, service, or compensation being\
+        \ offered to the creator (the reward).\n\nScale definition:\n1: Negligible\
+        \ Value\n2: Very Low Value\n3: Low Value\n4: Moderate Value\n5: High Value\n\
+        6: Very High Value\n7: Exceptional/Luxury Value\n\nOutput only the integer\
+        \ score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_creator_brand_alignment:
+    name: rubric_deal_pitch_formative_creator_brand_alignment
+    description: Evaluates the intensity of formative_creator_brand_alignment on the
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_creator_brand_alignment
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative creator brand alignment.\nEvaluate the reputational safety and\
+        \ endorsement value of the product or service. This measures the continuum\
+        \ between an offering that would actively dilute or clash with a professional\
+        \ creator's brand equity versus an offering that seamlessly integrates into\
+        \ and actively elevates their social media feed.\n\nScale definition:\n1:\
+        \ Actively Dilutes Brand Equity (Reputational Risk)\n2: Poor Feed Integration\n\
+        3: Slightly Awkward Integration\n4: Neutral/Acceptable Integration\n5: Good\
+        \ Feed Integration\n6: Highly Native and Brand Enhancing\n7: Aspirational\
+        \ and Status Elevating\n\nOutput only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_functional_utility:
+    name: rubric_deal_pitch_formative_functional_utility
+    description: Evaluates the intensity of formative_functional_utility on the Deal
+      Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_functional_utility
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative functional utility.\nEvaluate the practical, everyday usefulness\
+        \ and utilitarian value of the physical product or service being offered.\
+        \ This measures the continuum between a purely decorative, novelty, or hedonic\
+        \ item versus a highly functional necessity that solves a practical daily\
+        \ problem.\n\nScale definition:\n1: Purely Novelty/Decorative (Zero Practical\
+        \ Utility)\n2: Very Low Utility\n3: Low Utility\n4: Moderate Utility\n5: High\
+        \ Utility\n6: Very High Utility\n7: Essential/Highly Practical Necessity\n\
+        \nOutput only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_product_universality:
+    name: rubric_deal_pitch_formative_product_universality
+    description: Evaluates the intensity of formative_product_universality on the
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_product_universality
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative product universality.\nEvaluate the mass-market consumer appeal\
+        \ of the physical product or service on offer. This measures the continuum\
+        \ between an item designed for a highly restricted, specialized target audience\
+        \ versus an everyday product with universal utility across a broad consumer\
+        \ base.\n\nScale definition:\n1: Extremely Niche/Restrictive\n2: Very Niche\n\
+        3: Somewhat Niche\n4: Moderate Appeal\n5: Broad Appeal\n6: Very Broad Appeal\n\
+        7: Universal Mass-Market Appeal\n\nOutput only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_workload_volume:
+    name: rubric_deal_pitch_formative_workload_volume
+    description: Evaluates the intensity of formative_workload_volume on the Deal
+      Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_workload_volume
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative workload volume.\nEvaluate the absolute physical quantity of deliverables\
+        \ and content-creation output required to fulfill the contract. This measures\
+        \ the raw production burden, ranging from a single, low-effort social media\
+        \ post to an exhaustive, multi-asset campaign.\n\nScale definition:\n1: Near-Zero\
+        \ Workload\n2: Very Light Workload\n3: Light Workload\n4: Moderate Workload\n\
+        5: Heavy Workload\n6: Very Heavy Workload\n7: Extreme/Exhaustive Workload\n\
+        \nOutput only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_creative_restrictiveness:
+    name: rubric_deal_pitch_formative_creative_restrictiveness
+    description: Evaluates the intensity of formative_creative_restrictiveness on
+      the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_creative_restrictiveness
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative creative restrictiveness.\nEvaluate the locus of creative control\
+        \ within the collaboration. This measures the continuum between absolute creator\
+        \ autonomy in executing the deliverables versus rigid corporate dictation\
+        \ and structural control.\n\nScale definition:\n1: Total Creative Freedom\n\
+        2: Very High Autonomy\n3: High Autonomy\n4: Moderate Guidelines\n5: Strict\
+        \ Guidelines\n6: Very Strict/Rigid Brief\n7: Total Corporate Dictation\n\n\
+        Output only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_call_to_action_strength:
+    name: rubric_deal_pitch_formative_call_to_action_strength
+    description: Evaluates the intensity of formative_call_to_action_strength on the
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_call_to_action_strength
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative call to action strength.\nEvaluate the relational enthusiasm and\
+        \ cooperative urgency of the pitch. This measures the continuum between a\
+        \ sterile, ambivalent, or purely transactional closing versus a highly motivated,\
+        \ welcoming invitation to collaborate.\n\nScale definition:\n1: Extremely\
+        \ Ambivalent/Sterile\n2: Very Weak\n3: Weak\n4: Average\n5: Strong\n6: Very\
+        \ Strong\n7: Highly Enthusiastic and Persuasive\n\nOutput only the integer\
+        \ score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_rhetorical_realism:
+    name: rubric_deal_pitch_formative_rhetorical_realism
+    description: Evaluates the intensity of formative_rhetorical_realism on the Deal
+      Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_rhetorical_realism
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative rhetorical realism.\nEvaluate the rhetorical style and tone of\
+        \ the pitch. This measures the continuum between highly inflated, purely positive\
+        \ promotional hyperbole (sales hype, relentless positivity) versus grounded,\
+        \ balanced, and transparent business realism (setting clear expectations,\
+        \ acknowledging practical boundaries or strictness).\n\nScale definition:\n\
+        1: Extreme Promotional Hyperbole (Pure sales hype)\n2: Highly Promotional\n\
+        3: Slightly Promotional\n4: Neutral/Standard Pitch\n5: Somewhat Grounded\n\
+        6: Highly Grounded and Realistic\n7: Completely Transparent/Factual Realism\n\
+        \nOutput only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_formative_proposition_clarity:
+    name: rubric_deal_pitch_formative_proposition_clarity
+    description: Evaluates the intensity of formative_proposition_clarity on the Deal
+      Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - formative_proposition_clarity
+    - deal_pitch
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ formative proposition clarity.\nEvaluate the structural clarity and cognitive\
+        \ ease of processing the pitch. This measures the continuum between a disorganized,\
+        \ opaque, or confusing text requiring high cognitive effort to decipher the\
+        \ terms of trade, versus a highly structured, explicit pitch where the required\
+        \ deliverables and offered rewards are immediately obvious.\n\nScale definition:\n\
+        1: Extremely Confusing and Opaque\n2: Very Unclear\n3: Slightly Unclear\n\
+        4: Average Clarity\n5: Clear and Structured\n6: Very Clear\n7: Perfectly Explicit\
+        \ and Immediately Obvious\n\nOutput only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+metadata:
+  description: Formative NoBARS, revised dimensions, including requirements,scale
+    7, revision2, system prompt V2
+  suite_tags:
+  - trait_intensity
+  - scale_7
+  - rubric
+  - formative
+  - deal_pitch

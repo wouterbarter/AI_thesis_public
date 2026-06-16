@@ -1,0 +1,73 @@
+id: 712743e7a514
+dimensions:
+  qa_pair_overall_answer_quality:
+    name: rubric_qa_pair_overall_answer_quality
+    description: Evaluates the intensity of overall_answer_quality on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - overall_answer_quality
+    - qa_pair
+    - feedback_qa
+    - holistic_naive
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Overall Answer Quality.
+
+
+        Dimension Definition:
+
+        Overall Answer Quality evaluates the overall degree to which the answer functions
+        as a good answer to the question in a public health information setting. It
+        measures how satisfactory the answer is as a response to the question, taking
+        into account how well it serves the user''s information need in context. This
+        ranges from an answer that fails to function as a satisfactory answer to an
+        answer that functions very well as a satisfactory answer.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Good
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+metadata:
+  description: Holistic naive v1, scale 4, system prompt V1, user prompt V1
+  suite_tags:
+  - rubric
+  - feedback_qa
+  - overall_answer_quality
+  - holistic_naive
+  - trait_intensity
+  - qa_pair
+  - scale_4

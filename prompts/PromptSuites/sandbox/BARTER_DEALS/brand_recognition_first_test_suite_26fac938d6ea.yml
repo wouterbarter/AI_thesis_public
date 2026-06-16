@@ -1,0 +1,50 @@
+id: 26fac938d6ea
+dimensions:
+  deal_pitch_brand_recognition:
+    name: rubric_deal_pitch_brand_recognition
+    description: Evaluates the intensity of brand_recognition on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - brand_recognition
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its brand\
+        \ recognition.\nThis measures how widely recognized and established the specific\
+        \ brand or company is to the general public, strictly independent of how familiar\
+        \ or common the actual product is (e.g., a generic smartphone vs. an Apple\
+        \ iPhone).\n\nScale definition:\n1: Not Known / Anonymous (The brand name\
+        \ is entirely missing, irrelevant, or appears to be a generic white-label/dropshipping\
+        \ operation. Zero inherent brand equity).\n2: Somewhat Unknown / Local (A\
+        \ distinct, real business\u2014such as a local restaurant, independent webshop,\
+        \ or new startup\u2014but it lacks widespread mainstream recognition. The\
+        \ average consumer has likely never heard of it).\n3: Somewhat Known / Established\
+        \ (A solid regional or national brand. Consumers might recognize the name\
+        \ from high-street presence, targeted ads, or it is a highly established player\
+        \ within a specific consumer niche).\n4: Well-Known / Household Name (A ubiquitous,\
+        \ top-tier national or global brand. Instant, universal recognition by the\
+        \ general public, bringing inherent social proof to the creator).\n\nOutput\
+        \ only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+metadata:
+  description: Brand Recognition, single dimension test
+  suite_tags:
+  - rubric
+  - brand_recognition
+  - trait_intensity
+  - deal_pitch
+  - scale_4

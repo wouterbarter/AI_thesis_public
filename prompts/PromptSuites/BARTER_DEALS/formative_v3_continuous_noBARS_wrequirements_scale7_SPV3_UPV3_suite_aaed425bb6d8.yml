@@ -1,0 +1,744 @@
+id: aaed425bb6d8
+dimensions:
+  deal_pitch_brand_prestige:
+    name: rubric_deal_pitch_brand_prestige
+    description: Evaluates the intensity of brand_prestige on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - brand_prestige
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Brand Prestige.
+
+
+        Dimension Definition:
+
+        Brand Prestige is defined as the degree to which the brand is recognized,
+        established, and trusted in the market. This ranges from a brand with very
+        low recognition or credibility to a brand with very high recognition, reputation,
+        and perceived status.
+
+
+        Scale Definition:
+
+        1: Very low prestige
+
+        2: Low prestige
+
+        3: Slightly below-average prestige
+
+        4: Moderate prestige
+
+        5: Above-average prestige
+
+        6: High prestige
+
+        7: Very high prestige
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_perceived_economic_value:
+    name: rubric_deal_pitch_perceived_economic_value
+    description: Evaluates the intensity of perceived_economic_value on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - perceived_economic_value
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Perceived Economic Value.
+
+
+        Dimension Definition:
+
+        Perceived Economic Value is defined as the perceived financial value, premium
+        level, or worth of the product, service, or compensation offered to the creator.
+        This ranges from very low value to very high value.
+
+
+        Scale Definition:
+
+        1: Very low value
+
+        2: Low value
+
+        3: Slightly below-average value
+
+        4: Moderate value
+
+        5: Above-average value
+
+        6: High value
+
+        7: Very high value
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_creator_content_fit:
+    name: rubric_deal_pitch_creator_content_fit
+    description: Evaluates the intensity of creator_content_fit on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - creator_content_fit
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Creator Content Fit.
+
+
+        Dimension Definition:
+
+        Creator Content Fit is defined as how naturally the collaboration opportunity
+        fits the kind of content creators would realistically make and share. This
+        ranges from a deal that feels very difficult or unnatural to integrate into
+        creator content to a deal that feels very natural and easy to integrate into
+        creator content.
+
+
+        Scale Definition:
+
+        1: Very poor fit
+
+        2: Poor fit
+
+        3: Slightly below-average fit
+
+        4: Moderate fit
+
+        5: Above-average fit
+
+        6: Good fit
+
+        7: Excellent fit
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_functional_utility:
+    name: rubric_deal_pitch_functional_utility
+    description: Evaluates the intensity of functional_utility on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - functional_utility
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Functional Utility.
+
+
+        Dimension Definition:
+
+        Functional Utility is defined as the degree to which the product or service
+        offers practical, everyday usefulness. This ranges from very low practical
+        usefulness to very high practical usefulness.
+
+
+        Scale Definition:
+
+        1: Very low utility
+
+        2: Low utility
+
+        3: Slightly below-average utility
+
+        4: Moderate utility
+
+        5: Above-average utility
+
+        6: High utility
+
+        7: Very high utility
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_product_universality:
+    name: rubric_deal_pitch_product_universality
+    description: Evaluates the intensity of product_universality on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - product_universality
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Product Universality.
+
+
+        Dimension Definition:
+
+        Product Universality is defined as the breadth of the product''s or service''s
+        general consumer appeal. This ranges from very narrow appeal to very broad
+        appeal.
+
+
+        Scale Definition:
+
+        1: Very narrow appeal
+
+        2: Narrow appeal
+
+        3: Slightly below-average appeal breadth
+
+        4: Moderate appeal breadth
+
+        5: Broad appeal
+
+        6: Very broad appeal
+
+        7: Near-universal appeal
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_workload_volume:
+    name: rubric_deal_pitch_workload_volume
+    description: Evaluates the intensity of workload_volume on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - workload_volume
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Workload Volume.
+
+
+        Dimension Definition:
+
+        Workload Volume is defined as the total amount of time, effort, and work required
+        to complete the collaboration. This ranges from very low workload to very
+        high workload.
+
+
+        Scale Definition:
+
+        1: Very low workload
+
+        2: Low workload
+
+        3: Slightly below-average workload
+
+        4: Moderate workload
+
+        5: Above-average workload
+
+        6: High workload
+
+        7: Very high workload
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_creative_restrictiveness:
+    name: rubric_deal_pitch_creative_restrictiveness
+    description: Evaluates the intensity of creative_restrictiveness on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - creative_restrictiveness
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Creative Restrictiveness.
+
+
+        Dimension Definition:
+
+        Creative Restrictiveness is defined as the degree to which the collaboration
+        limits the creator''s creative freedom. This ranges from very high freedom
+        and very low restriction to very low freedom and very high restriction.
+
+
+        Scale Definition:
+
+        1: Very low restrictiveness
+
+        2: Low restrictiveness
+
+        3: Slightly below-average restrictiveness
+
+        4: Moderate restrictiveness
+
+        5: Above-average restrictiveness
+
+        6: High restrictiveness
+
+        7: Very high restrictiveness
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_call_to_action_strength:
+    name: rubric_deal_pitch_call_to_action_strength
+    description: Evaluates the intensity of call_to_action_strength on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - call_to_action_strength
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Call To Action Strength.
+
+
+        Dimension Definition:
+
+        Call-to-Action Strength is defined as the degree of warmth, enthusiasm, and
+        inviting energy in the brand''s invitation to collaborate. This ranges from
+        very weak or distant to very strong and enthusiastic.
+
+
+        Scale Definition:
+
+        1: Very weak call to action
+
+        2: Weak call to action
+
+        3: Slightly below-average call to action strength
+
+        4: Moderate call to action strength
+
+        5: Above-average call to action strength
+
+        6: Strong call to action
+
+        7: Very strong call to action
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_promotional_hype_level:
+    name: rubric_deal_pitch_promotional_hype_level
+    description: Evaluates the intensity of promotional_hype_level on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - promotional_hype_level
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Promotional Hype Level.
+
+
+        Dimension Definition:
+
+        Promotional Hype Level is defined as the degree to which the pitch uses promotional,
+        exaggerated, or sales-oriented language rather than a neutral, factual, and
+        business-like tone. This ranges from very low hype to very high hype.
+
+
+        Scale Definition:
+
+        1: Very low hype
+
+        2: Low hype
+
+        3: Slightly below-average hype
+
+        4: Moderate hype
+
+        5: Above-average hype
+
+        6: High hype
+
+        7: Very high hype
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_proposition_clarity:
+    name: rubric_deal_pitch_proposition_clarity
+    description: Evaluates the intensity of proposition_clarity on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - proposition_clarity
+    - deal_pitch
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of influencer marketing deals ("Deal Texts")
+        for Barter, an app-based creator marketplace.
+
+        In this ecosystem, creators scroll a feed of deals and apply to collaborate.
+        If accepted, they produce content (e.g., UGC, TikToks, Instagram Reels) primarily
+        in exchange for the brand''s offering, with occasional cash supplements. Ground
+        your evaluation in this creator marketplace context. Use both the information
+        in the Deal Text and your general world knowledge when needed.
+
+
+        You will be given one Deal Text with a Title, Body, and Requirements. Evaluate
+        it on exactly one dimension: Proposition Clarity.
+
+
+        Dimension Definition:
+
+        Proposition Clarity is defined as how easy the pitch is to understand in terms
+        of what is being offered and what is being requested. This ranges from very
+        unclear to very clear.
+
+
+        Scale Definition:
+
+        1: Very unclear
+
+        2: Unclear
+
+        3: Slightly below-average clarity
+
+        4: Moderate clarity
+
+        5: Above-average clarity
+
+        6: Clear
+
+        7: Very clear
+
+
+        Evaluate where the deal falls on this continuum and return the closest whole-number
+        rating from 1 to 7.'
+      user: 'Here is the Deal Text:
+
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+metadata:
+  description: Formative NoBARS, including requirements,scale 7, system prompt V3,
+    user prompt V3
+  suite_tags:
+  - trait_intensity
+  - deal_pitch
+  - formative
+  - rubric
+  - scale_7

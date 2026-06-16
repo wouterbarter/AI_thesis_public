@@ -1,20 +1,6 @@
-This is BibTeX, Version 0.99d
+This is BibTeX, Version 0.99e
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
-Reallocating 'name_of_file' (item size: 1) to 26 items.
-A level-1 auxiliary file: sections/introduction.aux
-Reallocating 'name_of_file' (item size: 1) to 31 items.
-A level-1 auxiliary file: sections/literature_review.aux
-Reallocating 'name_of_file' (item size: 1) to 35 items.
-A level-1 auxiliary file: sections/theoretical_framework.aux
-Reallocating 'name_of_file' (item size: 1) to 25 items.
-A level-1 auxiliary file: sections/methodology.aux
-Reallocating 'name_of_file' (item size: 1) to 21 items.
-A level-1 auxiliary file: sections/results.aux
-Reallocating 'name_of_file' (item size: 1) to 24 items.
-A level-1 auxiliary file: sections/discussion.aux
-Reallocating 'name_of_file' (item size: 1) to 24 items.
-A level-1 auxiliary file: sections/conclusion.aux
 Reallocating 'name_of_file' (item size: 1) to 9 items.
 The style file: abbrvnat.bst
 Reallocating 'name_of_file' (item size: 1) to 11 items.
@@ -22,64 +8,81 @@ Reallocating 'name_of_file' (item size: 1) to 25 items.
 A level-1 auxiliary file: appendices/A_prompts.aux
 Reallocating 'name_of_file' (item size: 1) to 29 items.
 A level-1 auxiliary file: appendices/B_sample_data.aux
+Reallocating 'name_of_file' (item size: 1) to 41 items.
+A level-1 auxiliary file: appendices/C_additional_graphs_diags.aux
+Reallocating 'name_of_file' (item size: 1) to 41 items.
+A level-1 auxiliary file: appendices/D_measurement_diagnostics.aux
+Reallocating 'name_of_file' (item size: 1) to 37 items.
+A level-1 auxiliary file: appendices/E_evaluation_criteria.aux
 Database file #1: references.bib
+Warning--I didn't find a database entry for "zhong_towards_2022"
+Warning--to sort, need author or key in PDFModernLLM2026
 Warning--empty year in bang_transforming_2025
+Warning--empty journal in binetteImprovingValidityPractical2024
+Warning--empty year in fabbri_summeval_2021
 Warning--empty year in gu_survey_2025
-Warning--empty journal in li_fine-grained_2026
-Warning--empty year in li_fine-grained_2026
-Warning--empty year in li_fine-grained_2026
+Warning--empty year in hashemi_llm-rubric_2024
+Warning--empty year in hashemi_llm-rubric_2024
 Warning--empty year in li_using_2022
 Warning--empty year in li_using_2022
-Warning--empty year in lin_validity-guided_2025
+Warning--empty year in lin_rouge_2004
+Warning--empty year in lin_rouge_2004
 Warning--empty year in liu_g-eval_2023
-Warning--empty journal in messick_validity_1994
-Warning--empty year in messick_validity_1994
-Warning--empty year in messick_validity_1994
-Warning--empty year in shi_judging_2025
+Warning--empty year in papineni_bleu_2001
+Warning--empty year in papineni_bleu_2001
+Warning--empty year in saito_verbosity_2023
+Warning--empty year in sellam_bleurt_2020
+Warning--empty year in sellam_bleurt_2020
 Warning--empty journal in spearman1961general
-Warning--empty journal in gemma_2025
+Warning--empty journal in wangEvaluatingGeneralPurposeAI
+Warning--empty year in wangEvaluatingGeneralPurposeAI
+Warning--empty year in wangEvaluatingGeneralPurposeAI
+Warning--empty year in zhang_bertscore_2020
+Warning--empty year in zhao_moverscore_2019
+Warning--empty journal in zhaoChallengesTrustworthyHuman
+Warning--empty year in zhaoChallengesTrustworthyHuman
 Warning--empty journal in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
-You've used 18 entries,
+You've used 53 entries,
             2773 wiz_defined-function locations,
-            718 strings with 9342 characters,
-and the built_in function-call counts, 9657 in all, are:
-= -- 801
-> -- 750
-< -- 13
-+ -- 256
-- -- 237
-* -- 822
-:= -- 1516
-add.period$ -- 66
-call.type$ -- 18
-change.case$ -- 132
-chr.to.int$ -- 17
-cite$ -- 54
-duplicate$ -- 370
-empty$ -- 656
-format.name$ -- 261
-if$ -- 1972
+            972 strings with 21470 characters,
+and the built_in function-call counts, 32691 in all, are:
+= -- 2746
+> -- 2686
+< -- 28
++ -- 898
+- -- 844
+* -- 2950
+:= -- 5055
+add.period$ -- 191
+call.type$ -- 53
+change.case$ -- 430
+chr.to.int$ -- 52
+cite$ -- 135
+duplicate$ -- 1180
+empty$ -- 2130
+format.name$ -- 906
+if$ -- 6757
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 12
-newline$ -- 110
-num.names$ -- 72
-pop$ -- 316
+missing$ -- 34
+newline$ -- 295
+num.names$ -- 224
+pop$ -- 980
 preamble$ -- 1
-purify$ -- 114
+purify$ -- 377
 quote$ -- 0
-skip$ -- 319
+skip$ -- 1046
 stack$ -- 0
-substring$ -- 191
-swap$ -- 46
-text.length$ -- 3
+substring$ -- 898
+swap$ -- 225
+text.length$ -- 14
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 198
-warning$ -- 18
-while$ -- 70
+type$ -- 583
+warning$ -- 28
+while$ -- 227
 width$ -- 0
-write$ -- 243
-(There were 18 warnings)
+write$ -- 715
+(There were 29 warnings)

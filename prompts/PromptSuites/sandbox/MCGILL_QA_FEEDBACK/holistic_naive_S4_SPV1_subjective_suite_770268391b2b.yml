@@ -1,0 +1,47 @@
+id: 770268391b2b
+dimensions:
+  qa_pair_overall_answer_quality:
+    name: rubric_qa_pair_overall_answer_quality
+    description: Evaluates the intensity of overall_answer_quality on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - overall_answer_quality
+    - qa_pair
+    - feedback_qa
+    template_chat:
+      system: "You are an expert evaluator of Question and Answer (Q&A) pairs for\
+        \ a public health information platform. \nIn this ecosystem, individuals ask\
+        \ questions regarding the COVID-19 pandemic, and an informational text passage\
+        \ is provided as the answer. Your evaluation must be grounded in this specific\
+        \ context of health-related information exchange.\n\nYour task is to evaluate\
+        \ the provided Q&A Pair conditional strictly on its overall answer quality.\n\
+        This evaluates the overall quality and helpfulness of the answer provided\
+        \ in response to the user's question. It assesses the total subjective value\
+        \ of the response, ranging from a fundamentally unhelpful, irrelevant, or\
+        \ incorrect answer (Bad), up to a highly effective, accurate, and perfect\
+        \ response (Excellent).\n\nScale definition:\n1: Bad\n2: Could be Improved\n\
+        3: Acceptable\n4: Excellent\n\nOutput only the integer score."
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+metadata:
+  description: Holistic Naive Baseline FeedbackQA, scale 4, SPV1, subjective
+  suite_tags:
+  - trait_intensity
+  - overall_answer_quality
+  - qa_pair
+  - scale_4
+  - rubric
+  - feedback_qa

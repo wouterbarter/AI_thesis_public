@@ -1,0 +1,33 @@
+% !TEX root = ../main.tex
+
+
+\section{Results}
+
+\subsection{Convergent Validity (FeedbackQA)}
+
+(note that I still need to generate results on the full data sample, but the results will remain approximately the same)
+
+We first evaluate the extent to which the formative operationalization aligns with human expert judgments compared to the holistic baseline. Table \ref{tab:convergent_results} presents the Adjusted Coefficient of Determination ($R^2_{adj}$) for both specifications across all three target models.
+
+\begin{table}[h]
+\centering
+\caption{Comparative performance of Holistic vs. Formative specifications in predicting human expert ratings on FeedbackQA. The Formative model consistently explains greater variance in the ground truth.}\label{tab:convergent_results}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Model} & \textbf{Holistic Baseline ($R^2_{adj}$)} & \textbf{Formative Model ($R^2_{adj}$)} & \textbf{Improvement ($\Delta$)} \\
+        \midrule
+        Qwen 3-4B    & 0.387 & \textbf{0.432} & +0.045 \\
+        Llama 3.2-3B   & 0.318 & 0.419 & +0.101 \\
+        Gemma 3-4B     & 0.263 & 0.302 & +0.039 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The results provide strong empirical support for the formative hypothesis. Across all evaluated models, the formative specification yields a higher $R^2_{adj}$ than the holistic baseline, indicating that the decomposed indicators captures systematic variation in quality that the single-token holistic score misses.
+
+\paragraph{Model-Specific Performance.}
+Qwen3-4B achieves the highest overall alignment with human raters ($R^2_{adj} = 0.432$), confirming its status as the strongest model in this size class.  However, Llama 3.2-3B demonstrates the most significant benefit from decomposition. While its holistic performance is moderate ($0.318$), the formative specification increases predictive to $0.419$, effectively closing the gap with Qwen. 
+
+This disparity suggests that while Llama possesses the latent capability to identify quality features (as evidenced by the high formative score), it struggles to aggregate these signals into a single scalar during inference. The formative operationalization effectively bypasses this "aggregation bottleneck."
+
+\subsection{Barter Deals}

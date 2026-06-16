@@ -1,0 +1,157 @@
+id: 38c4714f0e3a
+dimensions:
+  deal_pitch_overall_reward_value:
+    name: rubric_deal_pitch_overall_reward_value
+    description: Evaluates the intensity of overall_reward_value on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - overall_reward_value
+    - deal_pitch
+    - informed_holistic
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals (\"Deal Texts\"\
+        ) for Barter, an app-based creator marketplace. \nIn this ecosystem, creators\
+        \ scroll a feed of deals and apply to collaborate. If accepted, they produce\
+        \ content (e.g., UGC, TikToks, Instagram Reels) primarily in exchange for\
+        \ the brand's offering, with occasional cash supplements. Your evaluation\
+        \ must be grounded in this creator ecosystem.\n\nYou will be provided with\
+        \ a Deal Text consisting of a Title, Body, and Requirements. Please analyze\
+        \ this text, focusing strictly on the following dimension: **Overall Reward\
+        \ Value**.\n\nDimension Definition:\nOverall Reward Value is defined as the\
+        \ total desirability and worth of the compensation package being offered to\
+        \ the creator. This measures the continuum between a highly unappealing reward\
+        \ with little to no worth, versus an exceptionally premium, highly coveted\
+        \ offering.\n\nScale Definition:\n1: Highly Unappealing (A very poor offering\
+        \ with negligible worth or desirability)\n2: Very Low Appeal\n3: Low Appeal\n\
+        4: Standard Market Value (An average, typical compensation package)\n5: High\
+        \ Appeal\n6: Very High Appeal\n7: Highly Premium Offering (An exceptionally\
+        \ valuable and highly coveted reward)\n\nEvaluate where the text falls on\
+        \ this continuum, and provide the closest whole number rating (1-7)."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_overall_task_demand:
+    name: rubric_deal_pitch_overall_task_demand
+    description: Evaluates the intensity of overall_task_demand on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - overall_task_demand
+    - deal_pitch
+    - informed_holistic
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals (\"Deal Texts\"\
+        ) for Barter, an app-based creator marketplace. \nIn this ecosystem, creators\
+        \ scroll a feed of deals and apply to collaborate. If accepted, they produce\
+        \ content (e.g., UGC, TikToks, Instagram Reels) primarily in exchange for\
+        \ the brand's offering, with occasional cash supplements. Your evaluation\
+        \ must be grounded in this creator ecosystem.\n\nYou will be provided with\
+        \ a Deal Text consisting of a Title, Body, and Requirements. Please analyze\
+        \ this text, focusing strictly on the following dimension: **Overall Task\
+        \ Demand**.\n\nDimension Definition:\nOverall Task Demand is defined as the\
+        \ total amount of effort, time, and rigid compliance required to complete\
+        \ the campaign. This measures the continuum between a very fast, easy, and\
+        \ flexible request, versus a highly demanding, time-consuming project with\
+        \ strict rules.\n\nScale Definition:\n1: Minimal Demand (An extremely fast,\
+        \ easy task with total flexibility)\n2: Very Low Demand\n3: Low Demand\n4:\
+        \ Moderate Demand (A standard campaign requiring an average amount of time\
+        \ and effort)\n5: High Demand\n6: Very High Demand\n7: Extreme Demand (A highly\
+        \ time-consuming project with intensive requirements and strict rules)\n\n\
+        Evaluate where the text falls on this continuum, and provide the closest whole\
+        \ number rating (1-7)."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_overall_pitch_quality:
+    name: rubric_deal_pitch_overall_pitch_quality
+    description: Evaluates the intensity of overall_pitch_quality on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - overall_pitch_quality
+    - deal_pitch
+    - informed_holistic
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals (\"Deal Texts\"\
+        ) for Barter, an app-based creator marketplace. \nIn this ecosystem, creators\
+        \ scroll a feed of deals and apply to collaborate. If accepted, they produce\
+        \ content (e.g., UGC, TikToks, Instagram Reels) primarily in exchange for\
+        \ the brand's offering, with occasional cash supplements. Your evaluation\
+        \ must be grounded in this creator ecosystem.\n\nYou will be provided with\
+        \ a Deal Text consisting of a Title, Body, and Requirements. Please analyze\
+        \ this text, focusing strictly on the following dimension: **Overall Pitch\
+        \ Quality**.\n\nDimension Definition:\nOverall Pitch Quality is defined as\
+        \ the clarity, structure, and professional tone of the brand's written communication.\
+        \ This measures the continuum between a highly confusing, poorly written,\
+        \ or unprofessional text, versus a flawlessly structured, perfectly clear,\
+        \ and highly professional proposal.\n\nScale Definition:\n1: Extremely Poor\
+        \ Quality (The text is highly confusing, unstructured, or deeply unprofessional)\n\
+        2: Very Low Quality\n3: Low Quality\n4: Standard Quality (A moderately clear,\
+        \ average business communication)\n5: High Quality\n6: Very High Quality\n\
+        7: Exceptional Quality (A perfectly clear, flawlessly structured, and highly\
+        \ professional proposal)\n\nEvaluate where the text falls on this continuum,\
+        \ and provide the closest whole number rating (1-7)."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+metadata:
+  description: Informed holistic NoBARS, revised dimensions, including requirements,scale
+    7, revision3, system prompt V3
+  suite_tags:
+  - trait_intensity
+  - deal_pitch
+  - rubric
+  - informed_holistic
+  - scale_7

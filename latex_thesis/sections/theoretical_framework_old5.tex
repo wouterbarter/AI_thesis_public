@@ -1,0 +1,156 @@
+% !TEX root = ../main.tex
+
+\section{Theoretical Framework}\label{sec:theoretical_framework}
+
+%TODO rewrite introduction
+This thesis treats LLM-based evaluators as measurement instruments that map an input (e.g., marketing copy text) to a score that represents an underlying construct (e.g., "Quality" or "Attractiveness"). 
+
+
+% The goal is to align the LLM evaluation with human evaluation. 
+
+The construct of interest can be evaluated directly, in which case it is considered holistically. However, a fundamental challenge in evaluating subjective attributes is that they are not singular, physical properties like temperature or length, but high-dimensional constructs. To address this, we propose a methodology inspired by \textit{construct representation}, treating the task of evaluation as a cognitive process which can be decomposed into sub-processes \citep{whitely1983construct, messick_validity_1994}. We hypothesize that by explicitly modelling the criteria humans implicitly use to reach a judgment, an LLM can yield a better measurement of the construct compared to a holistic evaluation.
+
+A similar measurement approach where a complex construct is decomposed is taken in \citet{li-fine-grained-2026} and \citet{wang2025evaluating}. \citet{li-fine-grained-2026} note that it is difficult to align general attributes such as "usefulness" and "harmlessness" with human evaluations, so they decompose them into more specific criteria. \citet{wang2025evaluating} find that an "analytic scoring" approach outperforms holistic scoring, where they supply the LLM with Rubrics containing multi-dimensional assessment criteria on which it bases its evaluation. 
+
+However, these studies typically treat decomposition as a pragmatic scoring or training design choice, rather than as an explicit construct-specification problem. As a result, it remains unclear how to adequately define the evaluation criteria, how the decomposed scores should be interpreted, and which criteria for validity follow. Validity in psychometrics concerns whether an instrument measures what it is supposed to measure, and serves as support for interpretations and actions based on the measurements. It is established through both theoretical rationales as well as empirical evidence \citep{messick1989meaning}. By making the measurement model explicit, we can define the theoretical requirements for meaningful measurements and derive an empirical validation strategy that matches the construct specification.  
+
+% "requirements for meaningful measurements"  means: what conditions must hold so that your reported scores can be read as measuring your intended construct rather than “some mixture of unspecified things.”"
+
+Moreover, common choices in the operationalization of LLM-based evaluators can introduce construct-irrelevant variance. In particular, placing multiple criteria in a single prompt makes scores sensitive to criterion order ("position bias"; see \citet{shi_judging_2025}), and requesting multiple scores in a single generation mechanically couples later scores to earlier outputs via autoregression. We therefore measure each criterion in isolation, consistent with \citet{bang_transforming_2025}. Our contribution is to formalize why this operationalization improves measurement validity.
+
+Finally, the validation methodologies in \citet{li-fine-grained-2026} and \citet{wang2025evaluating} require improvement. Firstly, they establish \textit{convergent validity} by comparing LLM ratings to human ratings on identical analytic scales. This approach demonstrates that an LLM can mimic human grading on specific sub-dimensions, but fails to prove that the decomposition strategy itself yields a superior measurement of the overall quality compared to a holistic evaluation. The theoretical foundation from Section \ref{sec:theoretical_definition} allows us to specify a model to directly assess this. Furthermore, neither paper has access to a dataset which includes behavioral outcomes, limiting their validation to human proxy labels. Demonstrating functional utility is especially important considering the intended use of the evaluator on the Barter platform. We therefore extend validation by assessing \textit{predictive validity} against a downstream behavioral KPI. 
+
+Accordingly, the structure of this chapter is as follows. 
+
+\begin{itemize}
+    \item \textbf{Theoretical definition:} We explain the two causal models that define the relationship between a composite construct ("latent variable") and its constituents ("indicators"): the \emph{reflective} and the \emph{formative} model. 
+    \item \textbf{Computational operationalization:} We formalize the independent measurement of these constituents by defining the mathematical mapping of dimensions to logit-based scores. 
+    \item \textbf{Empirical validation:} We explain how we assess measurement validity through the psychometric concept of \textit{construct validity}. We assess construct validity through \textit{convergent validity} (alignment with human holistic labels) and \textit{predictive validity} (prediction of a behavioral KPI). 
+\end{itemize}
+
+\subsection{Theoretical Definition}\label{sec:theoretical_definition}
+
+\subsubsection{Latent Variable Models}
+
+Latent variable models define the relationship between a target construct and its indicators. Two model types are distinguished: formative and reflective \citep{bollen1991conventional}. They differ in their assumptions about the direction of causality. 
+
+In formative models, the latent variable is assumed to be a composite construct, caused by the indicators ("causal indicators"). The canonical example is Socioeconomic Status (SES), which can be defined as the composite of three main features: income, education, and prestige \citep{mcquitty2013structural}. Formally, for a set of causal indicators indexed by $i = 1,2, \dots ,n$, we assume
+
+\begin{equation}\label{eq:formative_model}
+    \eta = \sum_{i=1}^{n} \gamma_i x_i + \zeta
+\end{equation}
+
+where $\eta$ is a latent construct, $\gamma_i$ a formative weight, $x_i$ a manifest variable, $\zeta$ the disturbance term. 
+
+In reflective models, the latent variable causes the manifest variables ("effect indicators"). For example, following a "g-factor" interpretation of the latent variable intelligence \citep{spearman1961general}, we assume that intelligence is an inherent trait that humans possess which causes people's performance on cognitive tasks. This is similar to the implicit assumption in benchmarking that high scores translate to abilities on some ability, such as reasoning, math, or writing. Formally, for any effect indicator $i$, we assume
+
+\begin{equation}\label{eq:reflective_model}
+    x_i = \lambda_i \eta + \varepsilon_i
+\end{equation}
+
+where $x_i$ is manifest variable, $\lambda_i$ a factor loading, $\eta$ the latent construct, and $\varepsilon_i$ the measurement error.
+
+% \paragraph{Exemplars in LLM-based measurement.}
+
+% Decomposition already appears in LLM-based evaluation, but with different implicit measurement stances. \citet{wang2025evaluating} study LLM scoring in large-scale writing assessment using psychometric reliability frameworks, consistent with treating rubric dimensions as manifestations of a common underlying writing ability (reflective stance). \citet{li-fine-grained-2026} operationalize broad evaluation targets through batteries of criteria organized by task category, emphasizing domain coverage, which is consistent with treating evaluation as a composite defined by its constituents (formative stance). 
+
+
+% \paragraph{Implications.}
+% These contrasting stances illustrate that the assumed causal model has downstream consequences for both measurement design and validation. Under a reflective specification, indicators are treated as effects of a common underlying attribute; accordingly, strengthening the measurement design (e.g., additional tasks/raters, well-functioning indicators) improves the precision of the latent estimate without redefining the construct, and internal-structure evidence (e.g., factor structure and reliability/generalizability) is a primary diagnostic of measurement quality. Under a formative specification, the construct is defined by its constituents; indicators are not expected to be interchangeable or strongly intercorrelated, and adding or omitting an indicator changes the construct’s meaning. Measurement quality therefore hinges on defensible construct specification and content coverage and accurate measurement of each constituent, while validation relies primarily on external relations (e.g., alignment with alternative measures of the target attribute and prediction of relevant criteria).
+
+% (relate formative to "content validity", which would be the theoretical requirement for meaningful measurement)
+
+\subsubsection{Formalizing Artefact-Level Measurement}
+
+placeholder
+
+% \paragraph{Construct specification (quality-for-purpose).} In this thesis, “marketing copy quality” is treated as a quality-for-purpose construct: the attribute is defined by the requirements of its intended use in the Barter setting (i.e., what stakeholders need the copy to achieve). Consequently, the construct is not assumed to be a single underlying trait that causally manifests in multiple observed ratings, but a composite defined by a set of constituent criteria (e.g., clarity, persuasiveness, and compliance with offer details) selected to cover the relevant content domain. This motivates a formative specification: the indicator set constitutes the construct definition, so modifying the set changes what “quality” means. The role of empirical analysis is therefore not to discover a latent factor behind the indicators as in a reflective model, but to test whether the specified composite yields valid measurements with respect to human judgments and downstream behavioral outcomes.
+
+\subsection{Operationalization: LLM as a Measurement Instrument}\label{sec:operationalization}
+
+Following the formative specification defined in Section \ref{sec:theoretical_definition}, we must define a computational process that measures each indicator $x_i$ (corresponding to criterion $c_i$) independently. We operationalize the LLM as a probabilistic measurement instrument. This section formalizes the mapping from input text to score and demonstrates why standard generation techniques introduce construct-irrelevant variance through positional and autoregressive dependencies, which leads to anchoring bias \citep{stureborgLargeLanguageModels2024}.
+
+\paragraph{Input Specification (Encoding)}
+Formally, an LLM maps an input token sequence $\mathbf{u}$ to a distribution of next-token logits $\mathbf{z}(\mathbf{u}) \in \mathbb{R}^{|\mathcal{V}|}$ over a vocabulary $\mathcal{V}$. The conditional probability of a token $v$ is given by the softmax function:
+
+\begin{equation}
+    P(v \mid \mathbf{u}) = \frac{\exp(z_v(\mathbf{u}))}{\sum_{w \in \mathcal{V}} \exp(z_w(\mathbf{u}))}.
+\end{equation}
+
+In standard evaluation pipelines, multiple criteria are often concatenated into a single input sequence $\mathbf{U}(d) = [\, s \,;\, c_1 \,;\, \dots \,;\, c_I \,;\, d \,]$. However, due to the self-attention mechanism, the representation of any specific criterion $c_i$ becomes a function of its position within $\mathbf{U}$. This introduces position bias, where the measurement is sensitive to the order of instructions rather than the content of the document $d$ \citep{shi_judging_2025}.
+
+To ensure the measurement of any indicator is invariant to the presence of other indicators or their order, we define the input as the triplet of task instruction $s$, single criterion $c_i$, and document $d$. For each criterion $i$, we construct an independent input sequence $\mathbf{u}_i$:
+\begin{equation}\label{eq:eval_triplet}
+    \mathbf{u}_i(d) = [\, s \,;\, c_i \,;\, d \,].
+\end{equation}
+This ensures that the logit vector $\mathbf{z}(\mathbf{u}_i)$ depends exclusively on the instructions, the definition of $c_i$, and the document content.
+
+\paragraph{Score Extraction (Decoding)}
+This design choice also facilitates independent decoding of each criterion score. When multiple criteria are measured in the same prompt, the model is required to generate a sequence of scores $\mathbf{y}=(y_1,\dots,y_I)$ for the batched criteria. This relies on autoregressive decoding, where the probability of a score $y_t$ is conditioned on the previously generated scores $y_{<t}$:
+\begin{equation}
+    P(\mathbf{y} \mid \mathbf{U}) = \prod_{t=1}^{J} P(y_t \mid \mathbf{U}, y_{<t}).
+\end{equation}
+
+where $t$ denotes the position in the token sequence. This formulation introduces two sources of construct-irrelevant variance. First, it creates \textit{autoregressive coupling}: the measurement of the $t$-th indicator is mathematically dependent on the values assigned to previous indicators, violating the requirement that a measurement should depend only on the attribute being measured. As \citep{stureborgLargeLanguageModels2024} show, this negatively affects rating accuracy. Second, the generation of a multi-token sequence relies on stochastic sampling strategies (e.g., nucleus sampling) and decoding hyperparameters (e.g., temperature), introducing stochasticity and additional design choices through parameter selection.
+
+To eliminate these dependencies, we restrict the generation horizon to a single token. We treat the evaluation of criterion $c_i$ as an independent classification task and extract the score $y_i$ by directly analyzing the next-token distribution conditioned on $\mathbf{u}_i(d)$:
+\begin{equation}
+    y_j \sim P(\cdot \mid \mathbf{u}_i(d)).
+\end{equation}
+By constraining the "generation" to the first step, we ensure that $P(y_i)$ is conditioned strictly on the input $\mathbf{u}_i(d)$ and never on prior outputs. Furthermore, this approach grants direct access to the logits $\mathbf{z}(\mathbf{u}_i)$, allowing us to bypass the sampling step entirely and derive deterministic, reproducible measurements invariant to decoding strategies.
+
+%TODO leave out if we leave out entropy, otherwise put back in
+% \paragraph{Measurement Magnitude and Sensitivity}\label{sec:theor_sensitivity}
+
+% Accessing the full logit distribution allows us to move beyond discrete text classification. We argue that a valid continuous LLM measurement instrument requires the evaluation of both its magnitude and its distributional dispersion. 
+
+% Traditionally, LLM scoring relies on the argmax token, which discards the model's internal probability mass. By computing the Expected Value (EV) over the discrete rating tokens, we extract a continuous measurement of magnitude. However, the EV alone is theoretically incomplete. An EV at the midpoint of a scale (e.g., 2.5 on a 1-4 scale) could indicate either a confident assessment of average quality, or complete uncertainty where the model simply assigns equal probability mass to all options.
+
+% Therefore, we consider the dispersion of the distribution over the rating tokens, measured via normalized Shannon entropy. Recent interpretability research establishes that the entropy of logit distributions provides a robust, permutation-invariant proxy for the model's internal uncertainty and decision strategies \citep{ali_entropy-lens_2025}. In the context of psychometric evaluation, we argue that this distributional dispersion is structurally linked to the instrument's \textit{sensitivity}: its ability to discriminate between nuanced differences in the target criterion. 
+
+% A highly sensitive instrument should produce EV measurements that meaningfully span the available rating scale, reflecting the natural variance of the target documents. When an instrument lacks this sensitivity, its EV measurements become artificially concentrated. In LLM-based measurement, this can be quantified through the model's entropy.
+
+% If a model consistently exhibits zero or near-zero entropy, its probability mass is entirely concentrated on single tokens, restricting the EV distribution to discrete integers (extreme quantization). Conversely, if a model exhibits universally high entropy across all documents (representing complete uncertainty), the uniform probability mass mathematically forces the EV to collapse to the scale's exact midpoint (central tendency compression). 
+
+% Therefore, a valid continuous measurement instrument must exhibit calibrated entropy: entropy that is structurally related to specific properties of the evaluated text. This way, even across a discrete rating scale, the model's distribution is able to capture continuous variance that is required to detect nuanced differences in quality. 
+
+% Considering both the EV and the entropy provides us with more insight into how well the LLMs serve as continuous measurement instruments. 
+
+
+\subsection{Empirical Validation: Construct Validity}\label{sec:empirical_validation}
+
+In order to determine whether the operationalization aligns with the theoretical constructs, we adopt a \textit{construct validity} approach. In psychometrics, validity is established through both theoretical rationales and empirical evidence \citep{messick1989meaning}. Where Section \ref{sec:theoretical_definition} provided the former, this section provides the latter. %TODO Introduce this in the section intro
+
+The motivation for adopting a construct validity approach is the same for psychology as it is for our evaluations. Unlike objectively measurable properties like "temperature" or "grammatical correctness", the latent (unobservable) nature of constructs means there is no observable "true" value to validate against. Instead, establishing construct validity requires accumulating evidence from multiple sources to demonstrate the appropriateness of the interpretations and their intended use \citep{messick1989meaning}. In this thesis, we build this evidence through two types of construct validity: \textit{Convergent validity} (alignment with human expert judgment) and \textit{predictive validity} (alignment with downstream behavioral outcomes). 
+
+\paragraph{Convergent Validity.} %TODO: doubling, just repeat the formative specification
+To assess convergent validity, we treat human expert ratings as a reference measure of the target construct. Let $y^{\text{H}}(d)$ denote a human holistic rating for document $d$. We assess validity by modeling the relationship
+
+\begin{equation}\label{eq:convergent_validity_formative}
+    y^{\text{H}}(d) = g(\mathbf{x}(d)) + \epsilon(d).
+\end{equation}
+
+This formulation directly implements the formative specification defined in Equation \ref{eq:formative_model} (Section \ref{sec:theoretical_definition}). By treating the human judgment $y^{\text{H}}$ as a proxy for the latent construct $\eta$, we can empirically estimate the weights $\gamma$ that best predict the holistic assessment from the independent indicators.
+
+We evaluate whether the LLM-derived indicators $\mathbf{x}(d)$ explain systematic variation in $y^{\text{H}}(d)$ on held-out data. Importantly, this evaluates the \emph{construct-level} utility of decomposition: rather than only testing whether an LLM can imitate human ratings on the indicator level as in \citet{li-fine-grained-2026} and \citet{wang2025evaluating}, we test whether the indicator measurements can be combined into a superior predictor of the overall expert judgment.
+
+We compare this against a holistic baseline $x^{\text{hol}}(d)$ obtained by prompting the LLM for a single overall "Quality" score, so we can compare 
+\begin{equation}\label{eq:convergent_validity_holistic}
+    y^{\text{H}}(d) \approx g(\mathbf{x}(d)) \quad \text{vs.} \quad y^{\text{H}}(d) \approx h(x^{\text{hol}}(d)).
+\end{equation}
+If formative decomposition improves measurement, the composite model should achieve lower predictive error than the holistic baseline.
+
+
+\paragraph{Predictive validity.}
+Predictive validity assesses whether a measure exhibits the theoretically expected relationships with an external criterion \citep{messick_validity_1994}. In our "quality-for-purpose" framework, this corresponds to functional utility: whether the measurements can predict the downstream outcomes the copy is expected to drive. % TODO need to introduce quality for purpose (or rather, quality/deal attractiveness/etc)
+
+Let $y^{\text{KPI}}(d)$ denote a behavioral outcome associated with document $d$ (e.g., user engagement or conversion on a platform). We test whether the vector of criterion measurements predicts this outcome:
+\begin{equation}
+    y^{\text{KPI}}(d) = r(\mathbf{x}(d)) + \eta(d),
+\end{equation}
+We again compare this performance to the holistic baseline $x^{\text{hol}}(d)$. Evidence that $\mathbf{x}(d)$ is a stronger predictor of $y^{\text{KPI}}(d)$ supports the construct-validity claim that the measurements are appropriate for their intended use, i.e., guiding diagnosis, validation, and improvement of marketing copy in deployment settings.
+
+Together, these two forms of validity provide evidence that our operationalization yields meaningful and usable measurements of the construct under the formative specification. 
+
+%TODO omit this?
+%While additional measures of construct validity can be considered (see: \citet{lin_validity-guided_2025}), convergent validity and predictive validity target the two principal requirements in our setting: alignment with human evaluations, and functional utility in deployment. 

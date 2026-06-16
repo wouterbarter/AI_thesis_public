@@ -1,0 +1,77 @@
+id: f1ea5fbc4957
+dimensions:
+  qa_pair_overall_answer_quality:
+    name: rubric_qa_pair_overall_answer_quality
+    description: Evaluates the intensity of overall_answer_quality on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - overall_answer_quality
+    - qa_pair
+    - feedback_qa
+    - holistic_informed
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Overall Answer Quality.
+
+
+        Dimension Definition:
+
+        Overall Answer Quality evaluates the overall degree to which the answer functions
+        as a good answer to the question in a public health information setting. It
+        concerns whether the answer matches the issue and constraints stated in the
+        question, provides enough relevant information to serve as a full answer,
+        remains centered on the asked issue without unnecessary extra material, and
+        is expressed clearly enough to be easily understood. This ranges from an answer
+        that functions poorly as an answer because it is misaligned, incomplete, unfocused,
+        or unclear to an answer that functions very well as an answer because it is
+        aligned, sufficiently informative, well focused, and clearly communicated.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Good
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+metadata:
+  description: Holistic informed v2, scale 4, system prompt V1, user prompt V2, rubric
+    v2
+  suite_tags:
+  - rubric
+  - feedback_qa
+  - overall_answer_quality
+  - scale_4
+  - trait_intensity
+  - holistic_informed
+  - qa_pair

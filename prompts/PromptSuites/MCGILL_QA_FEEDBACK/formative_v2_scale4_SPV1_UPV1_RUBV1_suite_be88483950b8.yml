@@ -1,0 +1,256 @@
+id: be88483950b8
+dimensions:
+  qa_pair_question_responsiveness:
+    name: rubric_qa_pair_question_responsiveness
+    description: Evaluates the intensity of question_responsiveness on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - question_responsiveness
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Question Responsiveness.
+
+
+        Dimension Definition:
+
+        Question Responsiveness evaluates whether the answer addresses the question
+        that was asked. It measures the degree to which the answer responds to the
+        requested issue, rather than discussing a different issue, only a loosely
+        related issue, or only part of the asked issue. This ranges from an answer
+        that fails to address the asked question or mainly addresses a different issue
+        to an answer that directly addresses the asked question.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Acceptable
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_information_sufficiency:
+    name: rubric_qa_pair_information_sufficiency
+    description: Evaluates the intensity of information_sufficiency on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - information_sufficiency
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Information Sufficiency.
+
+
+        Dimension Definition:
+
+        Information Sufficiency evaluates whether the answer provides enough information
+        to serve as a satisfactory answer. It measures the degree to which the answer
+        contains the needed content, details, or conditions, rather than being too
+        limited, underspecified, or incomplete to satisfy the informational demand
+        of the question. This ranges from an answer that lacks necessary information
+        and leaves major informational gaps to an answer that provides enough information
+        for a full answer.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Acceptable
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_case_specificity:
+    name: rubric_qa_pair_case_specificity
+    description: Evaluates the intensity of case_specificity on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - case_specificity
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Case Specificity.
+
+
+        Dimension Definition:
+
+        Case Specificity evaluates whether the answer matches the specific case described
+        in the question. It measures the degree to which the answer is tailored to
+        the exact situation, group, condition, or constraint expressed in the question,
+        rather than remaining generic or addressing only a broader related case. This
+        ranges from an answer that does not match the specific case being asked about
+        to an answer that is well matched to the exact case described in the question.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Acceptable
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_topical_focus:
+    name: rubric_qa_pair_topical_focus
+    description: Evaluates the intensity of topical_focus on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - topical_focus
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: 'You are an expert evaluator of Question and Answer (Q&A) pairs for
+        a public health information platform.
+
+        In this ecosystem, individuals ask questions regarding the COVID-19 pandemic,
+        and an informational text passage is provided as the answer. Ground your evaluation
+        in this specific context of health-related information exchange.
+
+
+        You will be given one Q&A Pair consisting of a Question and an Answer. Evaluate
+        it on exactly one dimension: Topical Focus.
+
+
+        Dimension Definition:
+
+        Topical Focus evaluates whether the answer stays concentrated on the information
+        needed for the question. It measures the degree to which the answer remains
+        on the requested topic, rather than including substantial irrelevant, distracting,
+        or off-target content that weakens the answer as a response to the question.
+        This ranges from an answer dominated by irrelevant or off-target content to
+        an answer that stays tightly focused on the requested topic.
+
+
+        Scale Definition:
+
+        1: Bad
+
+        2: Could be Improved
+
+        3: Acceptable
+
+        4: Excellent
+
+
+        Rate the Q&A Pair on this dimension using the scale above.
+
+        Output only the integer score.'
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+metadata:
+  description: Formative v2, scale 4, system prompt V1, user prompt V1, rubric V1
+  suite_tags:
+  - feedback_qa
+  - trait_intensity
+  - formative
+  - rubric
+  - scale_4
+  - qa_pair

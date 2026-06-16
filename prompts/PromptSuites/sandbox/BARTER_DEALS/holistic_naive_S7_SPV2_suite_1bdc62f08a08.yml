@@ -1,0 +1,51 @@
+id: 1bdc62f08a08
+dimensions:
+  deal_pitch_overall_deal_attractiveness:
+    name: rubric_deal_pitch_overall_deal_attractiveness
+    description: Evaluates the intensity of overall_deal_attractiveness on the Deal
+      Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - overall_deal_attractiveness
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ overall deal attractiveness.\nThis evaluates the overall appeal of the barter\
+        \ opportunity from the perspective of a typical content creator. It assesses\
+        \ the total subjective value of the offer, ranging from a fundamentally undesirable\
+        \ deal that offers no compelling reward (Extremely Weak), up to a highly coveted,\
+        \ premium opportunity that is instantly desirable (Excellent).\n\nScale definition:\n\
+        1: Extremely Weak\n2: Weak\n3: Slightly Weak\n4: Fair / Average\n5: Slightly\
+        \ Strong\n6: Strong\n7: Excellent\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+metadata:
+  description: Holistic Naive Baseline, scale 7, SPV2
+  suite_tags:
+  - overall_deal_attractiveness
+  - rubric
+  - trait_intensity
+  - scale_7
+  - deal_pitch

@@ -1,4 +1,5 @@
 {
     "dataWrangler.defaultViewingFilterOptions": "advanced",
-    "dataWrangler.columnInsights.displayOnOpen": true
+    "dataWrangler.columnInsights.displayOnOpen": true,
+    "workbench.colorTheme": "Light Modern"
 }

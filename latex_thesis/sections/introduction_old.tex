@@ -1,0 +1,86 @@
+% !TEX root = ../main.tex
+
+\section{Introduction}
+
+"A good marketing copy writer can have a bad day and write bad marketing copy, should we replace the writer or edit the copy?" 
+
+Prior work has established that LLMs can be used as automated annotators for psychological and behavioural text analysis. However, the present thesis treats this not merely as an annotation problem, but as a measurement problem: under what conditions do LLM-generated annotations constitute valid construct measures? \citep{feuerriegelUsingNaturalLanguage2025}
+% 1. Weaponizing the Parameter Constraint
+
+% Do not frame the use of a 4B model merely as an "internship budget constraint." Frame it as an engineering contribution to Efficient AI and Edge-Deployable Evaluation.
+
+% The Academic Framing: "Frontier models (e.g., GPT-4) possess the parameter density to perform complex, implicit multi-criteria aggregation in zero-shot settings. However, deploying frontier models for high-throughput pipeline evaluation is computationally and financially prohibitive for SME platforms. This research proves that applying a formative, decomposed prompting architecture allows low-parameter, open-source models (e.g., Qwen 3.5-4B) to achieve high predictive validity. We demonstrate that structural prompt decomposition bridges the cognitive gap between efficient models and expensive frontier models."
+
+
+\subsection{General Introduction}
+
+
+
+\textbf{DRAFT} 
+
+LLMs are increasingly used for content generation. However, reliability remains a bottleneck.
+
+Subjective evaluation poses a challenge for Large Language Models (LLMs) and humans alike. Consider an evaluation task, such as the correctness of a mathematical derivation, the number of grammatical errors in a sentence, or the helpfulness of an LLM output. An evaluation task is subjective when the ground truth is not explicitly known, such as for the helpfulness of LLM output: what is helpful to one user might be irrelevant to another. Contrast this with objective evaluation, where output can be validated against an observable ground truth, as is generally the case for e.g. mathematical statements and grammar. 
+
+General practice in subjective evaluation is to ask humans to provide 'gold labels'. By training humans to follow a customized evaluation protocol, human evaluators are assumed to approximate a valid measurement of the latent ground truth. However, this process is unscalable. 
+
+To automate evaluation, classic Natural Language Generation (NLG) evaluation techniques such as BLEU and ROUGE were often used. Yet, because these only consider surface-level linguistic characteristics like n-gram overlap, they often suffer from low correlation with human evaluations \citep{liu_g-eval_2023}. While useful for simple tasks like translation and summarization quality, they fail to capture the linguistic nuances needed for more complex tasks such as evaluation.
+
+LLMs offer a promising solution. In a seminal paper, \citet{zheng_judging_2023} use well-aligned LLMs such as GPT4 in pairwise comparisons, where two candidate texts are compared and the best one is selected. GPT-4 achieves over 80\% agreement with human preferences, on par with human-human agreement. \citet{liu_g-eval_2023} adopt a similar approach in their G-Eval framework, prompting LLMs to grade text on a fine-grained Likert scale. Their approach shows significantly higher correlation with human judgements compared to previous state-of-the-art evaluators. 
+
+However promising, (limitations of current methods, bridge to subsection 1.2 industrial partner operational challenges)
+%They suggest that since models like GPT-4 have been aligned to human preferences using reinforcement learning from human feedback (RLHF), they are able to mirror human preferences. 
+
+
+
+% LLM evaluators offer significant benefits over human evaluators. Human evaluators are costly and are susceptible to biases, for example in misinterpretation, but also due to fatigue, lack of motivation, etc. Moreover, human-in-the-loop (hitl) evaluation is not scalable, and cannot be performed online. However, for obvious reasons, human evaluation remains the gold standard for aligning NLG with human preferences. The current paper proposes novel methods to better align fine-grained LLM evaluations 
+
+
+% "General practice in subjective evaluation is to ask humans to provide 'gold labels'. By having human evaluators follow customized training and by providing them with specific instructions their evaluations are assumed to approximate a valid measurement of the latent (unobservable) ground truth. A similar approach is being used for subjective evaluation with LLMs. Classic Natural Language Generation (NLG) evaluation techniques such as BLEU and ROUGE scores only consider surface-level linguistic characteristics, such as n-gram overlap, leading to low correlation with human evaluations \cite{liu_g-eval_2023}. Although useful for translation and summarization, they fail the capture linguistic nuances needed for more complex tasks. LLMs offer a solution. In a seminal paper, \cite{zheng_judging_2023} use well-aligned LLMs such as GPT4 in pairwise comparisons, where two candidate texts are compared and the best one is selected. GPT-4 achieves over 80\% agreement with human preferences, on par with human-human agreement. \cite{liu_g-eval_2023} adopt a similar approach in their G-Eval framework, prompting LLMs to grade text on a fine-grained Likert scale. Their approach shows significantly higher correlation with human judgements compared to previous state-of-the-art evaluators. " 
+
+A model can be a fantastic text generator (producing highly coherent argmax tokens), but a terrible evaluator if its underlying probability distribution suffers from Latent Space Collapse (Llama 3.2) or Variance Starvation/Hyper-confidence (Gemma 4).
+
+Conversely, a model with perfectly calibrated logit entropy (Qwen 3.5) functions as a superior measurement instrument because its uncertainty distribution accurately maps the semantic ambiguity of human preference.
+
+\subsection{Quotes}
+
+"general-purpose ‘benchmarks’ are currently an insufficient sole evaluation mechanisms for the real-world utility of AI systems." \citep{salaudeenMeasurementMeaningValidityCentered2025}
+
+Checking the correctness of a multiple-choice question in a knowledge benchmark is trivial; evaluating the quality of a summary, as \citet{fabbri_summeval_2021} showed, is hard. 
+
+Of the 478 quality evaluation questions studied by Howcroft et al. (2020), over 50\% did not define the criterion they were evaluating for (279 out of 478), 65\% did not report the exact question they gave the evaluators (311/478), and 20\% did not even name the criterion being evaluated (98/478). \citep{gehrmann2023repairing}. 
+
+
+
+
+\subsection{Industrial Partner: Barter}
+
+The current study is motivated by the operational challenges faced by the industrial partner, Barter. The company aims to leverage Generative AI (GenAI) to streamline the onboarding experience, specifically addressing the friction new partners experience during the sign-up flow. Currently, users must manually write marketing copy such as company descriptions and deal offers before they can make use of the platform. This creates a significant barrier to entry, resulting in user attrition.
+
+While GenAI offers a scalable solution to automate this drafting process, its implementation in business contexts is hindered by the inherent variability of output quality. As LLMs are probabilistic in nature, some degree of inconsistency is unavoidable. Although well-engineered prompts might yield high-quality output in the majority of cases, the accumulation of low-quality output (such as hallucinations and misalignment) becomes a significant operational problem at high volumes. 
+
+Two fundamental challenges lie at the core of this problem. First is the challenge of identification: without a reliable mechanism to flag low-quality output, we are unable to quantify the severity of the problem, or make the problematic output actionable. The second is the challenge of diagnosis: improving the output requires an evaluation to identify the reasons why the quality is insufficient. For GenAI to function as an automated solution, it must not only detect the errors but also provide the feedback to resolve them.
+
+Therefore, although Barter's problem statement concerns generation, the solution to the problem begins with accurate validation. Currently, Barter operates in a similar fashion, where employees use GenAI to generate content which is manually evaluated and refined. However, such a human-in-the-loop (HITL) approach is costly and unscalable. To address this, this thesis explores whether small-scale open-source LLMs can be used for automated "AI-in-the-loop" (AITL) evaluation. We introduce a method inspired by the latent variable models of Psychometrics to provide the granular evaluation required for the identification and diagnosis of output quality. 
+
+% FIRST DRAFT
+
+
+% The current study is motivated by a problem statement from the industrial partner Barter. They aim to automate generative aspects on their platform, with the goal of streamlining platform use. Specifically, they observe that new partners face a high barrier of entry when first engaging with the platform. When a partner signs up and enters the 'sign-up flow', they are required to fill in company information, such as a 200-word company description. Moreover, in order to start making use of the platform they have to write their first 'deal', which are product or service offers that influencers can apply to. If the creator is accepted, they receive the product in exchange for user-generated content (UGC). However, since many companies are unfamiliar with the concept of influencer marketing, the barrier to finish the sign-up flow and post their first deal is high. To this end, Barter wants to make use of generative AI (GenAI) to automate (parts of) the sign-up flow.
+
+% One major limitation of GenAI is the lack of control we can exert on the desired output. Although a well-engineered prompt might result in output that is up to industry standards over 90\% of the time, error accumulates on many repetitions. This leads to output that is of insufficient quality, harming platform quality.
+
+% Two main issues lie at the foundation of this problem. Firstly, although we can make general statements that "over 90\% of the GenAI output is of sufficient quality", if we are unable to quantify this, the 10\% that is of insufficient quality is inactionable. Moreover, even if we are able to flag low-quality output, GenAI can not be used as an automated solution if there are no means to improve the quality of the remaining '10\%'.
+
+% So, although Barter's problem statement concerns _generation_, the solution to the problem starts with accurate _validation_. Currently, Barter already operates in a similar fashion. Employees use GenAI to generate deals, which are evaluated and then improved where necessary. However, such a human-in-the-loop (HITL) approach is costly and unscalable. To this end, in this paper, we explore whether small-scale open-source LLMs can be used for automated "AI-in-the-loop" (AITL) evaluation, by introducing a method inspired by the "latent variable models" subfield of Psychometrics. 
+
+
+\subsection{Proposed Approach: Formative Decomposition}
+
+ljklhkjkhl
+
+
+\subsection{Research Questions \& Hypotheses}
+
+
+kjghjk

@@ -1,5 +1,7 @@
 \section{Prompt rendering via \texttt{apply\_chat\_template}}\label{app:apply_chat_template}
 
+TODO: CHANGE THIS SO IT MATCHES CURRENT PROMPT
+
 We format each prompt using Hugging Face's chat template with
 \texttt{add\_generation\_prompt=True}, and then append an explicit assistant
 prefix (shown below). The rendered template is passed to the model, which computes the next-token probabilities after the assistant prefix. The model input is the concatenation of:

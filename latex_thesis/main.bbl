@@ -1,9 +1,30 @@
-\begin{thebibliography}{18}
+\begin{thebibliography}{53}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[PDF(2026)]{PDFModernLLM2026}
+({{PDF}}) {{Modern LLM Evaluation Techniques}}: {{A Mathematical Framework From
+  Classical Metrics}} to {{LLM-as-Judge}} and {{Psychometric Foundations}}.
+\newblock
+  https://www.researchgate.net/publication/404007861\_Modern\_LLM\_Evaluation\_Techniques\_A\_Mathematical\_Framework\_From\_Classical\_Metrics\_to\_LLM-as-Judge\_and\_Psychometric\_Foundations,
+  May 2026.
+
+\bibitem[Alaa et~al.(2025)Alaa, Hartvigsen, Golchini, Dutta, Dean, Raji, and
+  Zack]{alaaMedicalLargeLanguage2025}
+A.~Alaa, T.~Hartvigsen, N.~Golchini, S.~Dutta, F.~Dean, I.~D. Raji, and
+  T.~Zack.
+\newblock Medical {{Large Language Model Benchmarks Should Prioritize Construct
+  Validity}}, Mar. 2025.
+
+\bibitem[Arias et~al.(2025)Arias, Blocher, Rodemann, A{\ss}enmacher, and
+  Jansen]{arias2025statistical}
+E.~G. Arias, H.~Blocher, J.~Rodemann, M.~A{\ss}enmacher, and C.~Jansen.
+\newblock Statistical multicriteria evaluation of llm-generated text.
+\newblock In \emph{Proceedings of the 18th International Natural Language
+  Generation Conference}, pages 338--351, 2025.
 
 \bibitem[Bang et~al.()Bang, Kim, and Min]{bang_transforming_2025}
 G.~Bang, D.~Kim, and M.~Min.
@@ -11,11 +32,107 @@ G.~Bang, D.~Kim, and M.~Min.
   an integrated {LLM} {AHP} system.
 \newblock URL \url{http://arxiv.org/abs/2601.05267}.
 
+\bibitem[Bean et~al.(2025)Bean, Kearns, Romanou, Hafner, Mayne, Batzner,
+  Foroutan, Schmitz, Korgul, Batra, Deb, Beharry, Emde, Foster, Gausen,
+  Grandury, Han, Hofmann, Ibrahim, Kim, Kirk, Lin, Liu, Luettgau, Magomere,
+  Rystr{\o}m, Sotnikova, Yang, Zhao, Bibi, Bosselut, Clark, Cohan, Foerster,
+  Gal, Hale, Raji, Summerfield, Torr, Ududec, Rocher, and
+  Mahdi]{beanMeasuringWhatMatters2025}
+A.~M. Bean, R.~O. Kearns, A.~Romanou, F.~S. Hafner, H.~Mayne, J.~Batzner,
+  N.~Foroutan, C.~Schmitz, K.~Korgul, H.~Batra, O.~Deb, E.~Beharry, C.~Emde,
+  T.~Foster, A.~Gausen, M.~Grandury, S.~Han, V.~Hofmann, L.~Ibrahim, H.~Kim,
+  H.~R. Kirk, F.~Lin, G.~K.-M. Liu, L.~Luettgau, J.~Magomere, J.~Rystr{\o}m,
+  A.~Sotnikova, Y.~Yang, Y.~Zhao, A.~Bibi, A.~Bosselut, R.~Clark, A.~Cohan,
+  J.~Foerster, Y.~Gal, S.~A. Hale, I.~D. Raji, C.~Summerfield, P.~H.~S. Torr,
+  C.~Ududec, L.~Rocher, and A.~Mahdi.
+\newblock Measuring what {{Matters}}: {{Construct Validity}} in {{Large
+  Language Model Benchmarks}}, Nov. 2025.
+
+\bibitem[Binette and Reiter(2024)]{binetteImprovingValidityPractical2024}
+O.~Binette and J.~P. Reiter.
+\newblock Improving the {{Validity}} and {{Practical Usefulness}} of
+  {{AI}}/{{ML Evaluations Using}} an {{Estimands Framework}}.
+\newblock 2024.
+\newblock \doi{10.48550/ARXIV.2406.10366}.
+
 \bibitem[Bollen and Lennox(1991)]{bollen1991conventional}
 K.~Bollen and R.~Lennox.
 \newblock Conventional wisdom on measurement: A structural equation
   perspective.
 \newblock \emph{Psychological bulletin}, 110\penalty0 (2):\penalty0 305, 1991.
+
+\bibitem[Boyd and Pennebaker(2017)]{boydLanguagebasedPersonalityNew2017}
+R.~L. Boyd and J.~W. Pennebaker.
+\newblock Language-based personality: A new approach to personality in a
+  digital world.
+\newblock \emph{Current Opinion in Behavioral Sciences}, 18:\penalty0 63--68,
+  Dec. 2017.
+\newblock ISSN 2352-1546.
+\newblock \doi{10.1016/j.cobeha.2017.07.017}.
+
+\bibitem[Cohen(1988)]{cohen1988statistical}
+J.~Cohen.
+\newblock Statistical power analysis for the behavioral sciences new york.
+\newblock \emph{NY: Academic}, 54:\penalty0 77--155, 1988.
+
+\bibitem[Dziri et~al.(2019)Dziri, Kamalloo, Mathewson, and
+  Zaiane]{dziriEvaluatingCoherenceDialogue2019}
+N.~Dziri, E.~Kamalloo, K.~Mathewson, and O.~Zaiane.
+\newblock Evaluating {{Coherence}} in {{Dialogue Systems}} using
+  {{Entailment}}.
+\newblock In J.~Burstein, C.~Doran, and T.~Solorio, editors, \emph{Proceedings
+  of the 2019 {{Conference}} of the {{North American Chapter}} of the
+  {{Association}} for {{Computational Linguistics}}: {{Human Language
+  Technologies}}, {{Volume}} 1 ({{Long}} and {{Short Papers}})}, pages
+  3806--3812, Minneapolis, Minnesota, June 2019. Association for Computational
+  Linguistics.
+\newblock \doi{10.18653/v1/N19-1381}.
+
+\bibitem[Fabbri et~al.()Fabbri, Kryściński, {McCann}, Xiong, Socher, and
+  Radev]{fabbri_summeval_2021}
+A.~R. Fabbri, W.~Kryściński, B.~{McCann}, C.~Xiong, R.~Socher, and D.~Radev.
+\newblock {SummEval}: Re-evaluating summarization evaluation.
+\newblock URL \url{http://arxiv.org/abs/2007.12626}.
+
+\bibitem[Federiakin(2025)]{federiakinImprovingLLMLeaderboards2025}
+D.~Federiakin.
+\newblock Improving {{LLM Leaderboards}} with {{Psychometrical Methodology}},
+  Jan. 2025.
+
+\bibitem[Feuer et~al.(2025)Feuer, Tseng, Lathe, Elachqar, and
+  Dickerson]{feuerWhenJudgmentBecomes2025}
+B.~Feuer, C.-Y. Tseng, A.~S. Lathe, O.~Elachqar, and J.~P. Dickerson.
+\newblock When {{Judgment Becomes Noise}}: {{How Design Failures}} in {{LLM
+  Judge Benchmarks Silently Undermine Validity}}, Oct. 2025.
+
+\bibitem[Freitag et~al.(2021)Freitag, Foster, Grangier, Ratnakar, Tan, and
+  Macherey]{freitagExpertsErrorsContext2021}
+M.~Freitag, G.~Foster, D.~Grangier, V.~Ratnakar, Q.~Tan, and W.~Macherey.
+\newblock Experts, {{Errors}}, and {{Context}}: {{A Large-Scale Study}} of
+  {{Human Evaluation}} for {{Machine Translation}}.
+\newblock \emph{Transactions of the Association for Computational Linguistics},
+  9:\penalty0 1460--1474, Dec. 2021.
+\newblock ISSN 2307-387X.
+\newblock \doi{10.1162/tacl_a_00437}.
+
+\bibitem[Fu et~al.(2023)Fu, Ng, Jiang, and Liu]{fuGPTScoreEvaluateYou2023}
+J.~Fu, S.-K. Ng, Z.~Jiang, and P.~Liu.
+\newblock {{GPTScore}}: {{Evaluate}} as {{You Desire}}, Feb. 2023.
+
+\bibitem[Gehrmann et~al.(2022)Gehrmann, Clark, and
+  Sellam]{gehrmannRepairingCrackedFoundation2022}
+S.~Gehrmann, E.~Clark, and T.~Sellam.
+\newblock Repairing the {{Cracked Foundation}}: {{A Survey}} of {{Obstacles}}
+  in {{Evaluation Practices}} for {{Generated Text}}, Feb. 2022.
+
+\bibitem[Gentzkow et~al.(2019)Gentzkow, Shapiro, and
+  Taddy]{gentzkowMeasuringGroupDifferences2019}
+M.~Gentzkow, J.~M. Shapiro, and M.~Taddy.
+\newblock Measuring {{Group Differences}} in {{High-Dimensional Choices}}:
+  {{Method}} and {{Application}} to {{Congressional Speech}}.
+\newblock \emph{Econometrica}, 87\penalty0 (4):\penalty0 1307--1340, 2019.
+\newblock ISSN 1468-0262.
+\newblock \doi{10.3982/ECTA16566}.
 
 \bibitem[Gu et~al.()Gu, Jiang, Shi, Tan, Zhai, Xu, Li, Shen, Ma, Liu, Wang,
   Zhang, Wang, Gao, Ni, and Guo]{gu_survey_2025}
@@ -26,15 +143,70 @@ J.~Gu, X.~Jiang, Z.~Shi, H.~Tan, X.~Zhai, C.~Xu, W.~Li, Y.~Shen, S.~Ma, H.~Liu,
 \newblock Read\_Status: In Progress Read\_Status\_Date:
   2025-10-14T13:58:05.029Z.
 
-\bibitem[Li and Sun()]{li_fine-grained_2026}
-Y.~Li and Y.~Sun.
-\newblock A fine-grained evaluation framework for language models: Combining
-  pointwise grading and pairwise comparison.
-\newblock 63\penalty0 (1):\penalty0 104270.
-\newblock ISSN 0306-4573.
-\newblock \doi{10.1016/j.ipm.2025.104270}.
-\newblock URL
-  \url{https://www.sciencedirect.com/science/article/pii/S0306457325002110}.
+\bibitem[Guntuku et~al.(2017)Guntuku, Yaden, Kern, Ungar, and
+  Eichstaedt]{guntukuDetectingDepressionMental2017}
+S.~C. Guntuku, D.~B. Yaden, M.~L. Kern, L.~H. Ungar, and J.~C. Eichstaedt.
+\newblock Detecting depression and mental illness on social media: An
+  integrative review.
+\newblock \emph{Current Opinion in Behavioral Sciences}, 18:\penalty0 43--49,
+  Dec. 2017.
+\newblock ISSN 2352-1546.
+\newblock \doi{10.1016/j.cobeha.2017.07.005}.
+
+\bibitem[Hashemi et~al.()Hashemi, Eisner, Rosset, Durme, and
+  Kedzie]{hashemi_llm-rubric_2024}
+H.~Hashemi, J.~Eisner, C.~Rosset, B.~V. Durme, and C.~Kedzie.
+\newblock {LLM}-rubric: A multidimensional, calibrated approach to automated
+  evaluation of natural language texts.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 13806--13834.
+\newblock \doi{10.18653/v1/2024.acl-long.745}.
+\newblock URL \url{http://arxiv.org/abs/2501.00274}.
+
+\bibitem[Kahn et~al.(2007)Kahn, Tobin, Massey, and
+  Anderson]{kahnMeasuringEmotionalExpression2007}
+J.~H. Kahn, R.~M. Tobin, A.~E. Massey, and J.~A. Anderson.
+\newblock Measuring {{Emotional Expression}} with the {{Linguistic Inquiry}}
+  and {{Word Count}}.
+\newblock \emph{The American Journal of Psychology}, 120\penalty0 (2):\penalty0
+  263--286, July 2007.
+\newblock ISSN 0002-9556.
+\newblock \doi{10.2307/20445398}.
+
+\bibitem[Kardanova et~al.(2024)Kardanova, Ivanova, Tarasova, Pashchenko,
+  Tikhoniuk, Yusupova, Kasprzhak, Kuzminov, Kruchinskaia, and
+  Brun]{kardanovaNovelPsychometricsBasedApproach2024}
+E.~Kardanova, A.~Ivanova, K.~Tarasova, T.~Pashchenko, A.~Tikhoniuk,
+  E.~Yusupova, A.~Kasprzhak, Y.~Kuzminov, E.~Kruchinskaia, and I.~Brun.
+\newblock A {{Novel Psychometrics-Based Approach}} to {{Developing Professional
+  Competency Benchmark}} for {{Large Language Models}}, Oct. 2024.
+
+\bibitem[Kola et~al.(2026)Kola, Sharma, Dey, Mishra, and
+  Datar]{kolaSAJASimpleApproach2026}
+S.~Kola, P.~K. Sharma, S.~Dey, B.~Mishra, and M.~Datar.
+\newblock {{SAJA}}: {{A Simple Approach}} to {{Judge Alignment}} for
+  {{LLM-as-a-Judge}}.
+\newblock In \emph{The 64th {{Annual Meeting}} of the {{Association}} for
+  {{Computational Linguistics}} -- {{Industry Track}}}, Apr. 2026.
+
+\bibitem[Kryscinski et~al.(2020)Kryscinski, McCann, Xiong, and
+  Socher]{kryscinskiEvaluatingFactualConsistency2020}
+W.~Kryscinski, B.~McCann, C.~Xiong, and R.~Socher.
+\newblock Evaluating the {{Factual Consistency}} of {{Abstractive Text
+  Summarization}}.
+\newblock In B.~Webber, T.~Cohn, Y.~He, and Y.~Liu, editors, \emph{Proceedings
+  of the 2020 {{Conference}} on {{Empirical Methods}} in {{Natural Language
+  Processing}} ({{EMNLP}})}, pages 9332--9346, Online, Nov. 2020. Association
+  for Computational Linguistics.
+\newblock \doi{10.18653/v1/2020.emnlp-main.750}.
+
+\bibitem[Le~Mens et~al.(2023)Le~Mens, Kov{\'a}cs, Hannan, and
+  Pros]{lemensUncoveringSemanticsConcepts2023}
+G.~Le~Mens, B.~Kov{\'a}cs, M.~T. Hannan, and G.~Pros.
+\newblock Uncovering the semantics of concepts using {{GPT-4}}.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 120\penalty0
+  (49):\penalty0 e2309350120, Dec. 2023.
+\newblock \doi{10.1073/pnas.2309350120}.
 
 \bibitem[Li et~al.()Li, Sharma, Lu, Cheung, and Reddy]{li_using_2022}
 Z.~Li, P.~Sharma, X.~H. Lu, J.~C.~K. Cheung, and S.~Reddy.
@@ -45,18 +217,30 @@ Z.~Li, P.~Sharma, X.~H. Lu, J.~C.~K. Cheung, and S.~Reddy.
 \newblock \doi{10.18653/v1/2022.findings-acl.75}.
 \newblock URL \url{http://arxiv.org/abs/2204.03025}.
 
-\bibitem[Lin()]{lin_validity-guided_2025}
+\bibitem[Lin()]{lin_rouge_2004}
+C.-Y. Lin.
+\newblock Rouge: A package for automatic evaluation of summaries.
+\newblock In \emph{Text Summarization Branches Out}, pages 74--81. Association
+  for Computational Linguistics.
+\newblock URL \url{https://aclanthology.org/W04-1013/}.
+
+\bibitem[Lin(2025)]{linPromptsConstructsDualValidity2025}
 Z.~Lin.
-\newblock A validity-guided workflow for robust large language model research
-  in psychology.
-\newblock URL \url{http://arxiv.org/abs/2507.04491}.
-\newblock Read\_Status: In Progress Read\_Status\_Date:
-  2025-10-14T14:31:31.251Z.
+\newblock From {{Prompts}} to {{Constructs}}: {{A Dual-Validity Framework}} for
+  {{LLM Research}} in {{Psychology}}, June 2025.
 
 \bibitem[Liu et~al.()Liu, Iter, Xu, Wang, Xu, and Zhu]{liu_g-eval_2023}
 Y.~Liu, D.~Iter, Y.~Xu, S.~Wang, R.~Xu, and C.~Zhu.
 \newblock G-eval: {NLG} evaluation using {GPT}-4 with better human alignment.
 \newblock URL \url{http://arxiv.org/abs/2303.16634}.
+
+\bibitem[Manela and Moreira(2017)]{manelaNewsImpliedVolatility2017}
+A.~Manela and A.~Moreira.
+\newblock News implied volatility and disaster concerns.
+\newblock \emph{Journal of Financial Economics}, 123\penalty0 (1):\penalty0
+  137--162, Jan. 2017.
+\newblock ISSN 0304-405X.
+\newblock \doi{10.1016/j.jfineco.2016.01.032}.
 
 \bibitem[McQuitty and Wolf(2013)]{mcquitty2013structural}
 S.~McQuitty and M.~Wolf.
@@ -64,46 +248,106 @@ S.~McQuitty and M.~Wolf.
 \newblock \emph{Journal of African Business}, 14\penalty0 (1):\penalty0 58--69,
   2013.
 
-\bibitem[Messick()]{messick_validity_1994}
-S.~Messick.
-\newblock Validity of psychological assessment: Validation of inferences from
-  persons' responses and performances as scientific inquiry into score meaning.
-\newblock 1994\penalty0 (2):\penalty0 i--28.
-\newblock ISSN 2330-8516.
-\newblock \doi{10.1002/j.2333-8504.1994.tb01618.x}.
-\newblock URL
-  \url{https://onlinelibrary.wiley.com/doi/abs/10.1002/j.2333-8504.1994.tb01618.x}.
-\newblock \_eprint:
-  https://onlinelibrary.wiley.com/doi/pdf/10.1002/j.2333-8504.1994.tb01618.x
-  Read\_Status: New Read\_Status\_Date: 2025-10-14T12:42:52.831Z.
-
 \bibitem[Messick(1989)]{messick1989meaning}
 S.~Messick.
 \newblock Meaning and values in test validation: The science and ethics of
   assessment.
 \newblock \emph{Educational researcher}, 18\penalty0 (2):\penalty0 5--11, 1989.
 
-\bibitem[Shi et~al.()Shi, Ma, Liang, Diao, Ma, and Vosoughi]{shi_judging_2025}
-L.~Shi, C.~Ma, W.~Liang, X.~Diao, W.~Ma, and S.~Vosoughi.
-\newblock Judging the judges: A systematic study of position bias in
-  {LLM}-as-a-judge.
-\newblock URL \url{http://arxiv.org/abs/2406.07791}.
+\bibitem[Papineni et~al.()Papineni, Roukos, Ward, and Zhu]{papineni_bleu_2001}
+K.~Papineni, S.~Roukos, T.~Ward, and W.-J. Zhu.
+\newblock {BLEU}: a method for automatic evaluation of machine translation.
+\newblock In \emph{Proceedings of the 40th Annual Meeting on Association for
+  Computational Linguistics - {ACL} '02}, page 311. Association for
+  Computational Linguistics.
+\newblock \doi{10.3115/1073083.1073135}.
+\newblock URL \url{http://portal.acm.org/citation.cfm?doid=1073083.1073135}.
+
+\bibitem[Rathje et~al.(2024)Rathje, Mirea, Sucholutsky, Marjieh, Robertson, and
+  Van~Bavel]{rathjeGPTEffectiveTool2024}
+S.~Rathje, D.-M. Mirea, I.~Sucholutsky, R.~Marjieh, C.~E. Robertson, and J.~J.
+  Van~Bavel.
+\newblock {{GPT}} is an effective tool for multilingual psychological text
+  analysis.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 121\penalty0
+  (34):\penalty0 e2308950121, Aug. 2024.
+\newblock \doi{10.1073/pnas.2308950121}.
+
+\bibitem[Reiter(2018)]{reiter2018structured}
+E.~Reiter.
+\newblock A structured review of the validity of bleu.
+\newblock \emph{Computational Linguistics}, 44\penalty0 (3):\penalty0 393--401,
+  2018.
+
+\bibitem[Saito et~al.()Saito, Wachi, Wataoka, and
+  Akimoto]{saito_verbosity_2023}
+K.~Saito, A.~Wachi, K.~Wataoka, and Y.~Akimoto.
+\newblock Verbosity bias in preference labeling by large language models.
+\newblock URL \url{http://arxiv.org/abs/2310.10076}.
+
+\bibitem[Salaudeen et~al.(2025)Salaudeen, Reuel, Ahmed, Bedi, Robertson,
+  Sundar, Domingue, Wang, and
+  Koyejo]{salaudeenMeasurementMeaningValidityCentered2025}
+O.~Salaudeen, A.~Reuel, A.~Ahmed, S.~Bedi, Z.~Robertson, S.~Sundar,
+  B.~Domingue, A.~Wang, and S.~Koyejo.
+\newblock Measurement to {{Meaning}}: {{A Validity-Centered Framework}} for
+  {{AI Evaluation}}, June 2025.
+
+\bibitem[Sellam et~al.()Sellam, Das, and Parikh]{sellam_bleurt_2020}
+T.~Sellam, D.~Das, and A.~Parikh.
+\newblock {BLEURT}: Learning robust metrics for text generation.
+\newblock In D.~Jurafsky, J.~Chai, N.~Schluter, and J.~Tetreault, editors,
+  \emph{Proceedings of the 58th Annual Meeting of the Association for
+  Computational Linguistics}, pages 7881--7892. Association for Computational
+  Linguistics.
+\newblock \doi{10.18653/v1/2020.acl-main.704}.
+\newblock URL \url{https://aclanthology.org/2020.acl-main.704/}.
 
 \bibitem[Spearman(1961)]{spearman1961general}
 C.~Spearman.
 \newblock " general intelligence" objectively determined and measured.
 \newblock 1961.
 
-\bibitem[Team(2025{\natexlab{a}})]{gemma_2025}
-G.~Team.
-\newblock Gemma 3.
-\newblock 2025{\natexlab{a}}.
-\newblock URL \url{https://goo.gle/Gemma3Report}.
-
-\bibitem[Team(2025{\natexlab{b}})]{qwen3technicalreport}
+\bibitem[Team(2025)]{qwen3technicalreport}
 Q.~Team.
-\newblock Qwen3 technical report, 2025{\natexlab{b}}.
+\newblock Qwen3 technical report, 2025.
 \newblock URL \url{https://arxiv.org/abs/2505.09388}.
+
+\bibitem[T{\"o}rnberg(2025)]{tornbergLargeLanguageModels2025}
+P.~T{\"o}rnberg.
+\newblock Large {{Language Models Outperform Expert Coders}} and {{Supervised
+  Classifiers}} at {{Annotating Political Social Media Messages}}.
+\newblock \emph{Social Science Computer Review}, 43\penalty0 (6):\penalty0
+  1181--1195, Dec. 2025.
+\newblock ISSN 0894-4393.
+\newblock \doi{10.1177/08944393241286471}.
+
+\bibitem[Wang et~al.(2020)Wang, Cho, and
+  Lewis]{wangAskingAnsweringQuestions2020}
+A.~Wang, K.~Cho, and M.~Lewis.
+\newblock Asking and {{Answering Questions}} to {{Evaluate}} the {{Factual
+  Consistency}} of {{Summaries}}.
+\newblock In D.~Jurafsky, J.~Chai, N.~Schluter, and J.~Tetreault, editors,
+  \emph{Proceedings of the 58th {{Annual Meeting}} of the {{Association}} for
+  {{Computational Linguistics}}}, pages 5008--5020, Online, July 2020.
+  Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2020.acl-main.450}.
+
+\bibitem[Wang et~al.(2023)Wang, Liang, Meng, Sun, Shi, Li, Xu, Qu, and
+  Zhou]{wangChatGPTGoodNLG2023}
+J.~Wang, Y.~Liang, F.~Meng, Z.~Sun, H.~Shi, Z.~Li, J.~Xu, J.~Qu, and J.~Zhou.
+\newblock Is {{ChatGPT}} a {{Good NLG Evaluator}}? {{A Preliminary Study}}.
+\newblock In Y.~Dong, W.~Xiao, L.~Wang, F.~Liu, and G.~Carenini, editors,
+  \emph{Proceedings of the 4th {{New Frontiers}} in {{Summarization
+  Workshop}}}, pages 1--11, Singapore, Dec. 2023. Association for Computational
+  Linguistics.
+\newblock \doi{10.18653/v1/2023.newsum-1.1}.
+
+\bibitem[Wang et~al.()Wang, Jiang, {Hernandez-Orallo}, Stillwell, Sun, Luo, and
+  Xie]{wangEvaluatingGeneralPurposeAI}
+X.~Wang, L.~Jiang, J.~{Hernandez-Orallo}, D.~Stillwell, L.~Sun, F.~Luo, and
+  X.~Xie.
+\newblock Evaluating {{General-Purpose AI}} with {{Psychometrics}}.
 
 \bibitem[Wang et~al.(2025)Wang, Huang, Du, Guo, Liu, and
   Wang]{wang2025evaluating}
@@ -113,18 +357,59 @@ Y.~Wang, J.~Huang, L.~Du, Y.~Guo, Y.~Liu, and R.~Wang.
 \newblock \emph{Computers and Education: Artificial Intelligence}, page 100481,
   2025.
 
-\bibitem[Whitely(1983)]{whitely1983construct}
-S.~E. Whitely.
-\newblock Construct validity: Construct representation versus nomothetic span.
-\newblock \emph{Psychological bulletin}, 93\penalty0 (1):\penalty0 179, 1983.
+\bibitem[Xiao et~al.(2023)Xiao, Zhang, Lai, and
+  Liao]{xiaoEvaluatingEvaluationMetrics2023}
+Z.~Xiao, S.~Zhang, V.~Lai, and Q.~V. Liao.
+\newblock Evaluating {{Evaluation Metrics}}: {{A Framework}} for {{Analyzing
+  NLG Evaluation Metrics}} using {{Measurement Theory}}.
+\newblock In H.~Bouamor, J.~Pino, and K.~Bali, editors, \emph{Proceedings of
+  the 2023 {{Conference}} on {{Empirical Methods}} in {{Natural Language
+  Processing}}}, pages 10967--10982, Singapore, Dec. 2023. Association for
+  Computational Linguistics.
+\newblock \doi{10.18653/v1/2023.emnlp-main.676}.
 
-\bibitem[Wolf et~al.(2020)Wolf, Debut, Sanh, Chaumond, Delangue, Moi, Cistac,
-  Rault, Louf, Funtowicz, et~al.]{wolf2020transformers}
-T.~Wolf, L.~Debut, V.~Sanh, J.~Chaumond, C.~Delangue, A.~Moi, P.~Cistac,
-  T.~Rault, R.~Louf, M.~Funtowicz, et~al.
-\newblock Transformers: State-of-the-art natural language processing.
-\newblock In \emph{Proceedings of the 2020 conference on empirical methods in
-  natural language processing: system demonstrations}, pages 38--45, 2020.
+\bibitem[Yang et~al.(2024)Yang, Duan, Liu, and
+  Tam]{yangLLMMeasureGeneratingValid2024}
+Y.~Yang, H.~Duan, J.~Liu, and K.~Y. Tam.
+\newblock {{LLM-Measure}}: {{Generating Valid}}, {{Consistent}}, and
+  {{Reproducible Text-Based Measures}} for {{Social Science Research}}, Sept.
+  2024.
+
+\bibitem[Ye et~al.(2021)Ye, Lu, Huang, Lin, and
+  Liang]{yeQuantifiableDialogueCoherence2021}
+Z.~Ye, L.~Lu, L.~Huang, L.~Lin, and X.~Liang.
+\newblock Towards {{Quantifiable Dialogue Coherence Evaluation}}.
+\newblock In C.~Zong, F.~Xia, W.~Li, and R.~Navigli, editors, \emph{Proceedings
+  of the 59th {{Annual Meeting}} of the {{Association}} for {{Computational
+  Linguistics}} and the 11th {{International Joint Conference}} on {{Natural
+  Language Processing}} ({{Volume}} 1: {{Long Papers}})}, pages 2718--2729,
+  Online, Aug. 2021. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2021.acl-long.211}.
+
+\bibitem[Zhang et~al.()Zhang, Kishore, Wu, Weinberger, and
+  Artzi]{zhang_bertscore_2020}
+T.~Zhang, V.~Kishore, F.~Wu, K.~Q. Weinberger, and Y.~Artzi.
+\newblock {BERTScore}: Evaluating text generation with {BERT}.
+\newblock URL \url{http://arxiv.org/abs/1904.09675}.
+
+\bibitem[Zhao et~al.({\natexlab{a}})Zhao, Peyrard, Liu, Gao, Meyer, and
+  Eger]{zhao_moverscore_2019}
+W.~Zhao, M.~Peyrard, F.~Liu, Y.~Gao, C.~M. Meyer, and S.~Eger.
+\newblock {MoverScore}: Text generation evaluating with contextualized
+  embeddings and earth mover distance.
+\newblock In K.~Inui, J.~Jiang, V.~Ng, and X.~Wan, editors, \emph{Proceedings
+  of the 2019 Conference on Empirical Methods in Natural Language Processing
+  and the 9th International Joint Conference on Natural Language Processing
+  ({EMNLP}-{IJCNLP})}, pages 563--578. Association for Computational
+  Linguistics, {\natexlab{a}}.
+\newblock \doi{10.18653/v1/D19-1053}.
+\newblock URL \url{https://aclanthology.org/D19-1053/}.
+
+\bibitem[Zhao et~al.({\natexlab{b}})Zhao, Rush, and
+  Goyal]{zhaoChallengesTrustworthyHuman}
+W.~Zhao, A.~M. Rush, and T.~Goyal.
+\newblock Challenges in {{Trustworthy Human Evaluation}} of {{Chatbots}}.
+\newblock {\natexlab{b}}.
 
 \bibitem[Zheng et~al.()Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li, Li,
   Xing, Zhang, Gonzalez, and Stoica]{zheng_judging_2023}
@@ -133,5 +418,11 @@ L.~Zheng, W.-L. Chiang, Y.~Sheng, S.~Zhuang, Z.~Wu, Y.~Zhuang, Z.~Lin, Z.~Li,
 \newblock Judging {LLM}-as-a-judge with {MT}-bench and chatbot arena.
 \newblock URL
   \url{https://www.semanticscholar.org/paper/Judging-LLM-as-a-judge-with-MT-Bench-and-Chatbot-Zheng-Chiang/a0a79dad89857a96f8f71b14238e5237cbfc4787}.
+
+\bibitem[Zhong et~al.(2022)Zhong, Liu, Yin, Mao, Jiao, Liu, Zhu, Ji, and
+  Han]{zhongUnifiedMultiDimensionalEvaluator2022a}
+M.~Zhong, Y.~Liu, D.~Yin, Y.~Mao, Y.~Jiao, P.~Liu, C.~Zhu, H.~Ji, and J.~Han.
+\newblock Towards a {{Unified Multi-Dimensional Evaluator}} for {{Text
+  Generation}}, Oct. 2022.
 
 \end{thebibliography}

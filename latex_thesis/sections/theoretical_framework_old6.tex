@@ -1,0 +1,149 @@
+% !TEX root = ../main.tex
+
+% \section{Measurement Framework}\label{sec:theoretical_framework}
+
+
+\section{Measurement Framework}\label{sec:measurement_framework}
+
+This chapter formalizes the framework for meaningful artefact-level measurement with LLM-based evaluators. The central question is how an LLM can be operationalized as a measurement instrument, and under which conditions its scores can support diagnostic interpretations. In psychometrics, such meaningful measurement is addressed through construct validity: the accumulation of evidence from multiple sources to demonstrate the appropriateness of the interpretations and the intended use of the measurements \citep{messick1989meaning}.
+
+For the present thesis, the intended use is artefact-level diagnosis. This means that the evaluator should not only assign an overall score, but also measure the constituent criteria that define why an artefact is strong or weak. The measurement framework is therefore organized around three elements. First, the measurement model specifies how criterion-level measurements relate to the target construct. Second, the operationalization specifies how the LLM produces those criterion-level measurements while minimizing construct-irrelevant variance. Third, the empirical validation assesses whether formative decomposition provides stronger validity evidence than holistic measurement.
+
+The chapter follows this structure. Section~\ref{sec:theoretical_definition} distinguishes between reflective and formative measurement models and argues that diagnostic artefact-level evaluation is best understood formatively. Section~\ref{sec:operationalization} translates this specification into an LLM-based measurement procedure based on separate criterion-level prompting and logit-based score extraction. Section~\ref{sec:empirical_validation} then defines the validation strategy, using convergent validity and predictive validity as two empirical tests of whether formative decomposition improves artefact-level measurement relative to holistic alternatives.
+
+
+
+In this chapter, we formalize the artefact-level measurement framework. The central question is how we can operationalize an LLM as measurement instrument, and under which conditions the measurements are meaningful. In psychometrics, meaningful measurement requires establishing construct validity, which requires accumulating evidence from multiple sources to demonstrate the appropriateness of the interpretations and their intended use \citep{messick1989meaning}. For the specific case of using artefact-level measurements for diagnostic purposes, this means that the instrument should accurately measure all subdimensions that jointly constitute artefact quality. To this end, the measurement framework is defined by three distinct elements: The measurement model, the operationalization, and the empirical validation.
+
+This chapter provides the theoretical rationale for treating LLM-based evaluators as measurement instruments. The central question is under which conditions LLMs can provide meaningful measurements, and 
+
+This thesis treats LLM-based evaluators as measurement instruments that map an input artefact (e.g., a marketing copy text) to a score representing an attribute (e.g., "Quality" or a subdimension of quality) of that text. The interpretation of such a score depends on the measurement model being assumed. 
+
+
+
+from the measurement model  we assume, which defines how the measurements are related to the target construct. 
+
+Two types of measurement models are distinguished: the formative and the reflective model, which define the direction of the causal relationship between the dimensions and the construct. These two theoretically opposing models will be discussed in the first subsection, where we argue that artefact-level measurement demands a formative specification, and outline the core assumptions underlying this approach.
+%. The assumptions underlying the formative model will be discussed.
+
+These assumptions have consequences for how the LLM should be operationalized as measurement instrument. In the second subsection we show how we formalize this operationalization while respecting the formative assumptions. Moreover, we explain how the method avoids introducing construct-irrelevant variance through design choices. 
+
+Finally, we discuss the methodological approach we use to validate the measurements. Here, we adopt a construct validity approach. Validity in psychometrics concerns whether an instrument measures what it is supposed to measure, and serves as support for interpretations
+and actions based on the measurements. Establishing construct validity requires accumulating evidence from multiple sources to demonstrate the appropriateness of the interpretations and their intended use \citep{messick1989meaning}. 
+
+
+
+Construct validity pertains to whether the measurements correspond to the theoretical constructs we aim to measure. Since we do not have direct access to the ground truth, establishing construct validity requires accumulating evidence from multiple sources to demonstrate the appropriateness of the interpretations and their intended use \citep{messick1989meaning}. 
+
+
+
+
+
+
+
+% \section{Theoretical Framework}\label{sec:theoretical_framework}
+
+% This thesis treats LLM-based evaluators as measurement instruments that map an input (e.g., a marketing copy text) to a score representing a specific attribute (e.g., "Quality" or its constituent subdimensions) of that text. The theoretical meaning of the measurement is inherited from the assumed measurement model, which defines how the observed indicators relate to the target construct. 
+
+% Two types of measurement models are distinguished: the formative and the reflective model, which differ fundamentally in the directional causality they assume between the indicators and the construct. These two theoretically opposing models are discussed in the first subsection, where we argue that artefact-level measurement demands a formative specification, and outline the core assumptions underlying this approach.
+
+
+% Finally, we outline the methodological approach used to validate the resulting measurements. Here, we adopt a construct validity framework, as is standard in the text-as-data social sciences \citet{boydLanguagebasedPersonalityNew2017, guntukuDetectingDepressionMental2017, kahnMeasuringEmotionalExpression2007, manelaNewsImpliedVolatility2017, gentzkowMeasuringGroupDifferences2019, rathjeGPTEffectiveTool2024, lemensUncoveringSemanticsConcepts2023, yangLLMMeasureGeneratingValid2024} and increasingly advocated in current LLM evaluation literature \citep{xiaoEvaluatingEvaluationMetrics2023, linPromptsConstructsDualValidity2025, binetteImprovingValidityPractical2024, beanMeasuringWhatMatters2025, salaudeenMeasurementMeaningValidityCentered2025, wangEvaluatingGeneralPurposeAI, kardanovaNovelPsychometricsBasedApproach2024, federiakinImprovingLLMLeaderboards2025, PDFModernLLM2026, feuerWhenJudgmentBecomes2025, alaaMedicalLargeLanguage2025}. Rather than viewing validity as an inherent property of a tool to match an unobservable objective reality, contemporary psychometrics dictates that construct validity centers on the appropriateness of score interpretations and their intended operational use \citep{messick1989meaning}. Because we lack direct access to a latent ground truth, establishing validity within our formative framework requires accumulating multiple, convergent lines of evidence to justify the meaning and utility of the LLM-generated scores.
+
+establishing construct validity requires accumulating evidence from multiple sources to demonstrate the appropriateness of the interpretations and their intended use \citep{messick1989meaning}
+
+
+
+%TODO rewrite introduction
+This thesis treats LLM-based evaluators as measurement instruments that map an input (e.g., marketing copy text) to a score that represents an underlying construct (e.g., "Quality" or "Attractiveness").
+
+
+The construct is defined as a multi-dimensional latent variable, following common practice in NLP measurement research. The meaning of the score is inherited from the measurement model that is assumed to define the construct. 
+
+
+\begin{itemize}
+    \item \textbf{Theoretical definition:} We explain the two causal models that define the relationship between a composite construct ("latent variable") and its constituents ("indicators"): the \emph{reflective} and the \emph{formative} model. 
+    \item \textbf{Empirical validation:} We explain how we assess measurement validity through the psychometric concept of \textit{construct validity}. We assess construct validity through \textit{convergent validity} (alignment with human holistic labels) and \textit{predictive validity} (prediction of a behavioral KPI). 
+\end{itemize}
+
+\subsection{Theoretical Definition}\label{sec:theoretical_definition}
+
+\subsubsection{Latent Variable Models}
+
+Latent variable models define the relationship between a target construct and its indicators. Two model types are distinguished: formative and reflective \citep{bollen1991conventional}. They differ in their assumptions about the direction of causality. 
+
+In formative models, the latent variable is assumed to be a composite construct, caused by the indicators ("causal indicators"). The canonical example is Socioeconomic Status (SES), which can be defined as the composite of three main features: income, education, and prestige \citep{mcquitty2013structural}. Formally, for a set of causal indicators indexed by $i = 1,2, \dots ,n$, we assume
+
+\begin{equation}\label{eq:formative_model}
+    \eta = \sum_{i=1}^{n} \gamma_i x_i + \zeta
+\end{equation}
+
+where $\eta$ is a latent construct, $\gamma_i$ a formative weight, $x_i$ a manifest variable, $\zeta$ the disturbance term. 
+
+In reflective models, the latent variable causes the manifest variables ("effect indicators"). For example, following a "g-factor" interpretation of the latent variable intelligence \citep{spearman1961general}, we assume that intelligence is an inherent trait that humans possess which causes people's performance on cognitive tasks. This is similar to the implicit assumption in benchmarking that high scores translate to abilities on some ability, such as reasoning, math, or writing. Formally, for any effect indicator $i$, we assume
+
+\begin{equation}\label{eq:reflective_model}
+    x_i = \lambda_i \eta + \varepsilon_i
+\end{equation}
+
+where $x_i$ is manifest variable, $\lambda_i$ a factor loading, $\eta$ the latent construct, and $\varepsilon_i$ the measurement error.
+
+% \paragraph{Exemplars in LLM-based measurement.}
+
+% Decomposition already appears in LLM-based evaluation, but with different implicit measurement stances. \citet{wang2025evaluating} study LLM scoring in large-scale writing assessment using psychometric reliability frameworks, consistent with treating rubric dimensions as manifestations of a common underlying writing ability (reflective stance). \citet{li-fine-grained-2026} operationalize broad evaluation targets through batteries of criteria organized by task category, emphasizing domain coverage, which is consistent with treating evaluation as a composite defined by its constituents (formative stance). 
+
+
+% \paragraph{Implications.}
+% These contrasting stances illustrate that the assumed causal model has downstream consequences for both measurement design and validation. Under a reflective specification, indicators are treated as effects of a common underlying attribute; accordingly, strengthening the measurement design (e.g., additional tasks/raters, well-functioning indicators) improves the precision of the latent estimate without redefining the construct, and internal-structure evidence (e.g., factor structure and reliability/generalizability) is a primary diagnostic of measurement quality. Under a formative specification, the construct is defined by its constituents; indicators are not expected to be interchangeable or strongly intercorrelated, and adding or omitting an indicator changes the construct’s meaning. Measurement quality therefore hinges on defensible construct specification and content coverage and accurate measurement of each constituent, while validation relies primarily on external relations (e.g., alignment with alternative measures of the target attribute and prediction of relevant criteria).
+
+% (relate formative to "content validity", which would be the theoretical requirement for meaningful measurement)
+% More specifically, underspecification and underrepresentation
+
+
+
+
+The formative specification also has implications for empirical design. Because diagnostic interpretation depends on criterion-level scores, these scores should reflect the relationship between the criterion and the evaluated artefact rather than the mechanics of the prompting or decoding procedure. The empirical implementation therefore measures criteria separately and extracts deterministic scores from the model's rating-token distribution. The technical details of the independent prompt construction are specified in Section~\ref{sec:meth_prompt}, and the deterministic decoding procedure is described in Section~\ref{sec:meth_decoding}.
+
+
+\subsubsection{Formalizing Artefact-Level Measurement}
+
+placeholder
+
+
+\subsection{Empirical Validation: Construct Validity}\label{sec:empirical_validation}
+
+In order to determine whether the operationalization aligns with the theoretical constructs, we adopt a \textit{construct validity} approach. In psychometrics, validity is established through both theoretical rationales and empirical evidence \citep{messick1989meaning}. Where Section \ref{sec:theoretical_definition} provided the former, this section provides the latter. %TODO Introduce this in the section intro
+
+The motivation for adopting a construct validity approach is the same for psychology as it is for our evaluations. Unlike objectively measurable properties like "temperature" or "grammatical correctness", the latent (unobservable) nature of constructs means there is no observable "true" value to validate against. Instead, establishing construct validity requires accumulating evidence from multiple sources to demonstrate the appropriateness of the interpretations and their intended use \citep{messick1989meaning}. In this thesis, we build this evidence through two types of construct validity: \textit{Convergent validity} (alignment with human expert judgment) and \textit{predictive validity} (alignment with downstream behavioral outcomes). 
+
+\paragraph{Convergent Validity.} %TODO: doubling, just repeat the formative specification
+To assess convergent validity, we treat human expert ratings as a reference measure of the target construct. Let $y^{\text{H}}(d)$ denote a human holistic rating for document $d$. We assess validity by modeling the relationship
+
+\begin{equation}\label{eq:convergent_validity_formative}
+    y^{\text{H}}(d) = g(\mathbf{x}(d)) + \epsilon(d).
+\end{equation}
+
+This formulation directly implements the formative specification defined in Equation \ref{eq:formative_model} (Section \ref{sec:theoretical_definition}). By treating the human judgment $y^{\text{H}}$ as a proxy for the latent construct $\eta$, we can empirically estimate the weights $\gamma$ that best predict the holistic assessment from the independent indicators.
+
+We evaluate whether the LLM-derived indicators $\mathbf{x}(d)$ explain systematic variation in $y^{\text{H}}(d)$ on held-out data. Importantly, this evaluates the \emph{construct-level} utility of decomposition: rather than only testing whether an LLM can imitate human ratings on the indicator level as in \citet{li-fine-grained-2026} and \citet{wang2025evaluating}, we test whether the indicator measurements can be combined into a superior predictor of the overall expert judgment.
+
+We compare this against a holistic baseline $x^{\text{hol}}(d)$ obtained by prompting the LLM for a single overall "Quality" score, so we can compare 
+\begin{equation}\label{eq:convergent_validity_holistic}
+    y^{\text{H}}(d) \approx g(\mathbf{x}(d)) \quad \text{vs.} \quad y^{\text{H}}(d) \approx h(x^{\text{hol}}(d)).
+\end{equation}
+If formative decomposition improves measurement, the composite model should achieve lower predictive error than the holistic baseline.
+
+
+\paragraph{Predictive validity.}
+Predictive validity assesses whether a measure exhibits the theoretically expected relationships with an external criterion \citep{messick_validity_1994}. In our "quality-for-purpose" framework, this corresponds to functional utility: whether the measurements can predict the downstream outcomes the copy is expected to drive. % TODO need to introduce quality for purpose (or rather, quality/deal attractiveness/etc)
+
+Let $y^{\text{KPI}}(d)$ denote a behavioral outcome associated with document $d$ (e.g., user engagement or conversion on a platform). We test whether the vector of criterion measurements predicts this outcome:
+\begin{equation}
+    y^{\text{KPI}}(d) = r(\mathbf{x}(d)) + \eta(d),
+\end{equation}
+We again compare this performance to the holistic baseline $x^{\text{hol}}(d)$. Evidence that $\mathbf{x}(d)$ is a stronger predictor of $y^{\text{KPI}}(d)$ supports the construct-validity claim that the measurements are appropriate for their intended use, i.e., guiding diagnosis, validation, and improvement of marketing copy in deployment settings.
+
+Together, these two forms of validity provide evidence that our operationalization yields meaningful and usable measurements of the construct under the formative specification. 
+
+%TODO omit this?
+%While additional measures of construct validity can be considered (see: \citet{lin_validity-guided_2025}), convergent validity and predictive validity target the two principal requirements in our setting: alignment with human evaluations, and functional utility in deployment. 

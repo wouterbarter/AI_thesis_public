@@ -1,0 +1,50 @@
+id: 722bbd35b498
+dimensions:
+  deal_pitch_overall_deal_quality:
+    name: rubric_deal_pitch_overall_deal_quality
+    description: Evaluates the intensity of overall_deal_quality on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - overall_deal_quality
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ overall deal quality.\nThis evaluates the overall economic equity and holistic\
+        \ quality of the barter exchange. It assesses the total balance between the\
+        \ required deliverables and the offered product\u2014ranging from a fundamentally\
+        \ imbalanced, low-quality offer (Extremely Weak), up to an exceptionally balanced,\
+        \ high-quality, and premium opportunity (Excellent).\n\nScale definition:\n\
+        1: Extremely Weak\n2: Weak\n3: Slightly Weak\n4: Fair / Average\n5: Slightly\
+        \ Strong\n6: Strong\n7: Excellent\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+metadata:
+  description: Holistic Naive Quality, scale 7, SPV2
+  suite_tags:
+  - rubric
+  - overall_deal_quality
+  - trait_intensity
+  - scale_7
+  - deal_pitch

@@ -1,0 +1,148 @@
+id: 698a82f5d8a3
+dimensions:
+  deal_pitch_holistic_reward_attractiveness:
+    name: rubric_deal_pitch_holistic_reward_attractiveness
+    description: Evaluates the intensity of holistic_reward_attractiveness on the
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - holistic_reward_attractiveness
+    - deal_pitch
+    - informed_holistic
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ holistic reward attractiveness.\nEvaluate the overall attractiveness and\
+        \ subjective desirability of the reward from the perspective of a professional\
+        \ creator. Consider the 'Gestalt' of the offering: does the combination of\
+        \ the brand's reputation, the product's value, and its aesthetic appeal feel\
+        \ like a highly desirable opportunity?\n\nScale definition:\n1: Extremely\
+        \ Unattractive Reward\n2: Very Unattractive\n3: Unattractive\n4: Neutral/Average\
+        \ Reward\n5: Attractive\n6: Very Attractive\n7: Highly Desirable/Premium Reward\n\
+        \nOutput only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_holistic_burden_acceptability:
+    name: rubric_deal_pitch_holistic_burden_acceptability
+    description: Evaluates the intensity of holistic_burden_acceptability on the Deal
+      Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - holistic_burden_acceptability
+    - deal_pitch
+    - informed_holistic
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ holistic burden acceptability.\nEvaluate the subjective acceptability of\
+        \ the demands placed on the creator. Consider the 'Gestalt' of the friction:\
+        \ does the combination of the physical workload and the creative restrictions\
+        \ feel like an unreasonable burden, or a totally acceptable, frictionless\
+        \ ask?\n\nScale definition:\n1: Completely Unacceptable/Exploitative Burden\n\
+        2: Highly Unreasonable\n3: Somewhat Unreasonable\n4: Standard/Acceptable Burden\n\
+        5: Light Burden\n6: Very Light/Easy Ask\n7: Completely Frictionless\n\nOutput\
+        \ only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_holistic_pitch_professionalism:
+    name: rubric_deal_pitch_holistic_pitch_professionalism
+    description: Evaluates the intensity of holistic_pitch_professionalism on the
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - holistic_pitch_professionalism
+    - deal_pitch
+    - informed_holistic
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ holistic pitch professionalism.\nEvaluate the overall professionalism and\
+        \ subjective 'vibe' of the communication. Consider the 'Gestalt' of the pitch:\
+        \ does the combination of clarity, realism, and enthusiasm make you feel like\
+        \ you are dealing with a highly professional, trustworthy partner?\n\nScale\
+        \ definition:\n1: Extremely Unprofessional/Sketchy\n2: Very Unprofessional\n\
+        3: Unprofessional\n4: Average/Standard Pitch\n5: Professional\n6: Highly Professional\n\
+        7: Exceptionally Professional and Trustworthy\n\nOutput only the integer score."
+      user: 'Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+metadata:
+  description: Formative Macro NoBARS, revised dimensions, including requirements,scale
+    7, revision2, system prompt V2
+  suite_tags:
+  - scale_7
+  - informed_holistic
+  - trait_intensity
+  - rubric
+  - deal_pitch

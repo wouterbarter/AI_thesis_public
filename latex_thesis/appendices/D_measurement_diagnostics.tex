@@ -1,0 +1,71 @@
+\section{Supplementary Measurement Diagnostics}
+\label{app:measurement_diagnostics}
+
+This appendix provides additional methodological detail for the diagnostic procedures used to evaluate the LLM-derived measurements. These diagnostics are not themselves validation tests. Instead, they characterize whether the expected-value (EV) ratings and entropy values behave in ways that are compatible with their intended use as continuous measurement variables.
+
+\subsection{Interpreting EV and Entropy Regimes}
+\label{app:rating_regimes}
+
+The distributional diagnostics combine two sources of information: the spread of the EV ratings and the entropy of the restricted rating-token distribution. EV spread indicates how much of the available rating scale is used by the model. Entropy indicates whether the EV score is produced by probability mass concentrated on one or a few rating tokens, or by a smoother distribution over multiple rating tokens.
+
+These metrics allow us to distinguish four rating regimes, which serve as interpretive categories used to compare model behavior.
+
+\paragraph{Broad continuous regime.}
+A broad continuous regime occurs when EV ratings show substantial dispersion across the available rating scale and entropy is not uniformly near zero. In this case, the model differentiates between documents while also producing smooth variation between rating tokens. This is the most desirable regime for a logit-derived continuous measurement variable.
+
+\paragraph{Broad quantized regime.}
+A broad quantized regime occurs when EV ratings vary across the scale, but entropy is consistently low. In this case, the model distinguishes between documents, but it does so primarily through near-argmax selection among discrete rating tokens. The resulting scores behave more like hard ordinal classifications rather than continuous measurements.
+
+\paragraph{Narrow continuous regime.}
+A narrow continuous regime occurs when entropy indicates non-degenerate probability distributions, but EV ratings remain concentrated in a restricted part of the scale. In this case, the model produces smooth variation, but within a compressed interval. 
+
+%This limits sensitivity because differences between documents are expressed only weakly.
+
+\paragraph{Narrow quantized regime.}
+A narrow quantized regime occurs when EV ratings are compressed and entropy is consistently low. In this case, the model uses only a limited part of the rating scale and assigns probability mass to a small number of rating tokens. 
+
+%This regime indicates limited measurement sensitivity.
+
+\subsection{Residual Verbosity Sensitivity}
+\label{app:residual_verbosity_sensitivity}
+
+The residual verbosity diagnostic is designed to distinguish general text-length effects from length effects that remain after documents have reached a mature length. Not every association between text length and rating is evidence of verbosity bias. Very short texts may receive lower ratings for construct-relevant reasons, because they may lack the information required to satisfy the criterion. The diagnostic therefore compares documents in the upper half of the length distribution, where additional length is less likely to reflect basic informational adequacy.
+
+% To quantify residual verbosity sensitivity, we compute Cohen's $d$ by comparing the mean EV rating of documents in the third quartile (Q3) of text length with those in the fourth quartile (Q4). This provides a standardized effect size for the association between document length and LLM scores among relatively long documents. The focus on the upper quartiles is intended to separate residual length sensitivity from construct-relevant penalties assigned to very short texts. Short texts may receive lower ratings because they lack the information required to satisfy the criterion. By contrast, once texts have reached a mature length, further length differences should not systematically affect ratings unless the additional length changes criterion-relevant content. A systematic Q3--Q4 difference therefore provides a diagnostic of residual verbosity sensitivity.
+
+
+
+
+Let $D$ represent the corpus of evaluated documents and let $Q(p)$ denote the $p$-th quantile of the word-count distribution. The third and fourth quartile subsets are defined as:
+
+\[
+D_{Q3} = {d \in D \mid Q(0.50) \leq \mathrm{length}(d) \leq Q(0.75)},
+\]
+
+\[
+D_{Q4} = {d \in D \mid Q(0.75) < \mathrm{length}(d) \leq Q(1.00)}.
+\]
+
+For a given model $m$ and criterion $c_i$, let $\mu_{Q3}$ and $\mu_{Q4}$ denote the mean EV ratings assigned to documents in $D_{Q3}$ and $D_{Q4}$, respectively. Let $s_p$ denote the pooled standard deviation across the two groups. The signed Q3--Q4 effect is computed as:
+
+\[
+\delta_{m,c_i} = \frac{\mu_{Q4} - \mu_{Q3}}{s_p}.
+\]
+
+
+
+Positive values indicate that the longest documents receive higher ratings than mature but shorter documents, while negative values indicate that the longest documents receive lower ratings. Because the substantive interpretation of the sign depends on the criterion coding \footnote{For example, Llama 3.2 shows a negative Q3--Q4 effect for \textit{Creative Restrictiveness}. This criterion is inversely coded: higher scores indicate more restrictive requirements, whereas for most other criteria higher scores indicate desirable properties. This illustrates why the absolute effect size is used as the main diagnostic.}, the main diagnostic uses the absolute value $|\delta_{m,c_i}|$. This captures the magnitude of residual length sensitivity regardless of direction.
+
+Following \citet{cohen1988statistical}, values around $0.2$ are interpreted as small, values around $0.5$ as medium, and values of $0.8$ or above as large.
+
+
+\subsection{Construct Separability and VIF}
+\label{app:vif_diagnostics_prose}
+
+For the formative specifications, the LLM-derived predictors are intended to represent distinct components of the target construct. Empirical separability is assessed using the Variance Inflation Factor (VIF). For predictor $x_j$, the VIF is defined as:
+
+\[
+\mathrm{VIF}_j = \frac{1}{1 - R_j^2},
+\]
+
+where $R_j^2$ is obtained by regressing $x_j$ on the remaining predictors. Higher VIF values indicate that a predictor is strongly predictable from the other predictors, which reduces the interpretability of individual coefficients. VIF values below 5 are treated as indicating limited multicollinearity, values between 5 and 10 as moderate multicollinearity, and values above 10 as substantial multicollinearity.

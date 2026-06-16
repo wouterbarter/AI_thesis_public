@@ -1,0 +1,148 @@
+id: b30bc4372567
+dimensions:
+  deal_pitch_creator_brand_alignment:
+    name: rubric_deal_pitch_creator_brand_alignment
+    description: Evaluates the intensity of creator_brand_alignment on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - creator_brand_alignment
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ creator brand alignment.\nYou are measuring 'Creator Brand Alignment.' This\
+        \ construct evaluates the degree to which the product or service naturally\
+        \ integrates into the aspirational aesthetic and lifestyle identities typical\
+        \ of content creators (e.g., beauty, fashion, culinary, travel, fitness).\
+        \ It measures the continuum between a dry, highly corporate, or mundane utility\
+        \ product that inherently clashes with a creator's personal brand, up to a\
+        \ highly photogenic, trendy, and aspirational product that actively elevates\
+        \ it.\n\nScale definition:\n1: Extremely Weak\n2: Weak\n3: Fair\n4: Moderate\n\
+        5: Good\n6: Very Good\n7: Excellent\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_call_to_action_strength:
+    name: rubric_deal_pitch_call_to_action_strength
+    description: Evaluates the intensity of call_to_action_strength on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - call_to_action_strength
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ call to action strength.\nYou are measuring 'Call to Action Strength.' This\
+        \ construct evaluates the urgency, explicitness, and compelling nature of\
+        \ the prompt directing the creator's next steps. It measures the continuum\
+        \ between a completely passive, absent, or heavily implied prompt with no\
+        \ clear direction, up to an intensely compelling, urgent, and direct call\
+        \ to action that clearly dictates the next step and drives immediate excitement.\n\
+        \nScale definition:\n1: Extremely Weak\n2: Weak\n3: Fair\n4: Moderate\n5:\
+        \ Good\n6: Very Good\n7: Excellent\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+  deal_pitch_product_universality:
+    name: rubric_deal_pitch_product_universality
+    description: Evaluates the intensity of product_universality on the Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    template_tags:
+    - rubric
+    - scale_7
+    - trait_intensity
+    - product_universality
+    - deal_pitch
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals for Barter,\
+        \ an app-based creator marketplace. \nIn this ecosystem, creators scroll a\
+        \ feed of deals and apply to collaborate. If accepted, they produce content\
+        \ (e.g., UGC, TikToks, Reels) primarily in exchange for the brand's product\
+        \ or service, with occasional cash supplements. Your evaluation must be grounded\
+        \ in this specific, low-friction, product-driven marketplace dynamic.\n\n\
+        Your task is to evaluate the provided Deal Pitch conditional strictly on its\
+        \ product universality.\nYou are measuring 'Product Universality.' This construct\
+        \ evaluates the breadth of the product's target demographic. It measures the\
+        \ continuum between a highly specialized, restrictive product requiring specific\
+        \ hobbies or niche traits, up to a highly accessible, everyday product that\
+        \ appeals broadly to the general mass market.\n\nScale definition:\n1: Extremely\
+        \ Narrow\n2: Narrow\n3: Somewhat Narrow\n4: Moderate\n5: Somewhat Broad\n\
+        6: Broad\n7: Extremely Broad\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}
+
+
+        Requirements:
+
+        {creators_requirement}'
+metadata:
+  description: Prompt suite with continuous anchors (No BARS), including requirements,scale
+    7, system prompt V2
+  suite_tags:
+  - scale_7
+  - rubric
+  - trait_intensity
+  - deal_pitch

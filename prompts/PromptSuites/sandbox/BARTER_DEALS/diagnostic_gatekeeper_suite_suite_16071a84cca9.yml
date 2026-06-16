@@ -1,0 +1,205 @@
+id: 16071a84cca9
+dimensions:
+  deal_pitch_product_universality:
+    name: rubric_deal_pitch_product_universality
+    description: Evaluates the intensity of product_universality on the combined Deal
+      Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_pitch
+    - product_universality
+    - scale_4
+    - trait_intensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its product\
+        \ universality.\nThis measures how broad the appeal of the product or service\
+        \ is to a general audience versus a highly niche demographic.\n\nScale definition:\n\
+        1: Highly Niche (Appeals only to a very narrow, restrictive, or highly specialized\
+        \ demographic).\n2: Somewhat Niche (Appeals to specific sub-groups or hobbies,\
+        \ but excludes the general public).\n3: Broad Appeal (Appeals to most everyday\
+        \ consumers; highly accessible).\n4: Universal Appeal (Virtually anyone could\
+        \ use, consume, or desire this product).\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+  deal_pitch_creator_brand_alignment:
+    name: rubric_deal_pitch_creator_brand_alignment
+    description: Evaluates the intensity of creator_brand_alignment on the combined
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_pitch
+    - creator_brand_alignment
+    - scale_4
+    - trait_intensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its creator\
+        \ brand alignment.\nThis measures how well the deal aligns with aesthetic\
+        \ or lifestyle identities typical of creators (e.g., beauty, fashion, culinary,\
+        \ travel, fitness).\n\nScale definition:\n1: Weak Alignment (Product feels\
+        \ highly corporate, dry, or antithetical to typical creator aesthetics).\n\
+        2: Marginal Alignment (Could fit a creator's lifestyle, but lacks inherent\
+        \ aesthetic or trendy appeal).\n3: Strong Alignment (Fits naturally into standard\
+        \ creator niches; photogenic and lifestyle-friendly).\n4: Perfect Alignment\
+        \ (Highly aesthetic, aspirational, or trendy product that actively elevates\
+        \ a creator's personal brand).\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+  deal_pitch_value_proposition_clarity:
+    name: rubric_deal_pitch_value_proposition_clarity
+    description: Evaluates the intensity of value_proposition_clarity on the combined
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_pitch
+    - value_proposition_clarity
+    - scale_4
+    - trait_intensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its value\
+        \ proposition clarity.\nThis measures how explicitly and clearly the text\
+        \ communicates the exact reward and the core benefit of the collaboration\
+        \ to the creator.\n\nScale definition:\n1: Vague/Confusing (The actual reward\
+        \ or benefit to the creator is obscured, buried, or highly ambiguous).\n2:\
+        \ Implicit (The product is mentioned, but the exact value exchange or benefit\
+        \ requires the reader to infer it).\n3: Clear (The reward and collaboration\
+        \ terms are straightforward, easy to read, and immediately understandable).\n\
+        4: Highly Transparent & Highlighted (The benefits to the creator are the focal\
+        \ point, utilizing excellent formatting or extremely crisp copy to highlight\
+        \ the value).\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+  deal_pitch_call_to_action_strength:
+    name: rubric_deal_pitch_call_to_action_strength
+    description: Evaluates the intensity of call_to_action_strength on the combined
+      Deal Pitch
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - deal_pitch
+    - call_to_action_strength
+    - scale_4
+    - trait_intensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Deal Pitch conditional strictly on its call\
+        \ to action strength.\nThis measures how compelling, explicit, and urgent\
+        \ the prompt is for the creator to take the next step.\n\nScale definition:\n\
+        1: Passive/Absent (No clear CTA; leaves the reader guessing what to do next).\n\
+        2: Generic/Implied (A soft or generic CTA like 'let us know' without clear\
+        \ next steps or urgency).\n3: Clear and Direct (Straightforward CTA that explicitly\
+        \ states what to do, e.g., 'Apply now to collaborate').\n4: Highly Compelling\
+        \ (Creates excitement, urgency, or highlights exclusivity to drive immediate\
+        \ action).\n\nOutput only the integer score."
+      user: 'Deal Pitch:
+
+        Title: {deal_title}
+
+
+        Body:
+
+        {deal_text}'
+  requirements_workload_volume:
+    name: rubric_requirements_workload_volume
+    description: Evaluates the intensity of workload_volume on the Creator Requirements
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - creators_requirement
+    - workload_volume
+    - scale_4
+    - trait_intensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Creator Requirements conditional strictly on\
+        \ its workload volume.\nThis measures the sheer amount of content creation,\
+        \ deliverables, and ongoing effort required from the creator.\n\nScale definition:\n\
+        1: Minimal Effort (e.g., a single simple story, a quick shoutout, or basic\
+        \ amplification).\n2: Moderate Effort (Standard industry expectation; e.g.,\
+        \ one dedicated feed post or a standard short-form video).\n3: High Effort\
+        \ (Multiple deliverables across different platforms, or long-form dedicated\
+        \ content like a YouTube integration).\n4: Excessive Effort (Long-term ongoing\
+        \ commitments, massive volume of deliverables, or highly complex production\
+        \ requirements).\n\nOutput only the integer score."
+      user: 'Creator Requirements:
+
+        {creators_requirement}'
+  requirements_logistical_friction:
+    name: rubric_requirements_logistical_friction
+    description: Evaluates the intensity of logistical_friction on the Creator Requirements
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - creators_requirement
+    - logistical_friction
+    - scale_4
+    - trait_intensity
+    template_chat:
+      system: "You are an expert evaluator of influencer marketing deals. \nYour task\
+        \ is to evaluate the provided Creator Requirements conditional strictly on\
+        \ its logistical friction.\nThis measures the administrative, financial, or\
+        \ physical hurdles the creator must overcome to successfully participate in\
+        \ the deal.\n\nScale definition:\n1: Zero Friction (Purely digital delivery,\
+        \ instant access, or absolutely no out-of-pocket costs or complex approvals).\n\
+        2: Low Friction (Standard physical shipping of a product with simple, clear\
+        \ posting guidelines).\n3: Moderate Friction (Requires strict brand draft\
+        \ approvals, specific location visits, or adherence to dense legal/brand guidelines).\n\
+        4: High Friction (Requires the creator to purchase the item upfront for later\
+        \ reimbursement, returning physical items after the shoot, or extremely restrictive\
+        \ usage rights).\n\nOutput only the integer score."
+      user: 'Creator Requirements:
+
+        {creators_requirement}'
+metadata:
+  description: 'Diagnostic Gatekeeper suite: Combines Title/Text natively in prompt'
+  suite_tags:
+  - scale_4
+  - rubric
+  - trait_intensity

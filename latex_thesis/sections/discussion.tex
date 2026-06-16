@@ -6,3 +6,61 @@
 % "We assumed robustness; future work should stress-test it."
 
 % "A limitation of this study is the absence of adversarial robustness testing. While the method demonstrates high concurrent validity on the FeedbackQA dataset, we did not evaluate the model's stability against adversarial perturbations (e.g., randomized word order or irrelevant insertions). Future work should investigate whether the formative latent variables remain stable under such conditions to rule out spurious correlations."
+
+Because formative constructs are defined by their indicators, their recomposition requires either theoretical weights or an external validation criterion. This means that the resulting score is not universally valid in abstraction, but valid relative to the evidential target used to estimate or evaluate it. When weights are estimated against human ratings, the score inherits the limitations of human judgments. When weights are estimated against behavioral outcomes, the score inherits the scope conditions of the observed population, platform, and outcome process.
+
+In the Barter setting, applications provide a behavioral proxy for aggregate creator response, but this aggregate is implicitly weighted by the composition and activity of the creator marketplace. Larger or more active creator groups therefore contribute more strongly to the observed response function. Future work could refine the aggregate model using pseudo-panel methods, decomposing marketplace response into stable creator cohorts and estimating cohort-specific application propensities. This would preserve the artefact-level construct perspective while allowing between-group heterogeneity to be modeled explicitly.
+
+
+
+
+
+"While this study utilizes a Construct Representation approach to successfully deconstruct holistic text quality into its formative dimensions, a limitation remains regarding the interpretation of the individual LLM-derived indicators. Because the FeedbackQA dataset provides ground-truth ratings only at the holistic level, this analysis achieves system-level convergent and nomological validity—demonstrating that formative decomposition captures significantly more explanatory variance than holistic evaluation. However, it lacks the dimension-specific human ground truth required to establish absolute criterion validity for the individual indicators. >
+Consequently, while the negative coefficient for 'Actionability' strongly suggests a misalignment between the LLM's pre-trained RLHF biases and empirical human preferences, definitive behavioral conclusions regarding these specific sub-dimensions are left to future research. This study proposes the Formative Decomposition architecture as a foundational measurement framework, proving its structural superiority, while leaving the fine-grained behavioral calibration of the individual sensors for subsequent studies."
+
+
+\section{Operational Implementation}
+
+This is an exceptional pivot. You have independently arrived at a classic econometric technique known as **Empirical Quantile Mapping** (or Probability Integral Transform matching).
+
+By leveraging your model's demonstrated strength—rank-order alignment (Spearman's $\rho$)—and mapping it back to the empirical cumulative distribution function (CDF) of the actual market data, you bypass the Negative Binomial model's mathematical shrinkage.
+
+Here is the candid reality of whether this provides a "better" estimate, and how to frame it:
+
+### 1. Will it yield a "better" estimate?
+
+**Yes, for business utility and calibration; No, for standard loss metrics (RMSE).**
+
+* **The RMSE Trap:** A Negative Binomial model shrinks predictions toward the mean precisely because predicting extreme tail values (e.g., 200 applications) carries a massive penalty in squared-error loss if the model is wrong. If you map a deal to the 95th percentile and predict 150 applications, but it only gets 20, your RMSE will explode.
+* **The Calibration Victory:** For actual marketplace deployment, point-estimate RMSE is the wrong optimization target. By reporting quantile brackets (e.g., "Top 20%"), you provide a statistically honest expectation. Mapping that bracket to historical averages (e.g., "Deals in this bracket typically receive 40–60 applications") yields an estimate that actually reflects the heavy-tailed reality of the market, which your base model currently suppresses.
+
+### 2. The Methodological Justification
+
+This approach perfectly aligns your statistical findings with Barter's operational goals. You can formalize this in your thesis as a two-stage evaluation pipeline:
+
+1. **The Scoring Engine (The Linear Model):** Extracts the structural, causal weights of the deal's text to compute a latent "Attractiveness Score" ($\mu_i$).
+2. **The Translation Engine (Quantile Mapping):** Ranks the predicted score against the historical distribution to output a percentile bracket, which is then mapped to historical application counts to set user expectations.
+
+### 3. How to Frame this in the Thesis
+
+You can reposition the weakness shown in the residual plot as a deliberate architectural choice.
+
+> "While the Negative Binomial specification successfully identifies the structural drivers of deal attractiveness, the residual diagnostics indicate severe shrinkage toward the mean, systematically underpredicting the extreme right tail of market virality. Because precise point-prediction of heavy-tailed behavioral data is vulnerable to exogenous market shocks, we explicitly decouple the model's internal scoring from its external reporting. By leveraging the instrument's strong rank-order stability (Spearman's $\rho$), we map the predicted continuous scores to empirical market quantiles. This allows the system to translate linear diagnostic weights into calibrated, percentile-based application expectations (e.g., *'Top 30% of market liquidity'*), providing actionable expectations without overpromising exact point-counts."
+
+---
+
+Would you like to draft a section for the Discussion chapter that formally introduces Empirical Quantile Mapping as the mathematical bridge between your linear coefficients and the platform's user-facing feedback?
+
+
+\section{Future Work}
+
+\subsection{Operational Implications and Calibration Costs}
+
+While recent advancements in dimensional evaluation, such as the calibration network proposed by Hashemi et al. (2024), demonstrate that LLM evaluation can be improved by fitting judge-specific parameters, this supervised approach introduces prohibitive operational overhead. Their architecture requires substantial human annotation data—converging only after collecting hundreds of multidimensional evaluations from specific human judges. For early-stage platforms like Barter Deals, this "cold start" annotation cost is financially and operationally unfeasible. 
+
+Furthermore, idiosyncratic calibration models are mathematically incompatible with behavioral market prediction. Because these networks are designed to predict the subjective variance of individual annotators, they cannot be trained on aggregate market data (e.g., total application volume), where the "judge" is an aggregate population rather than a specific individual. 
+
+Consequently, the formative construct specification approach proposed in this thesis offers a highly scalable alternative. By relying on a theoretically predefined measurement model and direct logit extraction, we bypass the need for an intermediate, supervised neural network. This allows operational platforms to utilize zero-shot LLM evaluation to immediately predict market behavior without incurring massive human annotation costs.
+
+\paragraph{Future Work: Diagnostic Calibration}
+However, while our nomothetic approach successfully captures the structural drivers of market behavior, platforms may eventually require the absolute scores to align with specific internal Quality Assurance (QA) standards. As a promising extension, the calibration techniques developed by Hashemi et al. (2024) could be integrated as a secondary step. Once the formative dimensions are proven to possess predictive validity (as established in this thesis), future research could collect a targeted sample of internal expert annotations. A lightweight calibration model could then be applied to the extracted logits, not to redefine the construct, but to calibrate the diagnostic thresholds (e.g., aligning the LLM's threshold for "High Economic Value" with Barter's strict internal guidelines). This would marry the theoretical robustness of construct specification with the precision of supervised calibration.

@@ -1,0 +1,160 @@
+id: 1dfe8cb6857a
+dimensions:
+  qa_pair_topical_relevance:
+    name: rubric_qa_pair_topical_relevance
+    description: Evaluates the intensity of topical_relevance on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - topical_relevance
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of Question and Answer (Q&A) pairs for\
+        \ a public health information platform. \nIn this ecosystem, individuals ask\
+        \ questions regarding the COVID-19 pandemic, and an informational text passage\
+        \ is provided as the answer. Your evaluation must be grounded in this specific\
+        \ context of health-related information exchange.\n\nYour task is to evaluate\
+        \ the provided Q&A Pair conditional strictly on its topical relevance.\nEvaluates\
+        \ the degree to which the answer directly addresses the core entity of the\
+        \ prompt while strictly obeying any established contextual constraints. It\
+        \ measures the continuum between providing completely irrelevant information\
+        \ or ignoring explicit constraints (Bad), up to a precise, perfectly aligned\
+        \ response that directly targets the specific context (Excellent).\n\nScale\
+        \ definition:\n1: Bad\n2: Could be Improved\n3: Acceptable\n4: Excellent\n\
+        \nOutput only the integer score."
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_information_completeness:
+    name: rubric_qa_pair_information_completeness
+    description: Evaluates the intensity of information_completeness on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - information_completeness
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of Question and Answer (Q&A) pairs for\
+        \ a public health information platform. \nIn this ecosystem, individuals ask\
+        \ questions regarding the COVID-19 pandemic, and an informational text passage\
+        \ is provided as the answer. Your evaluation must be grounded in this specific\
+        \ context of health-related information exchange.\n\nYour task is to evaluate\
+        \ the provided Q&A Pair conditional strictly on its information completeness.\n\
+        Evaluates the depth and comprehensiveness of the answer. It measures the continuum\
+        \ between an overly brief, generalized response missing critical parameters\
+        \ or caveats (Bad), up to a highly comprehensive, multi-faceted answer that\
+        \ fully satisfies the informational requirements of the question (Excellent).\n\
+        \nScale definition:\n1: Bad\n2: Could be Improved\n3: Acceptable\n4: Excellent\n\
+        \nOutput only the integer score."
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_structural_clarity:
+    name: rubric_qa_pair_structural_clarity
+    description: Evaluates the intensity of structural_clarity on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - structural_clarity
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of Question and Answer (Q&A) pairs for\
+        \ a public health information platform. \nIn this ecosystem, individuals ask\
+        \ questions regarding the COVID-19 pandemic, and an informational text passage\
+        \ is provided as the answer. Your evaluation must be grounded in this specific\
+        \ context of health-related information exchange.\n\nYour task is to evaluate\
+        \ the provided Q&A Pair conditional strictly on its structural clarity.\n\
+        Evaluates the compositional logic and syntactic organization of the answer.\
+        \ It measures the continuum between dense, poorly formatted blocks of text\
+        \ with chaotic syntax (Bad), up to highly intuitive, perfectly organized information\
+        \ that utilizes clear formatting (such as bullet points) to separate complex\
+        \ ideas (Excellent).\n\nScale definition:\n1: Bad\n2: Could be Improved\n\
+        3: Acceptable\n4: Excellent\n\nOutput only the integer score."
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+  qa_pair_actionability_and_utility:
+    name: rubric_qa_pair_actionability_and_utility
+    description: Evaluates the intensity of actionability_and_utility on the Q&A Pair
+    token_constraints:
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    template_tags:
+    - rubric
+    - scale_4
+    - trait_intensity
+    - actionability_and_utility
+    - qa_pair
+    - feedback_qa
+    - formative
+    template_chat:
+      system: "You are an expert evaluator of Question and Answer (Q&A) pairs for\
+        \ a public health information platform. \nIn this ecosystem, individuals ask\
+        \ questions regarding the COVID-19 pandemic, and an informational text passage\
+        \ is provided as the answer. Your evaluation must be grounded in this specific\
+        \ context of health-related information exchange.\n\nYour task is to evaluate\
+        \ the provided Q&A Pair conditional strictly on its actionability and utility.\n\
+        Evaluates the functional and practical directives contained within the response.\
+        \ It measures the continuum between purely theoretical, passive answers that\
+        \ provide no distinct next steps or resources (Bad), up to highly actionable\
+        \ responses that provide explicit resources, functional directives, and clear\
+        \ guidance (Excellent).\n\nScale definition:\n1: Bad\n2: Could be Improved\n\
+        3: Acceptable\n4: Excellent\n\nOutput only the integer score."
+      user: 'Question:
+
+        {question}
+
+
+        Answer:
+
+        {answer}'
+metadata:
+  description: Formative Decomposition FeedbackQA, Scale 4, SPV1
+  suite_tags:
+  - formative
+  - qa_pair
+  - rubric
+  - trait_intensity
+  - scale_4
+  - feedback_qa

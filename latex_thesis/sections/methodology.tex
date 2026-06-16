@@ -1,25 +1,200 @@
 % !TEX root = ../main.tex
 
-\section{Methods}
+%TODO: Uniform language, criteria or dimensions?
+\section{Methods}\label{sec:methods}
+
+This section is divided into three parts: the general evaluation procedure, the implementation of convergent validity, and the implementation of predictive validity.
+
+The first part describes how the LLM evaluations are obtained and diagnosed. It covers model selection, prompt construction, experimental conditions, logit-based score extraction, and the diagnostic metrics used to assess whether the LLM outputs exhibit favorable properties for formative measurement (Section~\ref{sec:methods_instrument_diag}).
+
+The second part assesses convergent validity using the academic dataset \textit{FeedbackQA} \citep{li_using_2022}. \textit{FeedbackQA} contains Q\&A pairs with human evaluations of answer quality. We define \textit{Q\&A Answer Quality} as a formative construct and decompose it into four dimensions. To test convergent validity, we estimate regression models in which the human ratings are regressed on the LLM measurements.
+
+The third part assesses predictive validity using the proprietary industry dataset \textit{Barter Deals}. \textit{Barter Deals} contains written collaboration opportunities for creators, referred to as Deals. In a typical Deal, a company offers a product, service or experience in exchange for promotional creator content. On the Barter marketplace, creators view these offers and apply to the Deals they find appealing. This provides the external behavioral criterion used to assess predictive validity: the total number of applications a Deal receives within its first 7 days of going live (\textit{Apps After 7 Days}). We define \textit{Deal Attractiveness} as a formative construct and decompose it at two levels: first into three macro-dimensions, and then into ten fine-grained dimensions. To test predictive validity, we estimate regression models in which \textit{Apps After 7 Days} is regressed on the LLM measurements and additional market control variables.
+
+% So now, without further ado, let us get into the methods!
+
+\subsection{General Evaluation Procedure \& Diagnostics}
+
+\subsubsection{Model selection}
+
+To perform evaluations we select four popular small-scale, open-source instruction-tuned models: Llama-3.2-3B-Instruct ("Llama 3.2") (Meta), Qwen3-4B-Instruct-2507 ("Qwen 3") \citep{qwen3technicalreport} (Alibaba), Qwen/Qwen3.5-4B ("Qwen 3.5") (Alibaba), and google/gemma-4-E2B-it ("Gemma 4") (Google). These models were selected to represent recent small-scale open-source instruction-tuned evaluators that are feasible for logit-based evaluation. Notably, Qwen 3 has previously shown to outperform other similar sized open-source LLMs in evaluation tasks \citep{gu_survey_2025}, which motivates its inclusion alongside the more recent Qwen 3.5.
+
+The use of open-source models is methodologically required because the proposed scoring procedure depends on access to next-token logits. The focus on small instruction-tuned models reflects the operational setting of the industrial partner, where repeated evaluation requires models that are efficient and inexpensive to run at scale.
+
+\subsubsection{Prompt Architecture \& Experimental Conditions}\label{sec:meth_prompt}
+
+All evaluations use a standardized prompt structure. For each document $d$ and criterion $c_i$, the model input is defined as the triplet
+\[
+    \mathbf{u}_i(d) = [\, s \,;\, c_i \,;\, d \,].
+\]
+where $s$ denotes the system context and task instruction, $c_i$ denotes the criterion specification, and $d$ denotes the target artefact. The three components are defined as follows:
+
+\begin{itemize} 
+    \item $s$ \textbf{(System Context \& Task):} The baseline instruction that defines the evaluator role, the application setting, and the general evaluation task. 
+    \item $c_i$ \textbf{(Criterion Specification):} The prompt-level measurement target. This includes the semantic definition of the construct or criterion being evaluated, together with the Likert-scale anchors used to define the rating levels. 
+    \item $d$ \textbf{(Target Document):} The artefact to be evaluated, such as a Q\&A pair in FeedbackQA or the relevant Deal text in Barter Deals. 
+\end{itemize}
+
+Across experimental conditions, the system context $s$ and target document $d$ are held constant. The experimental manipulation is implemented through the content and structure of the criterion specification $c_i$. The experimental design differs per dataset; for \textit{FeedbackQA}, see Section~\ref{sec:qa_experimentaldesign}, for \textit{Barter Deals}, see Section~\ref{sec:barter_experimentaldesign}. 
 
 
-\subsection{Data}
+\subsubsection{Logit-Based Score Extraction}\label{sec:meth_decoding}
 
-Below we provide an overview of the two datasets that were used and relevant descriptives. Sample data can be found in Appendix \ref{app:sample_data}
+After constructing the evaluation triplet $\mathbf{u}_i(d)$, we instantiate and supply it to the LLM in Chat Template format, consisting of successive turns with fixed roles. The \emph{system} turn contains $s$ and $c_i$\footnote{For the informed baseline condition, $c_i$ represents a composite set of criteria rather than an isolated dimension; see Section~\ref{sec:qa_experimentaldesign}.}, and the \emph{user} turn contains $d$.
 
-\subsubsection{FeedbackQA (Human Labels)} 
+Generation begins at the \emph{assistant} turn, which we manually prefix with the literal string \texttt{Rating: } to condition the next-token distribution toward the evaluation tokens (see Appendix~\ref{app:apply_chat_template} for exact templates). We then perform a single forward pass to obtain the next-token logits $\mathbf{z}(\mathbf{u}_i) \in \mathbb{R}^{|\mathcal{V}|}$.
 
-The \textit{FeedbackQA} dataset \citet{li_using_2022} contains evaluations of Q\&A pairs ($n=5660$). Q\&A pairs related to Covid-19 were scraped from the websites of WHO, US Government, UK Government, Canadian government, and the Australian government. Crowd-source workers from English-speaking countries were hired through Amazon's MTurk platform to rate each Q\&A pair and provide feedback. The rating is performed on a four-point likert scale (\textit{bad, could be improved, good, excellent}). The feedback concerns "a natural language explanation elaborating on the strengths and/or weaknesses of the answer" \citep{li_using_2022}. Since each Q\&A pair contains two ratings, we aggregate both into the mean to obtain our "ground truth" target variable. 
+We restrict the logits to the subset of rating tokens $\mathcal{S} = {'1', \cdots, 'K'}$, where $K$ represents the maximum integer of the specified Likert scale. This yields the restricted logit vector $\mathbf{z}_{\mathcal{S}}(\mathbf{u}_i) = {z_k(\mathbf{u}_i)}*{k \in \mathcal{S}}$.
+
+The probability distribution over the rating tokens is obtained by applying a softmax to the restricted logit vector:
+\begin{equation}
+P_{\mathcal{S}}(k \mid \mathbf{u}_i) = \frac{\exp(z_k(\mathbf{u}_i))}{\sum*{j \in \mathcal{S}} \exp(z_j(\mathbf{u}_i))}.
+\end{equation}
+This defines a discrete probability distribution over $\mathcal{S}$, from which we derive two statistics: the expected value (EV), used as the evaluation score, and the normalized Shannon entropy, used as a diagnostic of distributional spread.
+
+The expected value represents the LLM's evaluation for a given prompt-document pair, where lower values correspond to lower ratings on the given criterion and higher values correspond to higher ratings. The EV is used as the primary LLM-derived measurement in the validation models and is computed as
+
+\begin{equation}\label{eq:weighted_score}
+x_i^{\text{EV}} = \sum_{k \in \mathcal{S}} v(k) \cdot P_{\mathcal{S}}(k \mid \mathbf{u}_i),
+\end{equation}
+where $x_i^{\text{EV}}$ is the EV score, and $v(k)$ is a function that maps token string $k$ to its corresponding integer value. This yields a continuous score that uses the probability mass assigned to each rating category. EV ratings are z-standardized within each model, dataset, condition, and criterion before entering the regression models to facilitate inter-model comparisons.
+
+The normalized Shannon entropy captures how probability mass is distributed across the rating tokens. Low entropy indicates that probability mass is concentrated on one or a few tokens, while high entropy indicates that probability mass is distributed more evenly across the rating scale. Entropy is used for diagnostic purposes, as described further in Section~\ref{sec:methods_instrument_diag}.
+
+To make entropy comparable across scales with different numbers of categories, such as the four-point scale used for FeedbackQA and the seven-point scale used for Barter Deals, we apply a normalization factor. Let $K = |\mathcal{S}|$ denote the number of valid rating categories. The normalized entropy $H_i$ for prompt sequence $\mathbf{u}*i$ is defined as:
+\begin{equation}\label{eq:normalized_entropy}
+H_i = - \frac{1}{\ln(K)} \sum*{k \in \mathcal{S}} P_{\mathcal{S}}(k \mid \mathbf{u}*i) \ln P*{\mathcal{S}}(k \mid \mathbf{u}_i).
+\end{equation}
+
+This specification takes values in $[0,1]$, attaining 0 when all probability mass is concentrated on a single token and 1 when the distribution is uniform.
+
+
+\subsubsection{Instrument Diagnostics}\label{sec:methods_instrument_diag}
+
+Below, we outline the diagnostics used to characterize the LLM-derived measurements. Additional details are provided in Appendix~\ref{app:measurement_diagnostics}.
+
+% We use three diagnostics to assess whether the LLM-derived measurements behave as usable formative measurement variables: distributional spread, residual verbosity sensitivity, and construct separability. Further details on the interpretations are provided in Appendix~\ref{app:measurement_diagnostics}.
+
+
+\paragraph{Distributional Properties of Evaluations and Entropy}
+
+To empirically diagnose the sensitivity of the LLMs as continuous measurement instruments, we analyze the first two moments (mean and standard deviation (SD)) of both the EV ratings and the normalized Shannon entropy (Table~\ref{tab:scale_utilization}). These summary statistics provide a preliminary diagnostic of whether the logit-derived metrics exhibit the properties expected from a continuous measurement instrument: The EV dispersion indicates scale utilization, and the entropy indicates whether the distribution that produced the EV scores is concentrated around single integers or evenly distributed across the rating scale. More detailed interpretations on rating regimes are provided in Appendix~\ref{app:rating_regimes}.
+
+\paragraph{Diagnosing Residual Verbosity Sensitivity}
+
+LLMs have been shown to prefer longer, more verbose documents over shorter documents even when quality is comparable, a phenomenon known as verbosity bias \citep{saito_verbosity_2023}. This is problematic for measurement, since a valid instrument should respond to the specified criterion rather than to construct-irrelevant variation in text length. We therefore diagnose whether LLM ratings remain sensitive to text length after documents have reached a mature length. We refer to this broader diagnostic as \textit{residual verbosity sensitivity}. 
+
+To quantify residual verbosity sensitivity, we compute the absolute Cohen's $d$ difference in mean EV ratings between documents in Q3 and Q4 of the text-length distribution. The diagnostic is computed separately by model and criterion. Larger values indicate stronger residual sensitivity to length among relatively long documents. Following \citet{cohen1988statistical}, we interpret $|\delta| \approx 0.2$ as small, $|\delta| \approx 0.5$ as medium, and $|\delta| \geq 0.8$ as large. For specifics, see Appendix~\ref{app:residual_verbosity_sensitivity}.
+
+
+\paragraph{Construct Separability and Multicollinearity}
+
+We diagnose construct separability using VIF, interpreting values above 5 as moderate and values above 10 as substantial multicollinearity. For specifics, see Appendix~\ref{app:vif_diagnostics_prose}. 
+
+
+% Finally, we assess whether the criterion-level evaluations contain empirically separable information. This is especially important for the formative specifications, where the criterion-level LLM evaluations are intended to capture distinct components of the target construct. Moreover, low separability is reflected in multicollinearity, which limits the interpretability of regression coefficients. 
+
+% We diagnose construct separability using the Variance Inflation Factor (VIF). Following common diagnostic practice, we interpret VIF values below 5 as indicating limited multicollinearity, values between 5 and 10 as indicating moderate multicollinearity, and values above 10 as indicating substantial multicollinearity. 
+
+\subsection{Convergent Validity: FeedbackQA}\label{sec:methods_feedbackqa}
+
+\subsubsection{Dataset Overview}
+
+The \textit{FeedbackQA} dataset \citet{li_using_2022} contains evaluations of Q\&A pairs ($n=9065$) related to COVID-19, which were scraped from the websites of WHO, US Government, UK Government, Canadian Government, and the Australian Government. Crowdsourced workers from English-speaking countries were hired through Amazon's MTurk platform to rate each Q\&A pair and provide feedback on their rating. The rating is performed on a four-point Likert scale (\textit{bad, could be improved, good, excellent}). The feedback concerns "a natural language explanation elaborating on the strengths and/or weaknesses of the answer" \citep{li_using_2022}, which we leverage to determine the formative indicators.
+
+The text length of the Q\&A pairs has a mean of 169.09 words with a standard deviation of 148.93, with the full empirical distribution visualized in Appendix \ref{app:verbosity_diagnostics}. The mature text brackets used for the verbosity-bias diagnostic are defined from the corpus-specific length distribution, where the median word count is 126 words and the 75th percentile is 202 words.
+
+%TODO move to appendix?
+The distribution of the annotation-level human ratings is shown in Table~\ref{tab:human_ratings_dist}. The distribution is heavily bimodal, with the majority of the ratings either 1 or 4 (65.21\%), while the intermediate ratings of 2 or 3 account for the remainder (34.79\%). 
+
+\begin{table}
+    \caption{Distribution of Human Ratings for FeedbackQA}\label{tab:human_ratings_dist}
+    \begin{tabular}{lcc}
+    \toprule
+    Rating & Count (Annotations) & Percentage (\%) \\
+    \midrule
+        1 - Bad & 6086 & 33.57 \\
+        2 - Could be improved & 3120 & 17.21 \\
+        3 - Good & 3188 & 17.58 \\
+        4 - Excellent & 5736 & 31.64 \\
+    \bottomrule
+    \end{tabular}
+\end{table}
 
 
 
 
 
-\subsubsection{Barter deals (Behavioral KPI)}
+\subsubsection{Definition of Experimental Conditions and Evaluation Criteria}\label{sec:qa_experimentaldesign}
 
-The \textit{Barter Deals} dataset contains 'deals' written by companies ($n=5111$). On the Barter platform, companies ('partners') can barter goods and services in exchange for influencer content. For example, a company that sells hair styling tools offers their new product in exchange for a video of a creator using it; or, a museum provides free entrance to a creator and their friends in exchange for a video of their visit. The 'deal text' is the marketing copy that is posted on the Barter platform as part of the deals that creators can apply to. 
+We define three experimental conditions: the naive baseline, the informed baseline, and the formative experimental condition. The naive baseline evaluates the holistic construct of \textit{Overall Answer Quality} using a minimal semantic definition.
 
-In the current study, we consider the 'deal text' (marketing copy) and the number of applications the deal has obtained after the first seven days of going live (\textit{applications after 7 days}). The variable \textit{applications after 7 days} is chosen because it serves as a behavioral proxy for marketing copy quality. One might apply to a deal because they like the product or the brand, but they could also be convinced to apply bceause of the way the copy is written. A valid measurement of marketing copy quality would therefore be predictive of whether somebody applies to a deal or not. By controlling for the fixed effects of the brand and the product category we can separate the effects of marketing copy quality, and hereby determine whether the LLM measurements satisfy predictive validity. 
+The formative condition is constructed by deriving dimensions empirically from the natural language explanations provided by the crowdsourced raters, supported by the thematic analysis conducted by \citet{li_using_2022}. These explanations indicate that reviewers primarily evaluate whether answers are relevant, complete, focused, and clearly expressed. We therefore decompose \textit{Q\&A Answer Quality} into four formative dimensions: \textit{Topical Alignment}, \textit{Information Coverage}, \textit{Topical Concentration}, and \textit{Communicative Clarity}. The full criterion definitions are provided in Appendix~\ref{app:evaluation_criteria}.
+
+The informed baseline uses the same enriched descriptions of the four dimensions, but requires the LLM to evaluate them jointly and output a single holistic score. This intermediate baseline distinguishes the effect of enriched construct specification from the additional effect of independently measuring each formative dimension.
+
+
+
+
+% We define three experimental conditions: the naive baseline, the informed baseline, and the formative experimental condition. The naive baseline evaluates the holistic construct of \textit{Overall Answer Quality} using a minimal semantic definition.
+
+% To construct the formative condition, we derive the dimensions empirically from the natural language explanations provided by the crowdsourced raters, supported by the thematic analysis conducted by \citet{li_using_2022}. These explanations indicate that reviewers primarily evaluate whether answers are relevant, complete, focused, and clearly expressed. We therefore decompose \textit{Q&A Answer Quality} into four formative dimensions: \textit{Topical Alignment}, \textit{Information Coverage}, \textit{Topical Concentration}, and \textit{Communicative Clarity}. The full criterion definitions are provided in Appendix~\ref{app:evaluation_criteria}.
+
+% Finally, the informed baseline uses the exact same enriched descriptions of the four dimensions but requires the LLM to evaluate them jointly and output a single holistic score. This intermediate baseline distinguishes the effect of enriched construct specification from the additional effect of independently measuring each formative dimension.
+
+
+% To construct the formative condition, we derive our dimensions empirically from the natural language explanations provided by the crowdsourced raters, supported by the thematic analysis conducted by \citet{li_using_2022}. Generally, these explanations reveal that reviewers prioritize answers that are relevant, complete, direct, and well-structured. We operationalize these priorities into four formative dimensions:
+
+% \begin{itemize}
+%     \item \textit{Topical Alignment} (the degree to which the answer addresses the issue and stated constraints of the question)
+%     \item \textit{Information Coverage} (the degree to which the answer provides enough relevant information to serve as a full answer)
+%     \item \textit{Topical Concentration} (the degree to which the answer remains centered on the asked issue throughout the passage)
+%     \item \textit{Communicative Clarity} (the degree to which the answer is expressed in a clear, well-organized, and easy-to-follow way)
+% \end{itemize}
+
+% In the formative condition, the LLM measures each of these four dimensions independently.
+
+
+\subsubsection{Model Specification}
+
+\paragraph{Convergent Validity}
+
+To assess convergent validity, we regress human-annotated Q\&A quality on the LLM-derived measurements, treating the four-point Likert ratings as continuous interval data. Because each document $d$ has one LLM evaluation but two human ratings indexed by $j \in \{1,2\}$, the regression is estimated at the annotation level. Each document-level LLM measurement is therefore paired separately with each human rating $y^{\text{H}}_{dj}$. To control for verbosity bias, all specifications include the natural logarithm of the document word count, $\ln(W_d)$.
+%TODO change "verbosity bias" to smth like text length effects?
+
+For the formative condition, we estimate:
+\begin{equation}\label{eq:feedbackqa_formative_regression}
+    y^{\text{H}}_{dj} = \beta_0 + \sum_{k \in K_F} \beta_k x_{k,d} + \delta \ln(W_d) + \varepsilon_{dj},
+\end{equation}
+where $y^{\text{H}}_{dj}$ denotes the human quality rating assigned to document $d$ in annotation $j$. The set $K_F$ contains the four formative dimensions. The predictor $x_{k,d}$ denotes the continuous LLM EV measurement for criterion $k$ and document $d$.
+
+For the naive and informed baselines, the model is restricted to a single holistic LLM measurement:
+\begin{equation}\label{eq:feedbackqa_baseline_regression}
+    y^{\text{H}}_{dj} = \beta_0 + \beta_1 x_{\text{holistic}, d} + \delta \ln(W_d) + \varepsilon_{dj}.
+\end{equation}
+Here, $x_{\text{holistic},d}$ denotes the condition-specific holistic EV measurement for document $d$: the minimally specified \textit{Overall Answer Quality} score in the naive baseline and the enriched holistic answer-quality score in the informed baseline.
+
+Because the LLM measurements and word counts vary at the document level, while the human ratings vary at the annotation level, residuals may be correlated within documents. We therefore estimate all models using Ordinary Least Squares (OLS) with standard errors clustered at the document level.
+
+\paragraph{Cross-Validated Alignment Metrics}
+
+For each specification, we generate out-of-fold predictions and compute RMSE, Pearson's $r$, Spearman's $\rho$, and Kendall's $\tau$ between predicted and observed ratings. Five-fold cross-validation is grouped by document, ensuring that the two annotations for the same document never appear in both the training and test sets. Human-human alignment is reported as a reference benchmark for annotation consistency, not as a competing model.
+
+
+
+\subsection{Predictive Validity: Barter Deals}\label{sec:methods_barter}
+
+\subsubsection{Dataset Overview}
+
+The \textit{Barter Deals} dataset contains \textit{Deals} written by companies ($n=3137$). Barter is an online marketplace where companies (\textit{partners}) can barter goods and services in exchange for influencer content. For example, a company that sells hair styling tools offers their new product in exchange for a video of a creator using it; or, a museum provides free entrance to a creator and their friends in exchange for a video of their visit. Creators view Deals on the Barter app, and can apply to the deals for which they are eligible. 
+
+The \textit{Deal Text} is the marketing copy that is posted on the Barter platform as part of the Deals that creators can apply to, and consists of a Title, Body, and Requirements. The Title provides a quick overview of the deal. The Body contains persuasive marketing copy used to inform the creator about details of the product, service, or experience being offered, as well as optional additional rewards. The Requirements section specifies what the company requires from the creator, such as the number of videos, script constraints, or details on the intended advertising use of the content.
+
+%TODO applications or Apps?
+The outcome variable is the number of applications a Deal receives within the first seven days of going live (\textit{applications after 7 days}). This variable is used as a behavioral criterion for \textit{Deal Attractiveness}. Although application volume is determined by both textual quality and market structure, meaningful differences in the attractiveness of Deals are expected to be partially reflected in creator application behavior.
+
+Corpus-specific text-length statistics and quartile thresholds for the Barter verbosity diagnostic are reported in Appendix~\ref{app:verbosity_diagnostics}.
+
 
 \begin{table}[h]
     \centering
@@ -29,146 +204,78 @@ In the current study, we consider the 'deal text' (marketing copy) and the numbe
     \toprule
     Variable & $N$ & Mean & SD & Min & P25 & Median & P75 & Max \\
     \midrule
-    Applications after 7 days & 5111 & 9.48 & 16.97 & 0 & 0 & 3 & 11 & 188 \\
+    Applications after 7 days & 3137 & 9.48 & 16.97 & 0 & 0 & 3 & 11 & 188 \\
     \bottomrule
     \end{tabular}
 \end{table}
 
-The KPI is highly dispersed with substantial mass at zero (25th percentile = 0), motivating a count model that accounts for overdispersion.
+The application count is highly dispersed with substantial mass at zero (25th percentile = 0), motivating a count model that accounts for overdispersion, such as a Negative Binomial.
 
 
-\subsubsection{Text Length Overview}\label{sec:text_length_overview}
+\subsubsection{Definition of Experimental Conditions and Evaluation Criteria}\label{sec:barter_experimentaldesign}
 
-To characterize the inputs to the LLM evaluator (and motivate truncation choices), we summarize the distribution of estimated token counts for the two datasets. Table~\ref{tab:token_stats} reports standard descriptive statistics.
+We define three experimental conditions: the naive baseline, the macro-formative baseline, and the formative condition. All dimensions across these conditions are measured on a seven-point Likert scale to allow finer-grained variation in the evaluations.
 
-\begin{table}[h]
-    \centering
-    \caption{Descriptive statistics of input text length (estimated token counts).}
-    \label{tab:token_stats}
-    \begin{tabular}{lrrrrr}
-    \toprule
-    Dataset & $N$ & Mean & SD & Median & Max \\
-    \midrule
-    FeedbackQA (Q\&A text) & 5660 & 166.07 & 143.83 & 124 & 2306 \\
-    Barter Deals (marketing copy) & 5111 & 79.27 & 73.65 & 59 & 886 \\
-    \bottomrule
-    \end{tabular}
-\end{table}
+While the informed baseline in Section \ref{sec:methods_feedbackqa} tests the general efficacy of structural decomposition, the macro-formative baseline used for Barter Deals isolates the value of fine-grained decomposition relative to broader macro-level evaluations commonly used in NLP \citep{fabbri_summeval_2021, liu_g-eval_2023, zhong_towards_2022}.
 
-The FeedbackQA texts are substantially longer on average than the marketing copy (median: 124 vs.\ 59 tokens) and exhibit a heavier right tail, with extreme cases exceeding 2000 tokens. This has direct implications for prompt budgeting and truncation. Notably, the marketing copy dataset includes empty texts (minimum token count $=0$), which we treat as missing/invalid inputs in downstream analyses.
+The naive baseline evaluates the holistic construct of \textit{Overall Deal Attractiveness}, measuring "the overall appeal of the barter opportunity from the perspective of a typical content creator." 
+
+The macro-formative baseline serves as intermediate condition, and jointly measures the three theoretical pillars of \textit{Deal Attractiveness} established in Section \ref{sec:theor_macro_pillars}: Reward, Cost, and Pitch Quality. 
+%TODO: define \ref{sec:theor_macro_pillars}
+
+The formative condition decomposes the three macro-dimensions into ten fine-grained dimensions: \textit{Brand Prestige}, \textit{Perceived Economic Value}, \textit{Creator Brand Alignment}, \textit{Functional Utility}, \textit{Product Universality}, \textit{Workload Volume}, \textit{Creative Restrictiveness}, \textit{Call-to-Action Strength}, \textit{Rhetorical Objectivity}, and \textit{Proposition Clarity}. The full criterion definitions are provided in Appendix~\ref{app:evaluation_criteria}.
 
 
 
+\subsubsection{Model Specification}
 
-\subsection{Operationalization of Evaluation Constructs}
+\paragraph{Predictive Validity}
+To assess predictive validity in a real-world behavioral setting, we model creator application volume using the Barter Deals dataset. The dependent variable, \textit{applications after 7 days}, is an overdispersed count outcome, so we estimate Negative Binomial regression models with a log link. Because multiple Deals may be posted by the same brand, all models use standard errors clustered at the partner ID level.
 
-To empirically measure the efficacy of the formative prompting framework, we define a baseline control condition (\textit{holistic prompt}) and an experimental condition (\textit{formative prompt}). In the control condition, we treat the construct holistically and directly measure the construct of interest (\textit{Q\&A answer quality} or \textit{marketing copy quality}). In the experimental condition we treat the construct as a formative variable and measure its causal indicators. 
-
-
-\subsubsection{Prompt Design \& Construct Definition}\label{sec:prompt_design}
-
-The prompts are specified as the input sequence $\mathbf{u}_i(d) = [\, s \,;\, c_i \,;\, d \,]$, with task instruction $s$, criterion specification $c_i$, and document $d$. We instantiate $\mathbf{u}_i(d)$ in a chat format ("Chat Template") consisting of successive turns with fixed roles: a \emph{system} turn (general instructions), a \emph{user} turn (the document), and an \emph{assistant} turn (the model output). The system message contains $s$ and $c_i$ (in that order), the user message contains $d$, and generation starts at the assistant turn. We prefix the assistant turn with the literal string \texttt{Rating: } to bias the next-token distribution toward the rating tokens, which was empirically shown to provide more stable measurements. An example chat template is provided in Appendix~\ref{app:apply_chat_template}.
-
-The criteria $c_i$ provide the LLM with the semantic grounding for the evaluation, and are defined through a qualitative analysis of human evaluations for a particular construct. Recall from Section \ref{sec:theoretical_definition} that in a formative specification the construct is defined by the indicators, and omitting an indicator changes the meaning of the construct. Therefore, we select criteria intended to cover the entire construct domain.  
-
-% Therefore, it is vital that the criteria cover the entire construct domain (\textit{content validity}). It should be noted that this is a theoretical notion, and its practical interpretation is case-dependent. The main consideration in criterion definition is this: measurement validity hinges on (1) careful consideration on which criteria to include, and (2) adequate definition of each criterion. 
-
-
-\paragraph{FeedbackQA}
-
-For the question answering task, we derive the formative dimensions from the feedback provided in \citet{li_using_2022}. The authors identify numerous criteria that define "answer quality" by examining the explanations crowd-sourced workers provided for their ratings. From this, we derive three dimensions:
-
-\begin{itemize}
-    \item \textbf{Relevance:} The extent to which the answer avoids irrelevant content
-    \item \textbf{Completeness:} Whether the answer covers all aspects of the query.
-    \item \textbf{Directness:} Whether the answer directly answers the question.
-\end{itemize}
-
-We expect a degree of covariance among the dimensions, since high-quality answers generally score high across all three. However, the formative framework allows for orthogonal variation across the dimensions as well. For example, \citet{li_using_2022} highlight an answer rated \textit{could be improved} (2/4) with the feedback: \textit{"The answer is about some of the online risks but not about how to protect against them."}. This indicates an answer that is relevant but incomplete. While a holistic prompt forces the model to compress the conflicting signals into a single scalar value, the formative prompt explicitly models this through decomposition.
-
-\paragraph{Barter Deals}
-
-(\textit{this is still in draft, and will be changed})
-
-
-For the Barter dataset, we derive the criteria through an analysis of the functional requirements defined by the industrial partner. We reviewed internal guidelines on "effective copy" and identified the key linguistic features hypothesized to drive conversion. The "Marketing Effectiveness" construct is decomposed into:
-\begin{itemize}
-    \item \textbf{Persuasiveness:} The degree to which the text effectively highlights the value proposition and motivates the reader to consider the offer.
-    \item \textbf{Clarity:} The extent to which the offer and terms are communicated unambiguously, minimizing the cognitive effort required to understand the deal.
-    \item \textbf{Call-to-Action Strength:} The effectiveness of the final directive in compelling the user to take immediate, concrete action.
-\end{itemize}
-
-
-To operationalize each criterion $c_i$ as a measurable indicator, we define score-level descriptions for the $1$--$4$ rating scale. By defining each level of the scale, we provide additional context that anchors the intended interpretation of the ratings and reduces ambiguity in how the model applies the scale.
-
-\subsection{Model Selection \& Implementation}
-
-To perform evaluations we select three popular small-scale, open-source instruction-tuned models: Qwen3-4B-Instruct-2507 \citep{qwen3technicalreport} (AliBaba), Gemma3-4B-IT \citep{gemma_2025} (Google), and Llama-3.2-3B-Instruct (Meta). These models were selected to represent the current state-of-the-art open-source models. Notably, Qwen has previously shown to outperform other similar sized open-source LLMs in evaluation tasks \citep{gu_survey_2025}. 
-
-The choice of model type (small, open-source, instruction-tuned) is based on the methodological requirements and the operational constraints of the industrial partner. Methodologically, the use of open-source models enables "white-box" access to the model's probability distribution. This allows us to compute the logit-weighted mean unavailable in standard black-box APIs. Moreover, we prefer instruction-tuned models over base models to ensure adherence to the evaluation instructions provided in the prompt. Operationally, Barter requires the evaluator to balance measurement validity with cost-efficiency and latency. Unlike proprietary models (e.g., GPT-4) where costs scale linearly with volume, small open-source models incur only fixed compute costs, making them a more scalable solution for high-volume deployment. 
-
-We implement the inference pipeline using the HuggingFace \texttt{transformers} library \citep{wolf2020transformers}. To facilitate the single-token scoring method, we developed a custom generation wrapper that bypasses the standard autoregressive loop. Instead of sampling text, this wrapper performs a single forward pass on the prompt sequence and extracts the raw unnormalized logits. 
-
-\newpage
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=1.0\textwidth]{figures/evaluator_diagram.png}
-    \caption{\textbf{Logit-Based LLM Evaluation Pipeline.} The input sequence is processed through a frozen transformer architecture (single forward pass) to generate logits for the next token. Rather than sampling text, the evaluator extracts probabilities for specific rating tokens (1–4) to obtain evaluations. N.b.: Specifications are ommitted from the ChatTemplate for brevity, for a full example see Appendix \ref{app:apply_chat_template}.}
-    \label{fig:evaluator_diagram}
-\end{figure}
-
-
-\subsection{Computation of evaluations}
-
-The evaluation triplet $\mathbf{u}_i(d)$ is supplied in "Chat Template" format to the LLM, and we perform a single forward pass to obtain the next-token logits $\mathbf{z}(\mathbf{u}) \in \mathbb{R}^{|\mathcal{V}|}$. We subset the logits for the tokens $\mathcal{S} = \{ \text{`1'}, \text{`2'}, \text{`3'}, \text{`4'} \}$, adhering to the four-point Likert scale in \citet{li_using_2022}
-
-To obtain the evaluations, we compute the mode and the weighted mean of the constrained logit distribution. 
-Let $v(k)$ be a function that maps a token string $k$ to its integer value. The \textit{modal score} $x_i^{\text{mode}}$ corresponds to a standard greedy decoding procedure (temperature $T=0$) and is computed as:
-\begin{equation} 
-    x_i^{\text{mode}} = v\left(\underset{k \in \mathcal{S}}{\mathrm{argmax}} \; P_{\mathcal{S}}(k \mid \mathbf{u}_i)\right).
+Before introducing the LLM-derived measurements, we estimate a structured base model containing only non-LLM platform variables:
+\begin{equation}\label{eq:barter_base_regression}
+    \ln(\mu_i) = \beta_0 + \gamma \mathbf{Z}_i + \alpha_t,
 \end{equation}
+where $\mu_i$ is the expected application count for Deal $i$. The vector $\mathbf{Z}_i$ contains structural controls for strict follower requirements (defined by Deals that require creators to have $>4000$ followers in order to be eligible to apply), competitor density, platform strategy, geographic market scope, and product category. To account for verbosity-related length effects, $\mathbf{Z}_i$ also includes separate quartile-based indicators for body length and requirements length. This allows length effects to vary across text-length brackets rather than assuming a linear relationship between text length and the outcome variable. Finally, $\alpha_t$ denotes month-year fixed effects, which absorb platform growth, seasonal variation, and macro-level temporal shocks. The purpose of this base specification is to partial out predictable market structure before evaluating the LLM-derived measurements.
+%TODO have to explain competitor density, maybe in Appendix
 
-The \textit{expected score} $x_i^{\text{mean}}$ is computed by first normalizing the logits over $\mathcal{S}$ via a softmax function to obtain probabilities, and then calculating the probability-weighted sum:
-\begin{equation}\label{eq:weighted_score}
-    x_i^{\text{mean}} = \sum_{k \in \mathcal{S}} v(k) \cdot P_{\mathcal{S}}(k | \mathbf{u}_i) 
+
+The base model is then augmented with the LLM-derived measurements to test whether they explain additional variation in creator applications. For a given set of LLM predictors $K$, the augmented specification is:
+\begin{equation}\label{eq:barter_augmented_regression}
+    \ln(\mu_i) = \beta_0 + \sum_{k \in K} \beta_k x_{k,i} + \gamma \mathbf{Z}_i + \alpha_t,
 \end{equation}
+where $x_{k,i}$ denotes the continuous LLM Expected Value (EV) measurement for criterion $k$ and Deal $i$.
 
-By considering the token probabilities we incorporate model estimates of rating uncertainty, instead of collapsing this information into an integer score through the mode. As \citet{liu_g-eval_2023} show, this more fine-grained approach can provide better evaluations. 
+The set $K$ varies by measurement condition. In the naive baseline, $K$ contains only the holistic \textit{Overall Deal Attractiveness} score. In the macro-formative baseline, $K$ contains the three macro-pillars: Reward, Cost, and Pitch Quality. In the formative condition, $K$ contains the ten fine-grained Deal Quality dimensions. 
 
+\paragraph{Model Comparison Criteria}
 
-\subsection{Experimental design \& Validation Strategy}
+Model performance is evaluated using both in-sample likelihood-based criteria and out-of-sample cross-validation. For the in-sample comparison, we report the log-likelihood, McFadden pseudo-$R^2$, AIC, and BIC to assess whether the LLM-augmented specifications improve model fit beyond the structured baseline while accounting for model complexity.
 
-\subsubsection{Alignment with Human Raters (FeedbackQA)}
+To assess generalization, all specifications are also evaluated using $5$-fold cross-validation. In each fold, the model is estimated on the training partition and evaluated on held-out Deals. Out-of-sample performance is summarized using RMSE, Poisson deviance, and Spearman's $\rho$. RMSE captures prediction error on the original application-count scale, Poisson deviance provides a count-appropriate predictive loss, and Spearman's $\rho$ captures rank-order alignment between observed and predicted application counts.
 
-The target variable is the average of the two human evaluations of Q\&A answer quality, noting that the choice between averaging or selecting one rating column over the other yields no qualitative differences in the results.
-
-\paragraph{Correlation}
-We use Spearman $\rho$ to compute the monotonic (rank) correlation between the human evaluations and the LLM evaluations, which is interpreted as a general indicator for criterion relevance. Moreover, we compute the correlation between the formative dimensions as a diagnostic for whether the LLMs adequately distinguish the different criteria.  
-
-\paragraph{Convergent validity.}
-To assess convergent validity, we test whether LLM measurements predict human evaluations of \textit{Q\&A answer quality}.
-
-Following the formative specification in Equation~\ref{eq:convergent_validity_formative}, we instantiate the construct-level mapping $g(\mathbf{x}_d)$ as a linear model and estimate:
-\begin{equation}\label{eq:feedbackqa_formative_regression}
-    y^{\text{H}}_d
-    = \beta_0
-    + \beta_1 x_{\text{rel},d}
-    + \beta_2 x_{\text{comp},d}
-    + \beta_3 x_{\text{dir},d}
-    + \varepsilon_d,
-\end{equation}
-for Q\&A pair $d = 1,\dots,N$. Here, $y^{\text{H}}_d$ denotes the human holistic rating of answer quality for pair $d$, and $x_{\text{rel},d}$, $x_{\text{comp},d}$, and $x_{\text{dir},d}$ denote the LLM measurements of relevance, completeness, and directness, respectively. The $\beta$ coefficients correspond to the formative weights $\gamma$ from Equation \ref{eq:formative_model}.
+For the likelihood-based comparisons, improvements are reported relative to the structural baseline. $\Delta$LL is defined as $LL_{\text{model}} - LL_{\text{baseline}}$, while $\Delta$AIC and $\Delta$BIC are defined as $AIC_{\text{baseline}} - AIC_{\text{model}}$ and $BIC_{\text{baseline}} - BIC_{\text{model}}$, respectively. All three quantities are oriented so that positive values indicate improvement over the structural baseline.
 
 
-\subsubsection{Behavioral Prediction (Barter Deals)}
+% \paragraph{Model Comparison Criteria}
 
-We assess \emph{predictive validity} by testing whether the LLM-derived formative indicators predict the behavioral KPI \textit{applications after 7 days}. The underlying hypothesis is that higher-quality marketing copy increases user engagement, which should translate into more applications within the first week. We specify a time-period of seven days since deals can be left online for unspecified amounts of time, garnering more applications. One week serves as a consistent measure of deal engagement, accounting for possible time-of-day or weekday effects. 
+% Model performance is evaluated using both in-sample likelihood-based criteria and out-of-sample cross-validation. The in-sample comparison assesses whether the LLM-derived measurements improve the fitted Negative Binomial model beyond the structured baseline. For this purpose, we report the log-likelihood, McFadden pseudo-$R^2$, AIC, and BIC. The log-likelihood measures the fitted likelihood of the model, while McFadden pseudo-$R^2$ expresses improvement relative to the intercept-only model. AIC and BIC provide penalized fit criteria that account for the additional parameters introduced by the LLM-augmented specifications. Because BIC penalizes model complexity more strongly than AIC, improvements in BIC provide the more conservative test of whether the additional LLM-derived predictors improve model fit.
 
-The KPI is a non-negative count variable and is strongly right-skewed. Accordingly, we model \texttt{applications\_till\_day\_7} as a Generalized Linear Model (GLM) for count data. Let $y_d$ denote the number of applications within 7 days for deal $d$, and let $\hat{x}_i(d)$ be the LLM-measured score for indicator $i$. We specify a Negative Binomial GLM with log link:
-\begin{align}
-y_d \mid \mu_d &\sim \text{NegBin}(\mu_d, \kappa),\\
-\log(\mu_d) &= \beta_0 + \sum_{i=1}^{I} \beta_i \hat{x}_i(d) + \gamma^\top \text{category}_d,
-\end{align}
-where $\text{category}_d$ denotes category fixed effects, included to control for systematic differences in baseline application volume across categories.
+% To assess whether the in-sample improvements generalize to unseen data, we also evaluate all specifications using $5$-fold cross-validation. In each fold, the model is estimated on the training partition and evaluated on held-out Deals. Out-of-sample predictive performance is summarized using RMSE, Poisson deviance, and Spearman's $\rho$. RMSE measures the average magnitude of prediction errors on the original application-count scale. However, because RMSE is computed from squared errors, it is sensitive to extreme high-application Deals. Poisson deviance is therefore included as a count-appropriate predictive loss for evaluating predicted application counts. Finally, Spearman's $\rho$ measures rank-order alignment between observed and predicted application counts, indicating whether the model correctly orders Deals by expected application volume even when exact count prediction is difficult.
 
+% For the likelihood-based model comparison, improvements are reported relative to the structural baseline. $\Delta$LL is defined as $LL_{\text{model}} - LL_{\text{baseline}}$, while $\Delta$AIC and $\Delta$BIC are defined as $AIC_{\text{baseline}} - AIC_{\text{model}}$ and $BIC_{\text{baseline}} - BIC_{\text{model}}$, respectively. These quantities are oriented so that positive values indicate improvement over the structural baseline.
+
+%TODO Maybe move to table captions?
+
+% \paragraph{Exploratory Model Refinement}
+% After the pre-specified predictive validity models are estimated, we conduct an exploratory model-refinement analysis for the strongest-performing evaluator. This analysis is intended to support applied interpretation for the industry partner and is not used to test the main confirmatory hypotheses. Starting from the fully specified formative model, we apply both forward and backward variable selection to identify a reduced specification of LLM-derived predictors. The selected model is interpreted as a post-hoc, hypothesis-generating analysis of which textual quality dimensions appear most relevant for creator application volume.
+
+% As an exploratory industry-oriented extension, we applied the model-refinement procedure described in the Methods section to the strongest-performing evaluator, Qwen 3.5. Both forward and backward selection converged on the same reduced specification...
+
+% \subsubsection{Exploratory Industry-Oriented Model Refinement}
+
+% After estimating the pre-specified predictive-validity models, we conduct an exploratory model-refinement analysis for the strongest-performing evaluator, Qwen 3.5. The purpose of this analysis is not to test the main validity hypothesis, but to identify which LLM-derived dimensions are most relevant from an applied industry perspective.
+
+% Starting from the fully specified formative regression, we apply both forward and backward variable selection. Both procedures converge on the same reduced specification. In this model, \textit{Call-to-Action Strength} remains a statistically significant predictor of creator application volume. This suggests that, conditional on the structured platform controls and the other selected textual dimensions, the warmth and motivational force of the brand's invitation to collaborate may be an especially relevant component of Deal Attractiveness.
+
+% Because this analysis is post-hoc and model-selection-based, the resulting coefficient significance should be interpreted as exploratory rather than confirmatory. Its value lies primarily in generating actionable hypotheses for the industry partner, rather than in serving as the primary evidence for the measurement framework.
