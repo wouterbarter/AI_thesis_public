@@ -2,6 +2,12 @@
 
 \section{Related Work}
 
+% This literature review traces the development of automated text evaluation from similarity-based metrics to multi-dimensional LLM-based evaluators. The review is organized around a central argument: while decomposition has become the dominant paradigm, meaningful artefact-level measurement requires more than isolated criterion scoring. It also requires an explicit account of how criteria relate to the target construct, how they are recomposed into an overall score, and what kind of claims the resulting measurements support. The subsections therefore move from early similarity metrics, to multi-dimensional evaluation, to recent work on psychometric and validity-guided approaches, culminating in the measurement gap addressed by this thesis.
+
+
+This literature review traces two converging developments. The first is the development of automated NLG evaluation from similarity-based metrics to multi-dimensional LLM-based evaluators. The second is the use of language models in the social sciences to measure theoretical constructs from text. These literatures converge on the same methodological problem: LLMs can flexibly produce criterion-level scores, but meaningful measurement requires specifying what construct those scores support, how criteria relate to that construct, and what claims the resulting measurement permits.
+
+
 
 % \subsection{From Similarity Metrics to Multi-dimensional Evaluation}
 
@@ -29,9 +35,19 @@ Although their method correlates highly with expert annotations, it requires a c
 
 \subsection{Textual Quantification in the Social Sciences}
 
-The potential of LLMs for quantifying textual attributes is not limited to benchmarking NLG models. Given the function of language as a means for expression, linguistic analysis offers a window into human behavior. Text data analysis is used in psychology to study human behavioral traits, such as personality \citep{boydLanguagebasedPersonalityNew2017}, psychological well-being \citep{guntukuDetectingDepressionMental2017}, and emotional states \citep{kahnMeasuringEmotionalExpression2007}; in economics, to study stock market dynamics using text from news and social media \citep{manelaNewsImpliedVolatility2017}; and in political science, to study partisanship using congressional speeches \citep{gentzkowMeasuringGroupDifferences2019}. Given the abundance of text data and the costliness of manual annotation, NLP methods are therefore a natural choice to facilitate the measurement of complex constructs from text. 
+A parallel development has occurred in the social sciences, where researchers also seek to measure abstract constructs from text. This literature is relevant because it treats LLM scoring not merely as prediction or annotation, but as measurement: scores are interpreted in relation to theoretically defined constructs and validated against external evidence.
 
-The social sciences faced similar limitations as the NLG community. Dictionary methods, which consider basic features such as word count, are cheap to implement, but often too superficial to answer complex research questions. Representation-based methods, such as embedding models, are expensive to deploy, and most suitable for answering narrow research questions. LLMs again offered the potential for a one-size-fits-all solution: \citet{rathjeGPTEffectiveTool2024} show that GPT models can accurately measure numerous psychological constructs from texts in multiple different languages, and \citet{lemensUncoveringSemanticsConcepts2023} use GPT-4 to quantify semantical properties of texts, both studies achieving state-of-the-art performance. More generally, \citet{yangLLMMeasureGeneratingValid2024} propose a method to measure arbitrary concepts from text data leveraging the LLMs internal concept representation. 
+Given the function of language as a means for expression, linguistic analysis offers a window into human behavior. Text data analysis is used in psychology to study human behavioral traits, such as personality \citep{boydLanguagebasedPersonalityNew2017}, psychological well-being \citep{guntukuDetectingDepressionMental2017}, and emotional states \citep{kahnMeasuringEmotionalExpression2007}; in economics, to study stock market dynamics using text from news and social media \citep{manelaNewsImpliedVolatility2017}; and in political science, to study partisanship using congressional speeches \citep{gentzkowMeasuringGroupDifferences2019}. Given the abundance of text data and the costliness of manual annotation, NLP methods are therefore a natural choice to facilitate the measurement of complex constructs from text.
+
+The social sciences faced limitations similar to those encountered in automated NLG evaluation. Dictionary methods, which consider basic features such as word count, are cheap to implement, but often too superficial to answer complex research questions. Representation-based methods, such as embedding models, are more flexible, but are often best suited to narrower research questions. LLMs again offered the potential for a more general-purpose solution: \citet{rathjeGPTEffectiveTool2024} show that GPT models can accurately measure numerous psychological constructs from texts in multiple languages, and \citet{lemensUncoveringSemanticsConcepts2023} use GPT-4 to quantify semantic properties of texts, with both studies achieving state-of-the-art performance.
+
+
+
+% The potential of LLMs for quantifying textual attributes is not limited to benchmarking NLG models. Given the function of language as a means for expression, linguistic analysis offers a window into human behavior. Text data analysis is used in psychology to study human behavioral traits, such as personality \citep{boydLanguagebasedPersonalityNew2017}, psychological well-being \citep{guntukuDetectingDepressionMental2017}, and emotional states \citep{kahnMeasuringEmotionalExpression2007}; in economics, to study stock market dynamics using text from news and social media \citep{manelaNewsImpliedVolatility2017}; and in political science, to study partisanship using congressional speeches \citep{gentzkowMeasuringGroupDifferences2019}. Given the abundance of text data and the costliness of manual annotation, NLP methods are therefore a natural choice to facilitate the measurement of complex constructs from text. 
+
+% The social sciences faced similar limitations as the NLG community. Dictionary methods, which consider basic features such as word count, are cheap to implement, but often too superficial to answer complex research questions. Representation-based methods, such as embedding models, are expensive to deploy, and most suitable for answering narrow research questions. LLMs again offered the potential for a one-size-fits-all solution: \citet{rathjeGPTEffectiveTool2024} show that GPT models can accurately measure numerous psychological constructs from texts in multiple different languages, and \citet{lemensUncoveringSemanticsConcepts2023} use GPT-4 to quantify semantical properties of texts, both studies achieving state-of-the-art performance. 
+
+%More generally, \citet{yangLLMMeasureGeneratingValid2024} propose a method to measure arbitrary concepts from text data leveraging the LLMs internal concept representation. 
 
 \subsection{Conditions for Meaningful Measurement}
 
@@ -40,6 +56,8 @@ The current LLM-based methods for measuring constructs from text in the social s
 The considerations in \citet{fabbri_summeval_2021} are mostly pragmatic. They observed that a single holistic similarity score did not sufficiently cover the quality differences between summarization systems, so they proposed to measure subdimensions that expose these differences. For evaluating models on these specific criteria, this is sufficient. However, their procedure falls short of permitting general claims about summary quality and summarization capabilities. 
 
 As \citet{salaudeenMeasurementMeaningValidityCentered2025} argue, this inferential leap requires justifying the relationship between the measurements and the object of the claim; in this case, the relationship between criterion scores and the construct of "summarization ability". This practice is standard in the social sciences: \citet{boydLanguagebasedPersonalityNew2017, guntukuDetectingDepressionMental2017, kahnMeasuringEmotionalExpression2007, manelaNewsImpliedVolatility2017, gentzkowMeasuringGroupDifferences2019, rathjeGPTEffectiveTool2024, lemensUncoveringSemanticsConcepts2023, yangLLMMeasureGeneratingValid2024} all operate within a framework where the target constructs are theoretically defined, and where measurements are validated against established measures or theoretically relevant external criteria. Because of this, their measurements are not just criterion-level scores, but construct measurements whose interpretation is anchored in the broader theoretical frameworks of their respective fields.
+
+
 
 \subsection{Meaningful Multi-Dimensional Measurement}\label{sec:litrev_meaning}
 
@@ -59,8 +77,131 @@ The field has proposed several approaches, with varying measurement assumptions.
 
 \paragraph{Meaningful Artefact-Level Diagnostics}
 
-\citet{hashemi_llm-rubric_2024} and \citet{kolaSAJASimpleApproach2026} are examples of the frontier of multi-dimensional evaluation for diagnostic purposes, and they confirm that decomposition has potential for improving LLM evaluators. However, the pragmatism of their methods limits their utility. First of all, they both use calibration heads as their recomposition function. Although this might improve alignment with human ratings, it lacks explainability. Because of this, although the accuracy of their single predicted holistic quality score is high, it is difficult to determine which dimensions contributed to this score, and how. Moreover, their approaches explicitly model human idiosyncrasies. This is not necessarily wrong; human annotations are often considered the gold standard in alignment research. However, it is also widely acknowledged that human labels are inherently noisy \citep{zhaoChallengesTrustworthyHuman}, with recent evidence suggesting that LLMs can sometimes outperform expert coders on difficult annotation tasks \citep{tornbergLargeLanguageModels2025}. Therefore, methods are needed that distinguish alignment with human ratings from meaningful measurement of the target construct, treating human judgments as one source of validity evidence rather than as the object of measurement itself.
+\citet{hashemi_llm-rubric_2024} and \citet{kolaSAJASimpleApproach2026} represent the frontier of multi-dimensional LLM evaluation for diagnostic purposes, and demonstrate that decomposition can improve evaluator performance. However, their utility for artefact-level measurement is limited by the pragmatic orientation of their recomposition mechanisms. Both approaches use calibration heads to recombine criterion-level information into a predicted holistic rating. This may improve alignment with human judgments, but it makes the resulting score difficult to interpret diagnostically: even when the predicted holistic score is accurate, it remains unclear which dimensions contributed to the score, and how. Moreover, both approaches explicitly model human idiosyncrasies. This is appropriate when the goal is to reproduce human judgment distributions, since human annotations are often treated as the operational target in alignment research. However, human labels are also inherently noisy \citep{zhaoChallengesTrustworthyHuman}, and recent evidence suggests that LLMs can sometimes outperform expert coders on difficult annotation tasks \citep{tornbergLargeLanguageModels2025}. This motivates methods that distinguish alignment with human ratings from meaningful measurement of a target construct, treating human judgments as one source of validity evidence rather than as the object of measurement itself.
 
-\citet{bang_transforming_2025} take an important step in this direction with UniScore, which derives transparent criterion weights from their discriminative power against an external signal. However, while this makes recomposition interpretable, it leaves the measurement model implicit. Because the criteria remain user-defined, the framework can show how strongly each criterion relates to an external signal, but not whether the selected criteria adequately define the construct that the final score is interpreted as measuring. This is a central validity risk for artefact-level diagnostics: when an overall score is constructed from multiple criteria, the choice of criteria is itself part of the construct specification.
+% \citet{hashemi_llm-rubric_2024} and \citet{kolaSAJASimpleApproach2026} are examples of the frontier of multi-dimensional evaluation for diagnostic purposes, and they confirm that decomposition has potential for improving LLM evaluators. However, the pragmatism of their methods limits their utility. First of all, they both use calibration heads as their recomposition function. Although this might improve alignment with human ratings, it lacks explainability. Because of this, although the accuracy of their single predicted holistic quality score is high, it is difficult to determine which dimensions contributed to this score, and how. Moreover, their approaches explicitly model human idiosyncrasies. This is not necessarily wrong; human annotations are often considered the gold standard in alignment research. However, it is also widely acknowledged that human labels are inherently noisy \citep{zhaoChallengesTrustworthyHuman}, with recent evidence suggesting that LLMs can sometimes outperform expert coders on difficult annotation tasks \citep{tornbergLargeLanguageModels2025}. Therefore, methods are needed that distinguish alignment with human ratings from meaningful measurement of the target construct, treating human judgments as one source of validity evidence rather than as the object of measurement itself.
+
+
+\citet{bang_transforming_2025} take an important step in this direction with UniScore, which derives transparent criterion weights from their discriminative power against an external signal. However, while this makes recomposition interpretable, it leaves the measurement model implicit. Because the criteria remain user-defined, the framework can show how strongly each criterion relates to an external signal, but not whether the selected criteria adequately specify the construct that the final score is interpreted as measuring. This is a central validity risk for artefact-level diagnostics: when an overall score is constructed from multiple criteria, the choice of criteria is itself part of the construct specification.
+
+
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    >=Latex,
+    font=\sffamily\scriptsize,
+    % Styles
+    stagehead/.style={font=\sffamily\bfseries\footnotesize, align=center, text=black!80},
+    histbox/.style={rectangle, rounded corners=2pt, draw=black!50, thick, fill=gray!10, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    llmbox/.style={rectangle, rounded corners=2pt, draw=blue!60!black, thick, fill=blue!6, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    pragbox/.style={rectangle, rounded corners=2pt, draw=red!60!black, thick, fill=red!5, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    valbox/.style={rectangle, rounded corners=2pt, draw=green!45!black, thick, fill=green!8, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    finalbox/.style={rectangle, rounded corners=2pt, draw=green!60!black, thick, fill=green!15, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    arrow/.style={-{Latex[length=2mm]}, semithick, draw=black!75},
+    edgelabel/.style={font=\sffamily\scriptsize\itshape, text=black!70, align=center, fill=white, inner sep=2pt}
+]
+
+% =========================================================
+% COLUMN 1: HOLISTIC AUTOMATIC EVALUATION
+% =========================================================
+\node[histbox] (lex) {
+    \textbf{Lexical Overlap}\\[2pt]
+    Basic automatic text evaluation\\[1pt]
+    \textit{BLEU \citep{papineni_bleu_2001}, ROUGE \citep{lin_rouge_2004}}
+};
+
+\node[histbox, below=1.2cm of lex] (sem) {
+    \textbf{Semantic Similarity}\\[2pt]
+    More nuanced text similarity\\[1pt]
+    \textit{BERTScore \citep{zhang_bertscore_2020}, BLEURT \citep{sellam_bleurt_2020}}
+};
+
+% =========================================================
+% COLUMN 2: LLM-BASED CRITERION SCORING
+% =========================================================
+\node[llmbox, right=3.2cm of lex, yshift=-1.0cm] (iso) {
+    \textbf{Isolated Criterion Scoring}\\[2pt]
+    Fine-grained, reference-free evaluation\\[1pt]
+    \textit{G-Eval \citep{liu_g-eval_2023}, GPTScore \citep{fuGPTScoreEvaluateYou2023}}
+};
+
+% =========================================================
+% COLUMN 3: RECOMPOSITION STRATEGIES
+% =========================================================
+\node[pragbox, right=3.6cm of iso, yshift=1.4cm] (black) {
+    \textbf{Black-Box Aggregation}\\[2pt]
+    Best fit to human rating distributions\\[1pt]
+    \textit{LLM-Rubric \citep{hashemi_llm-rubric_2024}, SAJA \citep{kolaSAJASimpleApproach2026}}
+};
+
+\node[valbox, right=3.6cm of iso, yshift=-1.4cm] (exp) {
+    \textbf{Explainable Aggregation}\\[2pt]
+    Transparent recomposition\\
+    via criterion weights\\[1pt]
+    \textit{UniScore \citep{bang_transforming_2025}}
+};
+
+% =========================================================
+% COLUMN 4: MEANINGFUL MEASUREMENT
+% =========================================================
+\node[finalbox, below=1.37cm of exp] (thesis) {
+    \textbf{Construct-Specified\\Measurement}\\[2pt]
+    Theoretically specified criteria\\
+    and explicit construct claim\\[1pt]
+    \textit{This Thesis}
+};
+
+% =========================================================
+% ARROWS & LABELS
+% =========================================================
+% Chronological drop from Lexical to Semantic
+\draw[arrow] (lex.south) -- node[right=3pt, edgelabel, pos=0.46] {Need to move \\beyond surface features} (sem.north);
+
+% Evolutionary curve from Semantic to Isolated Criteria
+\draw[arrow] (sem.east) to[out=0, in=180] node[midway, edgelabel] {Need for fine-grained\\diagnosis} (iso.west);
+
+% Trunk extension for the recomposition fork 
+% Dynamically placed 85% of the way between the iso box and the right-side boxes
+\coordinate (fork) at ($(iso.east)!0.65!(iso.east -| black.west)$);
+
+% Draw the line and center the text label on this newly lengthened trunk
+\draw[-] (iso.east) -- (fork) node[midway, edgelabel] {Need for unified\\construct claims};
+
+% Split to aggregation types
+\draw[arrow] (fork) to[out=0, in=180] (black.west);
+\draw[arrow] (fork) to[out=0, in=180] (exp.west);
+
+
+
+
+% Evolutionary curve from Explainable to Thesis
+% Pushed label safely away from the starting box with pos=0.45
+\draw[arrow] (exp.south) -- node[pos=0.45, edgelabel] {Need for construct-level\\measurement interpretation} (thesis.north);
+
+% =========================================================
+% STAGE HEADERS
+% =========================================================
+\node[stagehead, above=0.8cm of lex] (h1) {Holistic\\Similarity Metrics};
+\node[stagehead] at (h1 -| iso) (h2) {Multi-Dimensional\\LLM Scoring};
+\node[stagehead] at (h1 -| black) (h3) {Criterion\\ Recomposition};
+
+
+
+\end{tikzpicture}%
+}
+\caption{Lineage of automated NLG evaluation. The field has evolved from holistic similarity metrics toward multi-dimensional LLM scoring. To support artefact-level construct claims, isolated criteria require recomposition. Current recomposition strategies diverge between black-box aggregation, which optimizes alignment with human rating distributions at the expense of explainability, and explainable aggregation, which estimates transparent criterion weights. The present thesis extends the latter path by treating recomposition as a construct-specification problem: theoretically specified criteria are recomposed under an explicit measurement model and interpreted as supporting a construct-level measurement claim.}
+\label{fig:lit_review_lineage}
+\end{figure*}
+
+
+
+As summarized in Figure~\ref{fig:lit_review_lineage}, the literature has progressed from holistic similarity metrics to criterion-level LLM scoring and, more recently, to recomposition strategies. What remains unresolved is the measurement-theoretic question of how recomposed criterion scores support artefact-level construct claims.
+
+Taken together, these literatures show that decomposition has become central to both automated NLG evaluation and text-based construct measurement. However, decomposition alone does not establish meaningful measurement. NLG evaluation often emphasizes predictive alignment with human judgments, while social-science measurement emphasizes construct definition and validity evidence. The remaining gap is therefore artefact-level LLM evaluation in which criterion-level scores are not merely produced, but theoretically specified, recomposed, and validated as measurements of a target construct.
 
 The present thesis addresses this problem by treating artefact-level LLM evaluation as a construct-specification problem rather than as just an aggregation problem. It examines whether theoretically grounded criteria, measured separately through LLM prompts and recomposed into an overall score, provide stronger validity evidence and more interpretable artefact-level measurements than holistic or weakly specified alternatives. To formalize this approach, artefact-level scoring is specified as a formative measurement model, drawing on established model specifications from psychometrics.
+
+
+

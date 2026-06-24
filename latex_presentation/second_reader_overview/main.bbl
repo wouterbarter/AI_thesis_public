@@ -1,0 +1,101 @@
+\begin{thebibliography}{13}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Papineni(2001)]{papineni2001bleu}
+Kishore Papineni.
+\newblock Bleu: a method for automatic evaluation of mt.
+\newblock \emph{Research Report, Computer Science RC22176 (W0109-022)}, 2001.
+
+\bibitem[Lin(2004)]{lin2004rouge}
+Chin-Yew Lin.
+\newblock Rouge: A package for automatic evaluation of summaries.
+\newblock In \emph{Text summarization branches out}, pages 74--81, 2004.
+
+\bibitem[Zhang et~al.(2019)Zhang, Kishore, Wu, Weinberger, and
+  Artzi]{zhang2019bertscore}
+Tianyi Zhang, Varsha Kishore, Felix Wu, Kilian~Q Weinberger, and Yoav Artzi.
+\newblock Bertscore: Evaluating text generation with bert.
+\newblock \emph{arXiv preprint arXiv:1904.09675}, 2019.
+
+\bibitem[Zhao et~al.(2019)Zhao, Peyrard, Liu, Gao, Meyer, and
+  Eger]{zhao2019moverscore}
+Wei Zhao, Maxime Peyrard, Fei Liu, Yang Gao, Christian~M Meyer, and Steffen
+  Eger.
+\newblock Moverscore: Text generation evaluating with contextualized embeddings
+  and earth mover distance.
+\newblock In \emph{Proceedings of the 2019 conference on empirical methods in
+  natural language processing and the 9th international joint conference on
+  natural language processing (EMNLP-IJCNLP)}, pages 563--578, 2019.
+
+\bibitem[Liu et~al.()Liu, Iter, Xu, Wang, Xu, and Zhu]{liu_g-eval_2023}
+Yang Liu, Dan Iter, Yichong Xu, Shuohang Wang, Ruochen Xu, and Chenguang Zhu.
+\newblock G-eval: {NLG} evaluation using {GPT}-4 with better human alignment.
+\newblock URL \url{http://arxiv.org/abs/2303.16634}.
+
+\bibitem[Zheng et~al.()Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li, Li,
+  Xing, Zhang, Gonzalez, and Stoica]{zheng_judging_2023}
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao
+  Zhuang, Zi~Lin, Zhuohan Li, Dacheng Li, E.~Xing, Haotong Zhang, Joseph~E.
+  Gonzalez, and Ion Stoica.
+\newblock Judging {LLM}-as-a-judge with {MT}-bench and chatbot arena.
+\newblock URL
+  \url{https://www.semanticscholar.org/paper/Judging-LLM-as-a-judge-with-MT-Bench-and-Chatbot-Zheng-Chiang/a0a79dad89857a96f8f71b14238e5237cbfc4787}.
+
+\bibitem[Hashemi et~al.()Hashemi, Eisner, Rosset, Durme, and
+  Kedzie]{hashemi_llm-rubric_2024}
+Helia Hashemi, Jason Eisner, Corby Rosset, Benjamin~Van Durme, and Chris
+  Kedzie.
+\newblock {LLM}-rubric: A multidimensional, calibrated approach to automated
+  evaluation of natural language texts.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 13806--13834.
+\newblock \doi{10.18653/v1/2024.acl-long.745}.
+\newblock URL \url{http://arxiv.org/abs/2501.00274}.
+
+\bibitem[Kola et~al.(2026)Kola, Sharma, Dey, Mishra, and
+  Datar]{kolaSAJASimpleApproach2026}
+Sneha Kola, Pankaj~Kumar Sharma, Soumyadeep Dey, Bamdev Mishra, and Mayur
+  Datar.
+\newblock {{SAJA}}: {{A Simple Approach}} to {{Judge Alignment}} for
+  {{LLM-as-a-Judge}}.
+\newblock In \emph{The 64th {{Annual Meeting}} of the {{Association}} for
+  {{Computational Linguistics}} -- {{Industry Track}}}, April 2026.
+
+\bibitem[Bang et~al.()Bang, Kim, and Min]{bang_transforming_2025}
+Geonwoo Bang, Dongho Kim, and Moohong Min.
+\newblock Transforming user defined criteria into explainable indicators with
+  an integrated {LLM} {AHP} system.
+\newblock URL \url{http://arxiv.org/abs/2601.05267}.
+
+\bibitem[Fabbri et~al.()Fabbri, Kryściński, {McCann}, Xiong, Socher, and
+  Radev]{fabbri_summeval_2021}
+Alexander~R. Fabbri, Wojciech Kryściński, Bryan {McCann}, Caiming Xiong,
+  Richard Socher, and Dragomir Radev.
+\newblock {SummEval}: Re-evaluating summarization evaluation.
+\newblock URL \url{http://arxiv.org/abs/2007.12626}.
+
+\bibitem[Bollen and Lennox(1991)]{bollen1991conventional}
+Kenneth Bollen and Richard Lennox.
+\newblock Conventional wisdom on measurement: A structural equation
+  perspective.
+\newblock \emph{Psychological bulletin}, 110\penalty0 (2):\penalty0 305, 1991.
+
+\bibitem[Sellam et~al.()Sellam, Das, and Parikh]{sellam_bleurt_2020}
+Thibault Sellam, Dipanjan Das, and Ankur Parikh.
+\newblock {BLEURT}: Learning robust metrics for text generation.
+\newblock In Dan Jurafsky, Joyce Chai, Natalie Schluter, and Joel Tetreault,
+  editors, \emph{Proceedings of the 58th Annual Meeting of the Association for
+  Computational Linguistics}, pages 7881--7892. Association for Computational
+  Linguistics.
+\newblock \doi{10.18653/v1/2020.acl-main.704}.
+\newblock URL \url{https://aclanthology.org/2020.acl-main.704/}.
+
+\bibitem[Fu et~al.(2023)Fu, Ng, Jiang, and Liu]{fuGPTScoreEvaluateYou2023}
+Jinlan Fu, See-Kiong Ng, Zhengbao Jiang, and Pengfei Liu.
+\newblock {{GPTScore}}: {{Evaluate}} as {{You Desire}}, February 2023.
+
+\end{thebibliography}

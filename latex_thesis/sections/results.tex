@@ -43,7 +43,7 @@ Qwen 3 and Gemma 4 show lower average entropy and therefore behave more like ord
 
 \begin{table}[h]
     \centering
-    \caption{Scale Utilization and Entropy Calibration by Dataset and Model Architecture}
+    \caption{Scale Utilization and Rating-Token Entropy by Dataset and Model Architecture}
     \label{tab:scale_utilization}
     \begin{tabular}{lcc}
     \toprule
@@ -66,7 +66,8 @@ Qwen 3 and Gemma 4 show lower average entropy and therefore behave more like ord
 
     \begin{flushleft}
     \footnotesize
-    \textit{Note.} Values are first computed within each evaluation criterion and then averaged across criteria. Ratings are expected-value (EV) scores computed over the model's rating-token distribution. Rating SD reflects average within-criterion scale utilization: higher values indicate that, for a typical criterion, the model spreads EV scores more broadly across documents. Entropy indicates how concentrated the model's probability mass is over the rating options: low entropy concentrates EV ratings around integer values, while higher entropy spreads probability across  multiple ratings, allowing EV scores to fall between integer values.
+    % \textit{Note.} Values are first computed within each evaluation criterion and then averaged across criteria. Ratings are expected-value (EV) scores computed over the model's rating-token distribution. Rating SD reflects average within-criterion scale utilization: higher values indicate that, for a typical criterion, the model spreads EV scores more broadly across documents. Entropy indicates how concentrated the model's probability mass is over the rating options: low entropy concentrates EV ratings around integer values, while higher entropy spreads probability across  multiple ratings, allowing EV scores to fall between integer values.
+    \textit{Note.} Values are first computed within each evaluation criterion and then averaged across criteria. Ratings are expected-value (EV) scores computed over the model's rating-token distribution. Rating SD reflects within-criterion scale utilization: higher values indicate broader use of the rating scale across documents. Entropy reflects rating-token dispersion: low entropy indicates that probability mass is concentrated on one or a few rating tokens, producing more quantized EV scores; higher entropy indicates that probability mass is spread across multiple rating tokens, producing more continuous EV scores.
     \end{flushleft}
 \end{table}
 

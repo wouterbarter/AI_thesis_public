@@ -1,4 +1,4 @@
-\begin{thebibliography}{53}
+\begin{thebibliography}{62}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -88,6 +88,15 @@ N.~Dziri, E.~Kamalloo, K.~Mathewson, and O.~Zaiane.
   Linguistics.
 \newblock \doi{10.18653/v1/N19-1381}.
 
+\bibitem[Edwards and Bagozzi(2000)]{edwardsNatureDirectionRelationships2000}
+J.~R. Edwards and R.~P. Bagozzi.
+\newblock On the nature and direction of relationships between constructs and
+  measures.
+\newblock \emph{Psychological Methods}, 5\penalty0 (2):\penalty0 155--174, June
+  2000.
+\newblock ISSN 1082-989X.
+\newblock \doi{10.1037/1082-989x.5.2.155}.
+
 \bibitem[Fabbri et~al.()Fabbri, Kryściński, {McCann}, Xiong, Socher, and
   Radev]{fabbri_summeval_2021}
 A.~R. Fabbri, W.~Kryściński, B.~{McCann}, C.~Xiong, R.~Socher, and D.~Radev.
@@ -119,6 +128,26 @@ M.~Freitag, G.~Foster, D.~Grangier, V.~Ratnakar, Q.~Tan, and W.~Macherey.
 J.~Fu, S.-K. Ng, Z.~Jiang, and P.~Liu.
 \newblock {{GPTScore}}: {{Evaluate}} as {{You Desire}}, Feb. 2023.
 
+\bibitem[{Fui-Hoon Nah} et~al.(2023){Fui-Hoon Nah}, Zheng, Cai, Siau, and
+  Chen]{fui-hoonnahGenerativeAIChatGPT2023}
+F.~{Fui-Hoon Nah}, R.~Zheng, J.~Cai, K.~Siau, and L.~Chen.
+\newblock Generative {{AI}} and {{ChatGPT}}: {{Applications}}, challenges, and
+  {{AI-human}} collaboration.
+\newblock \emph{Journal of Information Technology Case and Application
+  Research}, 25\penalty0 (3):\penalty0 277--304, July 2023.
+\newblock ISSN 1522-8053.
+\newblock \doi{10.1080/15228053.2023.2233814}.
+
+\bibitem[Gao et~al.(2024)Gao, Chen, Chen, Dai, Jin, Jiang, Ning, Yu, Xuan, Cai,
+  Yang, and Wang]{gaoLLMsbasedMachineTranslation2024}
+D.~Gao, K.~Chen, B.~Chen, H.~Dai, L.~Jin, W.~Jiang, W.~Ning, S.~Yu, Q.~Xuan,
+  X.~Cai, L.~Yang, and Z.~Wang.
+\newblock {{LLMs-based}} machine translation for e-commerce.
+\newblock \emph{Expert Systems with Applications}, 258:\penalty0 125087, Dec.
+  2024.
+\newblock ISSN 0957-4174.
+\newblock \doi{10.1016/j.eswa.2024.125087}.
+
 \bibitem[Gehrmann et~al.(2022)Gehrmann, Clark, and
   Sellam]{gehrmannRepairingCrackedFoundation2022}
 S.~Gehrmann, E.~Clark, and T.~Sellam.
@@ -134,14 +163,11 @@ M.~Gentzkow, J.~M. Shapiro, and M.~Taddy.
 \newblock ISSN 1468-0262.
 \newblock \doi{10.3982/ECTA16566}.
 
-\bibitem[Gu et~al.()Gu, Jiang, Shi, Tan, Zhai, Xu, Li, Shen, Ma, Liu, Wang,
-  Zhang, Wang, Gao, Ni, and Guo]{gu_survey_2025}
-J.~Gu, X.~Jiang, Z.~Shi, H.~Tan, X.~Zhai, C.~Xu, W.~Li, Y.~Shen, S.~Ma, H.~Liu,
-  S.~Wang, K.~Zhang, Y.~Wang, W.~Gao, L.~Ni, and J.~Guo.
-\newblock A survey on {LLM}-as-a-judge.
-\newblock URL \url{http://arxiv.org/abs/2411.15594}.
-\newblock Read\_Status: In Progress Read\_Status\_Date:
-  2025-10-14T13:58:05.029Z.
+\bibitem[{Google}(2026)]{googleGemma4E2BIt2026}
+{Google}.
+\newblock {Gemma-4-E2B-it}.
+\newblock \url{https://huggingface.co/google/gemma-4-E2B-it}, May 2026.
+\newblock Model card. Accessed: 2026-06-22.
 
 \bibitem[Guntuku et~al.(2017)Guntuku, Yaden, Kern, Ungar, and
   Eichstaedt]{guntukuDetectingDepressionMental2017}
@@ -254,6 +280,24 @@ S.~Messick.
   assessment.
 \newblock \emph{Educational researcher}, 18\penalty0 (2):\penalty0 5--11, 1989.
 
+\bibitem[{Meta}(2024)]{metaLlama323BInstruct2024}
+{Meta}.
+\newblock {Llama-3.2-3B-Instruct}.
+\newblock \url{https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct}, Sept.
+  2024.
+\newblock Model card. Accessed: 2026-06-22.
+
+\bibitem[Murakami et~al.(2023)Murakami, Hoshino, and
+  Zhang]{murakamiNaturalLanguageGeneration2023}
+S.~Murakami, S.~Hoshino, and P.~Zhang.
+\newblock Natural {{Language Generation}} for {{Advertising}}: {{A Survey}},
+  June 2023.
+
+\bibitem[Pandya and Holia(2023)]{pandyaAutomatingCustomerService2023}
+K.~Pandya and M.~Holia.
+\newblock Automating {{Customer Service}} using {{LangChain}}: {{Building}}
+  custom open-source {{GPT Chatbot}} for organizations, Oct. 2023.
+
 \bibitem[Papineni et~al.()Papineni, Roukos, Ward, and Zhu]{papineni_bleu_2001}
 K.~Papineni, S.~Roukos, T.~Ward, and W.-J. Zhu.
 \newblock {BLEU}: a method for automatic evaluation of machine translation.
@@ -262,6 +306,12 @@ K.~Papineni, S.~Roukos, T.~Ward, and W.-J. Zhu.
   Computational Linguistics.
 \newblock \doi{10.3115/1073083.1073135}.
 \newblock URL \url{http://portal.acm.org/citation.cfm?doid=1073083.1073135}.
+
+\bibitem[{Qwen Team}(2026)]{qwen35_4b_modelcard}
+{Qwen Team}.
+\newblock {Qwen3.5-4B}.
+\newblock \url{https://huggingface.co/Qwen/Qwen3.5-4B}, 2026.
+\newblock Model card. Accessed: 2026-06-22.
 
 \bibitem[Rathje et~al.(2024)Rathje, Mirea, Sucholutsky, Marjieh, Robertson, and
   Van~Bavel]{rathjeGPTEffectiveTool2024}
@@ -272,6 +322,15 @@ S.~Rathje, D.-M. Mirea, I.~Sucholutsky, R.~Marjieh, C.~E. Robertson, and J.~J.
 \newblock \emph{Proceedings of the National Academy of Sciences}, 121\penalty0
   (34):\penalty0 e2308950121, Aug. 2024.
 \newblock \doi{10.1073/pnas.2308950121}.
+
+\bibitem[Raza et~al.(2025)Raza, Jahangir, Riaz, Saeed, and
+  Sattar]{razaIndustrialApplicationsLarge2025}
+M.~Raza, Z.~Jahangir, M.~B. Riaz, M.~J. Saeed, and M.~A. Sattar.
+\newblock Industrial applications of large language models.
+\newblock \emph{Scientific Reports}, 15\penalty0 (1):\penalty0 13755, Apr.
+  2025.
+\newblock ISSN 2045-2322.
+\newblock \doi{10.1038/s41598-025-98483-1}.
 
 \bibitem[Reiter(2018)]{reiter2018structured}
 E.~Reiter.
@@ -410,6 +469,18 @@ W.~Zhao, M.~Peyrard, F.~Liu, Y.~Gao, C.~M. Meyer, and S.~Eger.
 W.~Zhao, A.~M. Rush, and T.~Goyal.
 \newblock Challenges in {{Trustworthy Human Evaluation}} of {{Chatbots}}.
 \newblock {\natexlab{b}}.
+
+\bibitem[Zhao et~al.(2026)Zhao, Zhou, Li, Tang, Dong, Hou, Zhang, Min, Zhang,
+  Liu, Wang, Du, Yang, Chen, Chen, Jiang, Ren, Li, Tang, Liu, Hu, Nie, and
+  Wen]{zhaoSurveyLargeLanguage2026}
+W.~X. Zhao, K.~Zhou, J.~Li, T.~Tang, Z.~Dong, Y.~Hou, B.~Zhang, Y.~Min,
+  J.~Zhang, P.~Liu, X.~Wang, Y.~Du, C.~Yang, Y.~Chen, Z.~Chen, J.~Jiang,
+  R.~Ren, Y.~Li, X.~Tang, Z.~Liu, Y.~Hu, J.-Y. Nie, and J.-R. Wen.
+\newblock A {{Survey}} of {{Large Language Models}}.
+\newblock \emph{Frontiers of Computer Science}, 20\penalty0 (12):\penalty0
+  2012627, May 2026.
+\newblock ISSN 2095-2236.
+\newblock \doi{10.1007/s11704-026-60308-3}.
 
 \bibitem[Zheng et~al.()Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li, Li,
   Xing, Zhang, Gonzalez, and Stoica]{zheng_judging_2023}

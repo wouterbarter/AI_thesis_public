@@ -1,0 +1,103 @@
+% =========================================================
+% Beamer presentation preamble
+% Shared by overview and defense decks
+% =========================================================
+
+% ---------------------------------------------------------
+% Theme and layout
+% ---------------------------------------------------------
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}[numbered]
+
+\setbeamersize{text margin left=0.7cm, text margin right=0.7cm}
+
+% ---------------------------------------------------------
+% Fonts
+% ---------------------------------------------------------
+\usefonttheme{professionalfonts}
+
+% ---------------------------------------------------------
+% Core packages
+% ---------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+
+% ---------------------------------------------------------
+% TikZ support
+% Needed for your diagrams
+% ---------------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{
+    arrows.meta,
+    positioning,
+    calc,
+    fit,
+    backgrounds
+}
+
+% ---------------------------------------------------------
+% Citations
+% Keeps \citep and \citet working
+% ---------------------------------------------------------
+\usepackage[numbers,sort&compress]{natbib}
+
+% Optional: make bibliography compact on slides
+\setbeamertemplate{bibliography item}{}
+\renewcommand{\bibfont}{\scriptsize}
+
+% ---------------------------------------------------------
+% Figure paths
+% These paths are relative to each deck's main.tex
+% ---------------------------------------------------------
+\graphicspath{
+    {../shared/figures/}
+    {../../latex_thesis/figures/}
+}
+
+
+% ---------------------------------------------------------
+% Presentation style tweaks
+% ---------------------------------------------------------
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small}
+\setbeamerfont{footline}{size=\scriptsize}
+
+\setbeamertemplate{footline}{
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=.75\paperwidth,ht=2.5ex,dp=1ex,leftskip=1em]{author in head/foot}%
+            \insertshorttitle
+        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.5ex,dp=1ex,rightskip=1em plus1fil]{date in head/foot}%
+            \hfill \insertframenumber{} / \inserttotalframenumber
+        \end{beamercolorbox}%
+    }%
+    \vskip0pt%
+}
+
+% ---------------------------------------------------------
+% Handy commands
+% ---------------------------------------------------------
+\newcommand{\construct}{\eta(d_i)}
+\newcommand{\artefact}{d_i}
+
+\newcommand{\ev}{x^{\mathrm{EV}}}
+\newcommand{\entropy}{H}
+
+% For small explanatory notes under figures or equations
+\newcommand{\slidenote}[1]{%
+    \vspace{0.4em}
+    {\scriptsize\color{black!65}#1}
+}

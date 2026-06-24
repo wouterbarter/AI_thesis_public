@@ -1,0 +1,69 @@
+
+\section{Logit-Based Score Extraction}\label{app:logit_score_extraction}
+
+This appendix provides the technical details for the logit-based scoring procedure described in Section~\ref{sec:methods_llm_procedure}. The procedure converts each prompt-document pair into a continuous Expected Value (EV) score and a normalized entropy diagnostic by restricting the model's next-token distribution to the valid rating tokens.
+
+\subsection{Prompt Formatting and Forward Pass}
+
+For artefact $d_i$ and criterion $c_j$, the evaluation input is defined as
+\[
+    \mathbf{u}_{ij} = [\, s \,;\, c_j \,;\, d_i \,],
+\]
+where $s$ denotes the system context and task instruction, $c_j$ the criterion specification, and $d_i$ the target artefact. In implementation, this input is formatted using the chat template associated with each model. The system turn contains the evaluator instruction and criterion definition, while the user turn contains the artefact to be evaluated.
+
+The assistant turn is manually prefixed with the literal string \texttt{Rating:}. This fixes the answer format and positions the next-token distribution over the possible rating tokens. A single forward pass is then used to obtain the next-token logits
+\[
+    \mathbf{z}(\mathbf{u}_{ij}) \in \mathbb{R}^{|\mathcal{V}|},
+\]
+where $\mathcal{V}$ denotes the model vocabulary.
+
+\subsection{Restricted Rating-Token Distribution}
+
+Let $\mathcal{S}=\{1,\ldots,L\}$ denote the valid rating categories for the relevant Likert scale. For \textit{FeedbackQA}, $L=4$; for \textit{Barter Deals}, $L=7$. The logits are restricted to the token IDs corresponding to the valid rating strings. This yields the restricted logit vector
+\[
+    \mathbf{z}_{\mathcal{S}}(\mathbf{u}_{ij})
+    =
+    \{ z_l(\mathbf{u}_{ij}) \}_{l \in \mathcal{S}}.
+\]
+
+The restricted logits are converted into a probability distribution by applying a softmax over the valid rating tokens:
+\begin{equation}
+P_{\mathcal{S}}(l \mid \mathbf{u}_{ij}) =
+\frac{\exp(z_l(\mathbf{u}_{ij}))}
+{\sum_{h \in \mathcal{S}} \exp(z_h(\mathbf{u}_{ij}))}.
+\end{equation}
+This produces a normalized probability distribution over the rating scale only. Tokens outside the valid rating set are excluded from the scoring distribution.
+
+\subsection{Expected Value Scores}
+
+The primary LLM-derived measurement is the Expected Value (EV) of the restricted rating-token distribution:
+\begin{equation}\label{eq:app_weighted_score}
+x_{ij}^{\mathrm{EV}}
+=
+\sum_{l \in \mathcal{S}} v(l) P_{\mathcal{S}}(l \mid \mathbf{u}_{ij}),
+\end{equation}
+where $v(l)$ maps each rating token to its numeric value. The EV score therefore uses the full distribution over rating categories rather than only the most likely token. For example, if a model assigns probability mass to both adjacent categories, the resulting EV can fall between integer values.
+
+Before entering the validation models, EV scores are z-standardized within each model, dataset, experimental condition, and criterion:
+\begin{equation}
+\tilde{x}_{ij}^{\mathrm{EV}}
+=
+\frac{x_{ij}^{\mathrm{EV}} - \bar{x}_{\cdot j}^{\mathrm{EV}}}
+{\mathrm{SD}(x_{\cdot j}^{\mathrm{EV}})}.
+\end{equation}
+This standardization ensures that regression coefficients are comparable across criteria and model architectures, despite differences in raw scale use.
+
+\subsection{Normalized Entropy}
+
+In addition to the EV score, we compute the normalized Shannon entropy of the same restricted rating-token distribution. Let $K = |\mathcal{S}|$ denote the number of valid rating categories. Entropy is defined as
+\begin{equation}\label{eq:app_normalized_entropy}
+H_{ij}
+=
+-\frac{1}{\ln(K)}
+\sum_{l \in \mathcal{S}}
+P_{\mathcal{S}}(l \mid \mathbf{u}_{ij})
+\ln P_{\mathcal{S}}(l \mid \mathbf{u}_{ij}).
+\end{equation}
+The normalization by $\ln(K)$ makes entropy comparable across rating scales with different numbers of categories. The statistic takes values in $[0,1]$: it equals 0 when all probability mass is concentrated on a single rating token and equals 1 when probability mass is uniformly distributed across all valid rating tokens.
+
+Entropy is used as a diagnostic of rating-token dispersion. Low entropy indicates that the EV score is based on concentrated probability mass over one or a few rating tokens, producing more quantized, integer-like scores. Higher entropy indicates that probability mass is distributed more diffusely across the rating scale, allowing EV scores to behave more continuously. The interpretation of entropy together with EV dispersion is discussed in Appendix~\ref{app:rating_regimes}.

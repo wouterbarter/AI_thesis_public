@@ -1,0 +1,95 @@
+% \begin{frame}{Validation Settings \& Experimental Conditions}
+% \framesubtitle{Testing weaker vs. stronger construct representations across two domains}
+
+% \begin{columns}[t]
+%     % LEFT COLUMN: FeedbackQA
+%     \begin{column}{0.46\textwidth}
+%         {\large \textbf{FeedbackQA}}\\[0.1cm]
+%         \hrule
+%         \vspace{0.2cm}
+%         \textit{Public Q\&A dataset}\\[0.1cm]
+%         Validity evidence: \textbf{Convergent}
+%         (Alignment with human ratings)
+        
+%         \vspace{0.4cm}
+%         \textbf{Specifications compared:}
+%         \begin{itemize}
+%             \item Naive holistic (1 score)
+%             \item Informed holistic (1 score)
+%             \item Formative criteria (4 scores)
+%         \end{itemize}
+%     \end{column}
+
+%     % RIGHT COLUMN: Barter Deals
+%     \begin{column}{0.46\textwidth}
+%         {\large \textbf{Barter Deals}}\\[0.1cm]
+%         \hrule
+%         \vspace{0.2cm}
+%         \textit{Proprietary marketplace data}\\[0.1cm]
+%         Validity evidence: \textbf{Predictive} \\
+%         (Alignment with application counts)
+        
+%         \vspace{0.4cm}
+%         \textbf{Specifications compared:}
+%         \begin{itemize}
+%             \item Naive holistic (1 score)
+%             \item Macro-formative (3 scores)
+%             \item Fine-grained formative (10 scores)
+%         \end{itemize}
+%     \end{column}
+% \end{columns}
+
+% \vfill
+
+% \begin{block}{Validation benchmarks}
+% FeedbackQA compares LLM measurements against human ratings. Barter Deals tests whether LLM measurements add predictive value beyond a structural market baseline built from platform covariates.
+% \end{block}
+
+% \end{frame}
+
+
+\begin{frame}{Validation Settings \& Experimental Conditions}
+\framesubtitle{Testing LLM measurements against external benchmarks}
+
+\begin{columns}[t]
+    \begin{column}{0.46\textwidth}
+        {\large \textbf{FeedbackQA}}\\[0.1cm]
+        \hrule
+        \vspace{0.2cm}
+        \textit{Public Q\&A dataset}\\[0.1cm]
+        Benchmark: \textbf{human ratings}
+
+        \vspace{0.35cm}
+        \textbf{Specifications compared:}
+        \begin{itemize}
+            \item Naive holistic (1 score)
+            \item Informed holistic (1 score)
+            \item Formative criteria (4 scores)
+        \end{itemize}
+    \end{column}
+
+    \begin{column}{0.46\textwidth}
+        {\large \textbf{Barter Deals}}\\[0.1cm]
+        \hrule
+        \vspace{0.2cm}
+        \textit{Proprietary marketplace data}\\[0.1cm]
+        Benchmark: \textbf{structural market baseline}\\
+        Outcome: application counts
+
+        \vspace{0.35cm}
+        \textbf{Specifications compared:}
+        \begin{itemize}
+            \item Naive holistic (1 score)
+            \item Macro-formative (3 scores)
+            \item Fine-grained formative (10 scores)
+        \end{itemize}
+    \end{column}
+\end{columns}
+
+\vfill
+
+\begin{block}{Key comparison}
+Do explicit formative LLM measurements provide stronger validity evidence than weaker construct specifications or non-LLM baselines?
+\end{block}
+
+\end{frame}

@@ -1,0 +1,404 @@
+% !TEX root = ../main.tex
+
+%TODO: Uniform language, criteria or dimensions?
+\section{Methods}\label{sec:methods}
+
+% The previous section motivates artefact-level evaluation as a formative measurement problem. The empirical design tests this claim by comparing alternative construct representations in two validation settings. FeedbackQA provides a convergent-validity setting, where LLM-derived measurements of answer quality are compared against human quality judgments. Barter Deals provides a predictive-validity setting, where LLM-derived measurements of deal attractiveness are evaluated against real-world creator application behavior. Through experiments, we aim to answer the research questions proposed at the beginning:
+
+% \begin{description}
+% \item[\textbf{RQ1:}] Does explicit formative recomposition of theoretically specified criteria provide stronger validity evidence than holistic or weakly specified alternatives?
+% \item[\textbf{RQ2:}] Do separately elicited formative criteria support more diagnostically interpretable artefact-level measurements than holistic or weakly specified alternatives?
+% \end{description}
+
+
+\subsection{Research Design and Construct Representations}\label{sec:methods_design}
+
+The previous section motivates artefact-level evaluation as a formative measurement problem. The empirical design tests this claim by comparing alternative construct representations in two complementary validation settings.
+
+\textit{FeedbackQA} \citep{li_using_2022} ($n=9{,}065$) is an academic dataset of COVID-19-related Q\&A pairs with human evaluations of answer quality. Each artefact is a question-answer pair, and the external criterion is the human quality rating assigned to the answer. This provides a convergent-validity setting: LLM-derived measurements of \textit{Answer Quality} are evaluated by testing whether they align with human quality judgments.
+
+\textit{Barter Deals} ($n=3{,}137$) is an industry dataset of written collaboration opportunities for creators, referred to as \textit{Deals}. In a typical Deal, a company offers a product, service, or experience in exchange for promotional creator content. Creators view these offers on the Barter marketplace and apply to the Deals they find appealing. Each artefact is the written Deal text, consisting of a title, body, and requirements section that together describe the offer and the requested creator deliverables. The external criterion is the number of creator applications received within the first seven days after publication. This provides a predictive-validity setting: LLM-derived measurements of \textit{Deal Attractiveness} are evaluated by testing whether they predict observed creator application behavior.
+
+Across both settings, the central manipulation concerns how the target construct is represented. Holistic baselines ask the LLM to assign a single overall score. Formative representations instead elicit criterion-level scores separately and recompose them through regression. This means that the LLM does not produce the final composite score directly; instead, it produces one score per specified criterion, and the relationship between these criterion-level scores and the external validity criterion is estimated in the corresponding regression model.
+
+Through these experiments, we answer the following research questions:
+
+\begin{description}
+\item[\textbf{RQ1:}] Does explicit formative recomposition of theoretically specified criteria provide stronger validity evidence than holistic or weakly specified alternatives?
+\item[\textbf{RQ2:}] Do separately elicited formative criteria support more diagnostically interpretable artefact-level measurements than holistic or weakly specified alternatives?
+\end{description}
+
+For \textit{FeedbackQA}, \textit{Answer Quality} is decomposed into four dimensions: \textit{Topical Alignment}, \textit{Information Coverage}, \textit{Topical Concentration}, and \textit{Communicative Clarity}. The naive holistic baseline evaluates overall answer quality using a minimal construct definition. The informed holistic design control presents the same dimensional content as the formative condition in a single LLM call and asks for one overall score. This helps isolate enriched construct specification from explicit recomposition. The formative condition measures the four dimensions separately, producing four criterion-level scores per answer.
+
+For \textit{Barter Deals}, \textit{Deal Attractiveness} is first represented through three theoretical macro-dimensions: \textit{Reward}, \textit{Cost}, and \textit{Pitch Quality}. The naive holistic baseline evaluates overall deal attractiveness using a minimal construct definition. The macro-formative baseline measures the three macro-dimensions separately, reflecting broad multi-dimensional evaluation schemes commonly used in NLG evaluation \citep{fabbri_summeval_2021, liu_g-eval_2023, zhongUnifiedMultiDimensionalEvaluator2022a}. The fine-grained formative condition further decomposes the macro-dimensions into ten theoretically specified dimensions: \textit{Brand Prestige}, \textit{Perceived Economic Value}, \textit{Creator Brand Alignment}, \textit{Functional Utility}, \textit{Product Universality}, \textit{Workload Volume}, \textit{Creative Restrictiveness}, \textit{Call-to-Action Strength}, \textit{Rhetorical Objectivity}, and \textit{Proposition Clarity}. This allows the analysis to test whether finer-grained decomposition improves predictive validity beyond broad theoretical pillars.
+
+Table~\ref{tab:construct_representations} summarizes the construct representations compared in each validation setting. Full criterion definitions and scale anchors are provided in Appendix~\ref{app:evaluation_criteria}. Dataset descriptives, text-length distributions, and additional diagnostic plots are reported in Appendix~\ref{app:verbosity_diagnostics}.
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Construct representations compared across validation settings. FeedbackQA evaluates \textit{Answer Quality}; Barter Deals evaluates \textit{Deal Attractiveness}. The table summarizes how each target construct is specified in the criterion prompt and how many LLM-derived scores are produced per artefact.}
+\label{tab:construct_representations}
+\begin{tabularx}{\textwidth}{@{} 
+    l 
+    >{\raggedright\arraybackslash}p{3.8cm} 
+    >{\raggedright\arraybackslash}X 
+    c 
+    @{}}
+\toprule
+\textbf{Dataset} & \textbf{Representation} & \textbf{Criterion content} & \begin{tabular}{@{}c@{}}\textbf{Scores /} \\ \textbf{artefact}\end{tabular} \\
+\midrule
+\textbf{FeedbackQA} 
+& Naive holistic 
+& Overall answer quality 
+& 1 \\
+\addlinespace
+& Informed holistic control 
+& Alignment; Coverage; Concentration; Clarity 
+& 1 \\
+\addlinespace
+& Formative 
+& Alignment; Coverage; Concentration; Clarity 
+& 4 \\
+
+\midrule
+
+\textbf{Barter Deals} 
+& Naive holistic 
+& Overall deal attractiveness 
+& 1 \\
+\addlinespace
+& Macro-formative 
+& Reward; Cost; Pitch Quality 
+& 3 \\
+\addlinespace
+& Fine-grained formative 
+& Ten dimensions nested within Reward, Cost, and Pitch Quality 
+& 10 \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.15cm}
+\begin{flushleft}
+\footnotesize
+\textit{Note.} Each score is obtained from one LLM call. Holistic representations produce one overall score, while formative representations produce one score per criterion. Criterion-level scores are recomposed through regression when assessing convergent or predictive validity.
+\end{flushleft}
+\end{table*}
+
+
+
+% The previous section motivates artefact-level evaluation as a formative measurement problem. The empirical design tests this claim by comparing alternative construct representations in two validation settings. \textit{FeedbackQA} provides a convergent-validity setting, where LLM-derived measurements of answer quality are compared against human quality judgments. \textit{Barter Deals} provides a predictive-validity setting, where LLM-derived measurements of deal attractiveness are evaluated against real-world creator application behavior.
+
+% Across both settings, the central manipulation concerns how the target construct is represented. Holistic baselines ask the LLM to assign a single overall score. Formative conditions instead elicit criterion-level scores separately and recompose them through regression. \textit{FeedbackQA} also includes an informed holistic design control, which presents the same dimensional content as the formative condition in a single LLM call and asks for one overall score. This helps isolate enriched construct specification from explicit recomposition. \textit{Barter Deals} includes both a macro-formative and a fine-grained formative representation, allowing the analysis to test whether finer-grained decomposition improves predictive validity beyond broad theoretical pillars.
+
+% Through these experiments, we answer the following research questions:
+
+% \begin{description}
+% \item[\textbf{RQ1:}] Does explicit formative recomposition of theoretically specified criteria provide stronger validity evidence than holistic or weakly specified alternatives?
+% \item[\textbf{RQ2:}] Do separately elicited formative criteria support more diagnostically interpretable artefact-level measurements than holistic or weakly specified alternatives?
+% \end{description}
+
+% RQ1 is addressed by comparing the alternative construct representations against external validity criteria in the two validation settings. RQ2 is addressed by diagnosing whether the resulting criterion-level measurements exhibit properties required for interpretable formative recomposition.
+
+% Table~\ref{tab:construct_representations} summarizes the construct representations compared in each validation setting. Full criterion definitions and scale anchors are provided in Appendix~\ref{app:evaluation_criteria}.
+
+
+% \begin{table*}[t]
+% \centering
+% \small
+% \caption{Construct representations compared across validation settings. FeedbackQA evaluates \textit{Answer Quality}; Barter Deals evaluates \textit{Deal Attractiveness}. The table summarizes how each target construct is specified in the criterion prompt and how many LLM-derived scores are produced per artefact.}
+% \label{tab:construct_representations}
+% \begin{tabularx}{\textwidth}{@{} 
+%     l 
+%     >{\raggedright\arraybackslash}p{3.8cm} 
+%     >{\raggedright\arraybackslash}X 
+%     c 
+%     @{}}
+% \toprule
+% \textbf{Dataset} & \textbf{Representation} & \textbf{Criterion content} & \begin{tabular}{@{}c@{}}\textbf{Scores /} \\ \textbf{artefact}\end{tabular} \\
+% \midrule
+% \textbf{FeedbackQA} 
+% & Naive holistic 
+% & Overall answer quality 
+% & 1 \\
+% \addlinespace
+% & Informed holistic control 
+% & Alignment; Coverage; Concentration; Clarity 
+% & 1 \\
+% \addlinespace
+% & Formative 
+% & Alignment; Coverage; Concentration; Clarity 
+% & 4 \\
+
+% \midrule
+
+% \textbf{Barter Deals} 
+% & Naive holistic 
+% & Overall deal attractiveness 
+% & 1 \\
+% \addlinespace
+% & Macro-formative 
+% & Reward; Cost; Pitch Quality 
+% & 3 \\
+% \addlinespace
+% & Fine-grained formative 
+% & Ten dimensions nested within Reward, Cost, and Pitch Quality 
+% & 10 \\
+% \bottomrule
+% \end{tabularx}
+
+% \vspace{0.15cm}
+% \begin{flushleft}
+% \footnotesize
+% \textit{Note.} Each score is obtained from one LLM call. Holistic representations produce one overall score, while formative representations produce one score per criterion. The criterion-level scores are recomposed in the validity models.
+% \end{flushleft}
+% \end{table*}
+
+
+
+
+
+
+\subsection{LLM Evaluation Procedure}\label{sec:methods_llm_procedure}
+
+The same evaluation procedure is used in both validation studies. The procedure is designed to produce criterion-level artefact measurements that can be recomposed in the validation models. Because the scoring method relies on access to next-token logits, we use open-weight instruction-tuned models rather than closed API-based systems. This also reflects the operational setting motivating the thesis: repeated artefact-level evaluation requires evaluators that are feasible to run at scale and inspect at the token-probability level. The evaluation models are Llama-3.2-3B-Instruct (``Llama 3.2'') \citep{metaLlama323BInstruct2024}, Qwen3-4B-Instruct-2507 (``Qwen 3'') \citep{qwen3technicalreport}, Qwen/Qwen3.5-4B (``Qwen 3.5'') \citep{qwen35_4b_modelcard}, and google/gemma-4-E2B-it (``Gemma 4'') \citep{googleGemma4E2BIt2026}.
+
+All evaluations use a standardized prompt structure. For artefact $d_i$ and criterion $c_j \in C$, the model input is represented as
+\[
+    \mathbf{u}_{ij} = [\, s \,;\, c_j \,;\, d_i \,],
+\]
+where $s$ denotes the system context and task instruction, $c_j$ denotes the criterion specification, and $d_i$ denotes the target artefact. The system context defines the evaluator role and application setting. The criterion specification defines the construct or dimension being measured, including the semantic definition and Likert-scale anchors. The target artefact is the document to be evaluated, such as a Q\&A pair in \textit{FeedbackQA} or a Deal text in \textit{Barter Deals}. Across experimental conditions, $s$ and $d_i$ are held constant; the experimental manipulation is implemented through the content and structure of $c_j$.
+
+For each input $\mathbf{u}_{ij}$, we extract a score from the model's next-token distribution rather than sampling a generated rating. The prompt is formatted using the model-specific chat template, and the assistant turn is prefixed with the literal string \texttt{Rating:} to condition the next-token distribution toward the evaluation tokens. We then perform a single forward pass and restrict the logits to the valid rating-token set $\mathcal{S}=\{1,\ldots,L\}$, where $L$ is the maximum value of the relevant Likert scale. The restricted logits are converted into a probability distribution:
+\begin{equation}
+P_{\mathcal{S}}(l \mid \mathbf{u}_{ij}) =
+\frac{\exp(z_l(\mathbf{u}_{ij}))}
+{\sum_{h \in \mathcal{S}} \exp(z_h(\mathbf{u}_{ij}))}.
+\end{equation}
+
+The primary LLM-derived measurement is the expected value (EV) of this distribution:
+\begin{equation}\label{eq:weighted_score}
+x_{ij}^{\mathrm{EV}} =
+\sum_{l \in \mathcal{S}} v(l) P_{\mathcal{S}}(l \mid \mathbf{u}_{ij}),
+\end{equation}
+where $v(l)$ maps each rating token to its numeric value. This produces a continuous score that uses the full probability distribution over valid rating categories. EV scores are z-standardized within model, dataset, condition, and criterion before entering the validation models, so that coefficients are comparable across models and criteria.
+
+In addition to the EV score, we compute the normalized Shannon entropy of the same rating-token distribution as a diagnostic of rating-token dispersion. Entropy indicates whether the EV score is based on probability mass concentrated on one or a few rating tokens or spread across multiple rating tokens. This diagnostic is described in Section~\ref{sec:methods_diagnostics}; implementation details are provided in Appendix~\ref{app:logit_score_extraction}.
+
+
+
+\subsection{Validity Evidence for RQ1}\label{sec:methods_rq1}
+
+RQ1 evaluates whether explicit formative recomposition of theoretically specified criteria provides stronger validity evidence than holistic or weakly specified alternatives. We assess this in two complementary settings: convergent validity on \textit{FeedbackQA} and predictive validity on \textit{Barter Deals}. In both settings, the alternative construct representations defined in Table~\ref{tab:construct_representations} are compared by testing how strongly their LLM-derived measurements align with an external validity criterion.
+
+\subsubsection{Convergent Validity: FeedbackQA}\label{sec:methods_feedbackqa}
+
+The \textit{FeedbackQA} analysis assesses convergent validity by comparing LLM-derived measurements of \textit{Answer Quality} against human quality ratings. Each Q\&A pair has one set of LLM-derived measurements but two human annotations, indexed by $a \in \{1,2\}$. The regression is therefore estimated at the annotation level: each document-level LLM measurement is paired with each corresponding human rating. Human ratings are treated as continuous interval scores on the original four-point scale.
+
+Let $m$ index the construct representation being evaluated, and let $C_m = \{c_1,\ldots,c_{J_m}\}$ denote the corresponding criterion set. For the naive holistic baseline and informed holistic design control, $J_m=1$ because each condition produces a single overall score. For the formative condition, $J_m=4$ because the four answer-quality dimensions are measured separately. For each representation $m$, we estimate
+
+\begin{equation}\label{eq:feedbackqa_regression}
+    y^{\mathrm{H}}_{ia}
+    =
+    \beta_{0m}
+    +
+    \sum_{j=1}^{J_m}
+    \beta_{jm} x^{\mathrm{EV}}_{ijm}
+    +
+    \delta_m \ln(W_i)
+    +
+    \varepsilon_{iam},
+\end{equation}
+
+where $y^{\mathrm{H}}_{ia}$ denotes the human rating assigned to document $d_i$ by annotator $a$, $x^{\mathrm{EV}}_{ijm}$ denotes the standardized LLM EV score for criterion $j$ under representation $m$, and $W_i$ denotes the document word count. The log word-count term controls for document-length effects in the relationship between LLM scores and human ratings.
+
+Because the LLM measurements and word counts vary at the document level, while the human ratings vary at the annotation level, residuals may be correlated within documents. We therefore estimate all models using Ordinary Least Squares (OLS) with standard errors clustered at the document level.
+
+Model performance is evaluated using grouped five-fold cross-validation. Folds are grouped by document so that the two annotations for the same Q\&A pair never appear in both the training and test sets. For each specification, we generate out-of-fold predictions and compute RMSE, Pearson's $r$, Spearman's $\rho$, and Kendall's $\tau$ between predicted and observed human ratings. Human-human alignment is reported as a reference benchmark for annotation consistency, not as a competing model.
+
+
+
+\subsubsection{Predictive Validity: Barter Deals}\label{sec:methods_barter}
+
+The \textit{Barter Deals} analysis assesses predictive validity by testing whether LLM-derived measurements of \textit{Deal Attractiveness} predict creator application behavior. Let $Y_i$ denote the number of applications received by Deal $i$ within its first seven days after publication. The outcome is a highly dispersed count variable, with many Deals receiving no applications and a small number receiving very high application counts. We therefore estimate Negative Binomial regression models with a log link. Because multiple Deals may be posted by the same partner, standard errors are clustered at the partner level.
+
+Before adding LLM-derived measurements, we estimate a structured baseline model containing only non-LLM platform variables:
+\begin{equation}\label{eq:barter_base_regression}
+    \ln(\mu_i) = \beta_0 + \boldsymbol{\gamma}^{T}\mathbf{Z}_i + \alpha_{\tau(i)},
+\end{equation}
+where $\mu_i = \mathbb{E}[Y_i \mid \mathbf{Z}_i]$ is the expected application count for Deal $i$. The vector $\mathbf{Z}_i$ contains structural controls for strict follower requirements, competitor density, platform strategy, geographic market scope, and product category. To account for text-length effects, $\mathbf{Z}_i$ also includes quartile indicators for body length and requirements length. Finally, $\alpha_{\tau(i)}$ denotes month-year fixed effects, which absorb platform growth, seasonality, and other time-varying shocks. The purpose of the baseline model is to partial out predictable market structure before evaluating the additional validity evidence provided by LLM-derived measurements.
+
+For each construct representation $m$ defined in Table~\ref{tab:construct_representations}, the baseline model is augmented with the corresponding LLM-derived scores:
+\begin{equation}\label{eq:barter_augmented_regression}
+    \ln(\mu_i)
+    =
+    \beta_{0m}
+    +
+    \sum_{j=1}^{J_m} \beta_{jm} x^{\mathrm{EV}}_{ijm}
+    +
+    \boldsymbol{\gamma}_{m}^{T}\mathbf{Z}_i
+    +
+    \alpha_{\tau(i)}
+\end{equation}
+where $x^{\mathrm{EV}}_{ijm}$ denotes the standardized LLM EV score for Deal $i$ on criterion $j$ under construct representation $m$. The number of LLM-derived predictors depends on the representation: $J_m=1$ for the naive holistic baseline, $J_m=3$ for the macro-formative representation, and $J_m=10$ for the fine-grained formative representation.
+
+Predictive-validity evidence is evaluated in two ways. First, we compare in-sample model fit against the structured baseline using log-likelihood, McFadden pseudo-$R^2$, AIC, and BIC. Improvements are reported relative to the baseline: $\Delta$LL is defined as $LL_{\mathrm{model}} - LL_{\mathrm{baseline}}$, while $\Delta$AIC and $\Delta$BIC are defined as $AIC_{\mathrm{baseline}} - AIC_{\mathrm{model}}$ and $BIC_{\mathrm{baseline}} - BIC_{\mathrm{model}}$, respectively. All three quantities are oriented so that positive values indicate improvement over the structured baseline.
+
+Second, we assess out-of-sample generalization using five-fold cross-validation. In each fold, the model is estimated on the training partition and evaluated on held-out Deals. Folds are grouped by partner so that Deals from the same partner do not appear in both training and test partitions. Predictive performance is summarized using RMSE, Poisson deviance, and Spearman's $\rho$. RMSE captures prediction error on the original application-count scale, Poisson deviance provides a count-appropriate predictive loss, and Spearman's $\rho$ captures rank-order alignment between observed and predicted application counts.
+
+
+
+
+% \subsection{Convergent Validity: FeedbackQA}\label{sec:methods_feedbackqa}
+
+% \subsubsection{Dataset Overview}
+
+% The \textit{FeedbackQA} dataset \citet{li_using_2022} contains evaluations of Q\&A pairs ($n=9065$) related to COVID-19, which were scraped from the websites of WHO, US Government, UK Government, Canadian Government, and the Australian Government. Crowdsourced workers from English-speaking countries were hired through Amazon's MTurk platform to rate each Q\&A pair and provide feedback on their rating. The rating is performed on a four-point Likert scale (\textit{bad, could be improved, good, excellent}). The feedback concerns "a natural language explanation elaborating on the strengths and/or weaknesses of the answer" \citep{li_using_2022}, which we leverage to determine the formative indicators.
+
+% The text length of the Q\&A pairs has a mean of 169.09 words with a standard deviation of 148.93, with the full empirical distribution visualized in Appendix \ref{app:residual_verbosity_sensitivity}. The mature text brackets used for the verbosity-bias diagnostic are defined from the corpus-specific length distribution, where the median word count is 126 words and the 75th percentile is 202 words.
+
+% %TODO move to appendix?
+% The distribution of the annotation-level human ratings is shown in Table~\ref{tab:human_ratings_dist}. The distribution is heavily bimodal, with the majority of the ratings either 1 or 4 (65.21\%), while the intermediate ratings of 2 or 3 account for the remainder (34.79\%). 
+
+% \begin{table}
+%     \caption{Distribution of Human Ratings for FeedbackQA}\label{tab:human_ratings_dist}
+%     \begin{tabular}{lcc}
+%     \toprule
+%     Rating & Count (Annotations) & Percentage (\%) \\
+%     \midrule
+%         1 - Bad & 6086 & 33.57 \\
+%         2 - Could be improved & 3120 & 17.21 \\
+%         3 - Good & 3188 & 17.58 \\
+%         4 - Excellent & 5736 & 31.64 \\
+%     \bottomrule
+%     \end{tabular}
+% \end{table}
+
+
+% \subsubsection{Definition of Experimental Conditions and Evaluation Criteria}\label{sec:qa_experimentaldesign}
+
+% We define three experimental conditions: the naive baseline, the informed baseline, and the formative experimental condition. The naive baseline evaluates the holistic construct of \textit{Overall Answer Quality} using a minimal semantic definition.
+
+% The formative condition is constructed by deriving dimensions empirically from the natural language explanations provided by the crowdsourced raters, supported by the thematic analysis conducted by \citet{li_using_2022}. These explanations indicate that reviewers primarily evaluate whether answers are relevant, complete, focused, and clearly expressed. We therefore decompose \textit{Q\&A Answer Quality} into four formative dimensions: \textit{Topical Alignment}, \textit{Information Coverage}, \textit{Topical Concentration}, and \textit{Communicative Clarity}. The full criterion definitions are provided in Appendix~\ref{app:evaluation_criteria}.
+
+% The informed baseline uses the same enriched descriptions of the four dimensions, but requires the LLM to evaluate them jointly and output a single holistic score. This intermediate baseline distinguishes the effect of enriched construct specification from the additional effect of independently measuring each formative dimension.
+
+
+
+% \subsubsection{Model Specification}
+
+% \paragraph{Convergent Validity}
+
+% To assess convergent validity, we regress human-annotated Q\&A quality on the LLM-derived measurements, treating the four-point Likert ratings as continuous interval data. Because each document $d_i$ has one LLM evaluation but two human ratings indexed by $a \in \{1,2\}$, the regression is estimated at the annotation level. Each document-level LLM measurement is therefore paired separately with each human rating $y^{\text{H}}_{ia}$. To control for verbosity bias, all specifications include the natural logarithm of the document word count, $\ln(W_i)$.
+% %TODO change "verbosity bias" to smth like text length effects?
+
+% For the formative condition, we estimate:
+% \begin{equation}\label{eq:feedbackqa_formative_regression}
+%     y^{\text{H}}_{ia} = \beta_0 + \sum_{j=1}^{J} \beta_j x^{\text{EV}}_{ij} + \delta \ln(W_i) + \varepsilon_{ia},
+% \end{equation}
+% where $y^{\text{H}}_{ia}$ denotes the human quality rating assigned to document $d_i$ in annotation $a$. The criterion set is denoted by \(C=\{c_1,\ldots,c_J\}\), with \(J=4\) for the FeedbackQA formative condition. The predictor $x_{ij}$ denotes the continuous LLM EV measurement for criterion $j$ and document $d_i$.
+
+% For the naive and informed baselines, the model is restricted to a single holistic LLM measurement:
+% \begin{equation}\label{eq:feedbackqa_baseline_regression}
+%     y^{\text{H}}_{ia} = \beta_0 + \beta_1 x^{\text{EV}}{i,\mathrm{hol}} + \delta \ln(W_i) + \varepsilon_{ia}.
+% \end{equation}
+% Here, $x^{\text{EV}}_{i,\mathrm{hol}}$ denotes the condition-specific holistic EV measurement for document $d_i$: the minimally specified \textit{Overall Answer Quality} score in the naive baseline and the enriched holistic answer-quality score in the informed baseline.
+
+% Because the LLM measurements and word counts vary at the document level, while the human ratings vary at the annotation level, residuals may be correlated within documents. We therefore estimate all models using Ordinary Least Squares (OLS) with standard errors clustered at the document level.
+
+% \paragraph{Cross-Validated Alignment Metrics}
+
+% For each specification, we generate out-of-fold predictions and compute RMSE, Pearson's $r$, Spearman's $\rho$, and Kendall's $\tau$ between predicted and observed ratings. Five-fold cross-validation is grouped by document, ensuring that the two annotations for the same document never appear in both the training and test sets. Human-human alignment is reported as a reference benchmark for annotation consistency, not as a competing model.
+
+
+
+% \subsection{Predictive Validity: Barter Deals}\label{sec:methods_barter}
+
+% \subsubsection{Dataset Overview}
+
+% The \textit{Barter Deals} dataset contains \textit{Deals} written by companies ($n=3137$). Barter is an online marketplace where companies (\textit{partners}) can barter goods and services in exchange for influencer content. For example, a company that sells hair styling tools offers their new product in exchange for a video of a creator using it; or, a museum provides free entrance to a creator and their friends in exchange for a video of their visit. Creators view Deals on the Barter app, and can apply to the deals for which they are eligible. 
+
+% The \textit{Deal Text} is the marketing copy that is posted on the Barter platform as part of the Deals that creators can apply to, and consists of a Title, Body, and Requirements. The Title provides a quick overview of the deal. The Body contains persuasive marketing copy used to inform the creator about details of the product, service, or experience being offered, as well as optional additional rewards. The Requirements section specifies what the company requires from the creator, such as the number of videos, script constraints, or details on the intended advertising use of the content.
+
+% %TODO applications or Apps?
+% The outcome variable is the number of applications a Deal receives within the first seven days of going live (\textit{applications after 7 days}). This variable is used as a behavioral criterion for \textit{Deal Attractiveness}. Although application volume is determined by both textual quality and market structure, meaningful differences in the attractiveness of Deals are expected to be partially reflected in creator application behavior.
+
+% Corpus-specific text-length statistics and quartile thresholds for the Barter verbosity diagnostic are reported in Appendix~\ref{app:verbosity_diagnostics}.
+
+
+% \begin{table}[h]
+%     \centering
+%     \caption{Descriptive statistics of the behavioral KPI \textit{applications after 7 days}}
+%     \label{tab:apps7d_stats}
+%     \begin{tabular}{lrrrrrrrr}
+%     \toprule
+%     Variable & $N$ & Mean & SD & Min & P25 & Median & P75 & Max \\
+%     \midrule
+%     Applications after 7 days & 3137 & 9.48 & 16.97 & 0 & 0 & 3 & 11 & 188 \\
+%     \bottomrule
+%     \end{tabular}
+% \end{table}
+
+% The application count is highly dispersed with substantial mass at zero (25th percentile = 0), motivating a count model that accounts for overdispersion, such as a Negative Binomial.
+
+
+% \subsubsection{Definition of Experimental Conditions and Evaluation Criteria}\label{sec:barter_experimentaldesign}
+
+% We define three experimental conditions: the naive baseline, the macro-formative baseline, and the formative condition. All dimensions across these conditions are measured on a seven-point Likert scale to allow finer-grained variation in the evaluations.
+
+% While the informed baseline in Section \ref{sec:methods_feedbackqa} tests the general efficacy of structural decomposition, the macro-formative baseline used for Barter Deals isolates the value of fine-grained decomposition relative to broader macro-level evaluations commonly used in NLP \citep{fabbri_summeval_2021, liu_g-eval_2023, zhongUnifiedMultiDimensionalEvaluator2022a}.
+
+% The naive baseline evaluates the holistic construct of \textit{Overall Deal Attractiveness}, measuring "the overall appeal of the barter opportunity from the perspective of a typical content creator." 
+
+% The macro-formative baseline serves as intermediate condition, and jointly measures the three theoretical pillars of \textit{Deal Attractiveness} established in Section \ref{sec:theor_macro_pillars}: Reward, Cost, and Pitch Quality. 
+% %TODO: define \ref{sec:theor_macro_pillars}
+
+% The formative condition decomposes the three macro-dimensions into ten fine-grained dimensions: \textit{Brand Prestige}, \textit{Perceived Economic Value}, \textit{Creator Brand Alignment}, \textit{Functional Utility}, \textit{Product Universality}, \textit{Workload Volume}, \textit{Creative Restrictiveness}, \textit{Call-to-Action Strength}, \textit{Rhetorical Objectivity}, and \textit{Proposition Clarity}. The full criterion definitions are provided in Appendix~\ref{app:evaluation_criteria}.
+
+
+
+% \subsubsection{Model Specification}
+
+% \paragraph{Predictive Validity}
+% To assess predictive validity in a real-world behavioral setting, we model creator application volume using the Barter Deals dataset. Let $Y_i$ denote the number of applications received by Deal $i$ within its first seven days of going live. Because $Y_i$ is an overdispersed count outcome, so we estimate Negative Binomial regression models with a log link. Because multiple Deals may be posted by the same brand, all models use standard errors clustered at the partner ID level.
+
+% Before introducing the LLM-derived measurements, we estimate a structured base model containing only non-LLM platform variables:
+% \begin{equation}\label{eq:barter_base_regression}
+%     \ln(\mu_i) = \beta_0 + \gamma^T \mathbf{Z}_i + \alpha_{\tau(i)},
+% \end{equation}
+% where $\mu_i = \mathbb{E}[Y_i \mid \mathbf{Z}_i]$ is the expected application count for Deal $i$. The vector $\mathbf{Z}_i$ contains structural controls for strict follower requirements (defined by Deals that require creators to have $>4000$ followers in order to be eligible to apply), competitor density, platform strategy, geographic market scope, and product category. To account for verbosity-related length effects, $\mathbf{Z}_i$ also includes separate quartile-based indicators for body length and requirements length. This allows length effects to vary across text-length brackets rather than assuming a linear relationship between text length and the outcome variable. Finally, $\alpha_{\tau(i)}$ denotes month-year fixed effects, where $\tau(i)$ maps Deal $i$ to the month-year period in which it went live. These fixed effects absorb platform growth, seasonal variation, and macro-level temporal shocks. The purpose of this base specification is to partial out predictable market structure before evaluating the LLM-derived measurements.
+% %TODO have to explain competitor density, maybe in Appendix
+
+% The base model is then augmented with the LLM-derived measurements to test whether they explain additional variation in creator applications. For a given measurement condition, let $C = \{c_1, \ldots, c_J\}$ denote the corresponding criterion set with its cardinality $J = |C|$. The augmented specification is:
+% \begin{equation}\label{eq:barter_augmented_regression}
+%     \ln(\mu_i) = \beta_0 + \sum_{j=1}^{J} \beta_j x^{\text{EV}}_{ij} + \boldsymbol{\gamma} \mathbf{Z}_i + \alpha_{\tau(i)},
+% \end{equation}
+% where $x^{\text{EV}}_{ij}$ denotes the continuous LLM Expected Value (EV) measurement for Deal $i$ on criterion $j$.
+
+% The set $C$ varies by measurement condition. In the naive baseline, $J=1$, with $C$ containing only the holistic \textit{Overall Deal Attractiveness} criterion. In the macro-formative baseline, $J=3$, with $C$ containing the three macro-pillars: Reward, Cost, and Pitch Quality. In the fine-grained formative condition, $J=10$, with $C$ containing the ten fine-grained Deal Quality dimensions. 
+
+% \paragraph{Model Comparison Criteria}
+
+% Model performance is evaluated using both in-sample likelihood-based criteria and out-of-sample cross-validation. For the in-sample comparison, we report the log-likelihood, McFadden pseudo-$R^2$, AIC, and BIC to assess whether the LLM-augmented specifications improve model fit beyond the structured baseline while accounting for model complexity.
+
+% To assess generalization, all specifications are also evaluated using $5$-fold cross-validation. In each fold, the model is estimated on the training partition and evaluated on held-out Deals. Out-of-sample performance is summarized using RMSE, Poisson deviance, and Spearman's $\rho$. RMSE captures prediction error on the original application-count scale, Poisson deviance provides a count-appropriate predictive loss, and Spearman's $\rho$ captures rank-order alignment between observed and predicted application counts.
+
+% For the likelihood-based comparisons, improvements are reported relative to the structural baseline. $\Delta$LL is defined as $LL_{\text{model}} - LL_{\text{baseline}}$, while $\Delta$AIC and $\Delta$BIC are defined as $AIC_{\text{baseline}} - AIC_{\text{model}}$ and $BIC_{\text{baseline}} - BIC_{\text{model}}$, respectively. All three quantities are oriented so that positive values indicate improvement over the structural baseline.
+
+
+
+\subsection{Diagnostic Evidence for RQ2}\label{sec:methods_diagnostics}
+
+RQ2 concerns whether stronger construct specification improves the diagnostic interpretability of artefact-level measurements. Since the formative scores are recomposed through regression, the criterion-level measurements should exhibit properties that support coefficient-level interpretation. We therefore assess three diagnostic properties:
+
+\begin{description}
+    \item[\textbf{Distributional behavior.}]
+    We inspect the distribution, mean, and standard deviation of the Expected Value (EV) scores and normalized entropy (Table~\ref{tab:scale_utilization}). EV dispersion captures \textit{scale utilization}: whether the model uses the rating scale broadly or collapses evaluations into a narrow range. Entropy captures \textit{rating-token dispersion}: whether probability mass is concentrated on one or a few rating tokens, producing more quantized EV scores, or spread across multiple rating tokens, producing more continuous EV scores. Together, these two axes define four \textit{rating regimes}; detailed interpretations are provided in Appendix~\ref{app:rating_regimes}.
+
+    \item[\textbf{Criterion separability.}]
+    A formative decomposition is diagnostically useful only if theoretically distinct criteria remain empirically distinguishable. This is especially important for regression-based recomposition, where coefficient-level interpretation depends on each criterion contributing distinguishable variation. We assess criterion separability using the variance inflation factor (VIF) among criterion-level EV scores. High VIF values indicate that the dimensions are strongly collinear: this does not necessarily harm aggregate prediction, but it weakens the interpretation of individual coefficients as dimension-specific effects. Details are provided in Appendix~\ref{app:vif_diagnostics_prose}.
+
+    \item[\textbf{Residual verbosity sensitivity.}]
+    Because LLM evaluators may prefer longer texts even when quality is comparable \citep{saito_verbosity_2023}, we inspect whether ratings remain sensitive to text length after documents have reached a mature length. The diagnostic focuses on the third and fourth quartiles of the text-length distribution, where additional length is less likely to reflect genuine improvements in text quality. We measure this as the absolute Cohen's $d$ difference in mean EV ratings between the two quartiles. Details are provided in Appendix~\ref{app:residual_verbosity_sensitivity}.
+
+\end{description}

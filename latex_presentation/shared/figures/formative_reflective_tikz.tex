@@ -1,0 +1,81 @@
+\begin{tikzpicture}[
+    >=Latex,
+    font=\sffamily\small,
+    latent/.style={
+        circle,
+        draw=black!70,
+        thick,
+        minimum size=1.15cm,
+        align=center
+    },
+    indicator/.style={
+        rectangle,
+        rounded corners=2pt,
+        draw=black!70,
+        thick,
+        minimum width=1.15cm,
+        minimum height=0.65cm,
+        align=center
+    },
+    title/.style={
+        font=\sffamily\bfseries\small,
+        align=center
+    },
+    note/.style={
+        font=\sffamily\footnotesize,
+        align=center,
+        text width=5cm
+    },
+    arrow/.style={
+        -{Latex[length=2.3mm]},
+        thick
+    }
+]
+
+% ------------------------------------------------
+% Reflective / system-level
+% ------------------------------------------------
+
+\node[title] at (0,2.1) {System-level evaluation};
+\node[title] at (0,1.65) {Reflective measurement};
+
+\node[latent] (etaS) at (0,0.55) {$\eta_S$};
+
+\node[indicator] (sx1) at (-1.8,-0.85) {$x_1$};
+\node[indicator] (sx2) at (0,-1.15) {$x_2$};
+\node[indicator] (sx3) at (1.8,-0.85) {$x_3$};
+
+\draw[arrow] (etaS) -- (sx1);
+\draw[arrow] (etaS) -- (sx2);
+\draw[arrow] (etaS) -- (sx3);
+
+\node[note] at (0,-2.15)
+{Latent system ability $\eta_S$ causes observed performance across tasks, prompts, or benchmark items.};
+
+\node[note] at (0,-3.0)
+{$x_j = \lambda_j \eta_S + \varepsilon_j$};
+
+% ------------------------------------------------
+% Formative / artefact-level
+% ------------------------------------------------
+
+\node[title] at (7.1,2.1) {Artefact-level evaluation};
+\node[title] at (7.1,1.65) {Formative measurement};
+
+\node[indicator] (ax1) at (5.3,0.55) {$x_1$};
+\node[indicator] (ax2) at (7.1,0.85) {$x_2$};
+\node[indicator] (ax3) at (8.9,0.55) {$x_3$};
+
+\node[latent] (etaA) at (7.1,-0.85) {$\eta_A$};
+
+\draw[arrow] (ax1) -- (etaA);
+\draw[arrow] (ax2) -- (etaA);
+\draw[arrow] (ax3) -- (etaA);
+
+\node[note] at (7.1,-2.15)
+{Criterion-specific scores jointly constitute the quality $\eta_A$ of an individual artefact.};
+
+\node[note] at (7.1,-3.0)
+{$\eta_A = \sum_{j=1}^{J} \gamma_j x_j + \zeta$};
+
+\end{tikzpicture}

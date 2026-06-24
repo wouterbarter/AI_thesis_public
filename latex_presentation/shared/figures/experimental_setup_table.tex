@@ -1,0 +1,51 @@
+
+\begin{table*}[!h]
+\centering
+\small
+\caption{Construct representations compared across validation settings. FeedbackQA evaluates \textit{Answer Quality}; Barter Deals evaluates \textit{Deal Attractiveness}. The table summarizes how each target construct is specified in the criterion prompt and how many LLM-derived scores are produced per artefact.}
+\label{tab:construct_representations}
+\begin{tabularx}{\textwidth}{@{} 
+    l 
+    >{\raggedright\arraybackslash}p{3.8cm} 
+    >{\raggedright\arraybackslash}X 
+    c 
+    @{}}
+\toprule
+\textbf{Dataset} & \textbf{Representation} & \textbf{Criterion content} & \begin{tabular}{@{}c@{}}\textbf{Scores /} \\ \textbf{artefact}\end{tabular} \\
+\midrule
+\textbf{FeedbackQA} 
+& Naive holistic 
+& Overall answer quality 
+& 1 \\
+\addlinespace
+& Informed holistic control 
+& Alignment; Coverage; Concentration; Clarity 
+& 1 \\
+\addlinespace
+& Formative 
+& Alignment; Coverage; Concentration; Clarity 
+& 4 \\
+
+\midrule
+
+\textbf{Barter Deals} 
+& Naive holistic 
+& Overall deal attractiveness 
+& 1 \\
+\addlinespace
+& Macro-formative 
+& Reward; Cost; Pitch Quality 
+& 3 \\
+\addlinespace
+& Fine-grained formative 
+& Ten dimensions nested within Reward, Cost, and Pitch Quality 
+& 10 \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.15cm}
+\begin{flushleft}
+\footnotesize
+\textit{Note.} Each score is obtained from one LLM call. Holistic representations produce one overall score, while formative representations produce one score per criterion. Criterion-level scores are recomposed through regression when assessing convergent or predictive validity.
+\end{flushleft}
+\end{table*}

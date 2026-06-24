@@ -1,0 +1,98 @@
+\begin{tikzpicture}[
+    >=Latex,
+    font=\sffamily\scriptsize,
+    node distance=0.4cm,
+    % Base box style
+    box/.style={rectangle, rounded corners=3pt, draw=black!60, thick, align=center, inner sep=6pt, minimum height=1.1cm},
+    % Specific semantic colors
+    diagbox/.style={box, fill=gray!8, text width=4.2cm},
+    fqabox/.style={box, fill=blue!6, text width=5.5cm},
+    barterbox/.style={box, fill=green!8, text width=5.5cm},
+    warnbox/.style={box, fill=red!6, text width=5.5cm, draw=red!40!black},
+    % Headers and arrows
+    stagehead/.style={font=\sffamily\bfseries\footnotesize, text=black!85, align=center},
+    arrow/.style={-{Latex[length=2.5mm]}, thick, draw=black!60},
+    splitarrow/.style={-{Latex[length=2.5mm]}, thick, draw=black!50, rounded corners=4pt}
+]
+
+% =========================================================
+% STAGE 1: INSTRUMENT DIAGNOSTICS (Top Row)
+% =========================================================
+\node[stagehead] (title1) at (0, 0) {1. Instrument Diagnostics};
+
+% Middle box (Anchor)
+\node[diagbox, below=0.2cm of title1] (verbosity) {
+    \textbf{Verbosity Bias}\\[2pt]
+    \textit{Llama 3.2} is highly sensitive;\\
+    all others are robust to text length
+};
+
+% Left box
+\node[diagbox, left=0.4cm of verbosity] (regime) {
+    \textbf{Rating Regimes}\\[2pt]
+    \textit{Qwen 3.5} is continuous;\\
+    \textit{Qwen 3 \& Gemma 4} are quantized
+};
+
+% Right box
+\node[diagbox, right=0.4cm of verbosity] (vif) {
+    \textbf{Multicollinearity (VIF)}\\[2pt]
+    FeedbackQA criteria are entangled;\\
+    Barter Deals are perfectly separable
+};
+
+% =========================================================
+% STAGE 2: VALIDITY EVIDENCE (Bottom Rows)
+% =========================================================
+\coordinate (split) at (0, -2.5);
+
+% Left Side: Convergent (FeedbackQA)
+\node[stagehead] (title2a) at (-3.4, -3.0) {2a. Convergent Validity\\(FeedbackQA)};
+
+\node[fqabox, below=0.2cm of title2a] (fqa1) {
+    \textbf{Formative > Holistic}\\[2pt]
+    Formative decomposition yields modest but\\consistent gains over holistic baselines
+};
+
+\node[fqabox, below=0.3cm of fqa1] (fqa2) {
+    \textbf{Top Performers}\\[2pt]
+    \textit{Qwen 3 \& 3.5} dominate, meeting or\\exceeding human-to-human agreement
+};
+
+\node[warnbox, below=0.3cm of fqa2] (fqa3) {
+    \textbf{Diagnostic Limitation}\\[2pt]
+    High multicollinearity prevents clean,\\independent coefficient interpretation
+};
+
+% Right Side: Predictive (Barter Deals)
+\node[stagehead] (title2b) at (3.4, -3.0) {2b. Predictive Validity\\(Barter Deals)};
+
+\node[barterbox, below=0.2cm of title2b] (bar1) {
+    \textbf{Fine-Grained Dominates}\\[2pt]
+    Massive $\Delta$AIC/BIC and rank-order gains\\over macro-formative and holistic
+};
+
+\node[barterbox, below=0.3cm of bar1] (bar2) {
+    \textbf{Top Performers}\\[2pt]
+    \textit{Gemma 4 \& Qwen 3.5} strongly excel\\at rank-ordering application counts
+};
+
+\node[barterbox, below=0.3cm of bar2] (bar3) {
+    \textbf{Key Measurement Insight}\\[2pt]
+    Model measurement validity does not\\perfectly generalize across different tasks
+};
+
+% =========================================================
+% ROUTING ARROWS
+% =========================================================
+% Drop down from diagnostics
+\draw[thick, draw=black!50] (verbosity.south) -- (split);
+
+% Split to FeedbackQA
+\draw[splitarrow] (split) -| (title2a.north);
+
+% Split to Barter Deals
+\draw[splitarrow] (split) -| (title2b.north);
+
+\end{tikzpicture}%
+}

@@ -1,0 +1,184 @@
+\begin{tikzpicture}[
+    >=Latex,
+    font=\sffamily\scriptsize,
+    % Styles
+    paneltitle/.style={font=\sffamily\bfseries\footnotesize, align=left},
+    theorybox/.style={rectangle, rounded corners=2pt, draw=black!65, thick, fill=blue!6, align=center, inner sep=6pt, text width=3.4cm, minimum height=0.9cm},
+    compbox/.style={rectangle, rounded corners=2pt, draw=black!65, thick, fill=gray!8, align=center, inner sep=6pt, text width=4.1cm, minimum height=0.9cm},
+    evidbox/.style={rectangle, rounded corners=2pt, draw=black!65, thick, fill=green!8, align=center, inner sep=6pt, text width=4.1cm, minimum height=0.9cm},
+    rqbox/.style={rectangle, rounded corners=2pt, draw=black!65, thick, fill=green!15, align=center, inner sep=6pt, text width=4.0cm, minimum height=0.9cm},
+    note/.style={font=\sffamily\tiny, text=black!65, align=center},
+    arrow/.style={-{Latex[length=2mm]}, semithick, draw=black!75},
+    softarrow/.style={-{Latex[length=2mm]}, semithick, draw=black!55},
+    panelarrow/.style={-{Latex[length=2.5mm]}, thick, draw=black!70}
+]
+
+% =========================================================
+% PANEL 1: THEORETICAL SPECIFICATION
+% =========================================================
+
+\node[theorybox] (objectclaim) {
+    \textbf{Object of claim}\\[2pt]
+    target construct $\eta(d_i)$\\
+    e.g., \textit{Answer Quality}\\
+    or \textit{Deal Attractiveness}\\
+    for artefact $d_i$
+};
+
+\node[theorybox, right=1cm of objectclaim] (specproc) {
+    \textbf{Construct specification}\\[2pt]
+    selects a criterion set\\
+    $C \in \{C_H,C_M,C_F\}$\\
+    used to represent the construct
+};
+
+\node[theorybox, right=1.2cm of specproc] (macrobox) {
+    \textbf{Macro-formative}\\[2pt]
+    several broad criteria\\
+    $\lvert C_M\rvert > 1$
+};
+
+\node[theorybox, above=0.3cm of macrobox] (holistic) {
+    \textbf{Holistic}\\[2pt]
+    one general criterion\\
+    $\lvert C_H\rvert = 1$
+};
+
+\node[theorybox, below=0.3cm of macrobox] (criterion) {
+    \textbf{Fine-grained formative}\\[2pt]
+    multiple explicit criteria\\
+    $\lvert C_F\rvert > \lvert C_M\rvert$
+};
+
+% Granularity Axis
+\node[note, above right=-0.12cm and 0.28cm of holistic.east] (genlabel) {coarse construct specification};
+\node[note, right=0.28cm of criterion.east, minimum width=73pt] (explabel) {fine-grained 
+construct specification};
+\draw[softarrow] (genlabel.south west) -- (explabel.north west) node[right=1pt, note, pos=0.45] {criterion-set\\granularity};
+% Panel 1 arrows
+\draw[arrow] (objectclaim.east) -- (specproc.west);
+\draw[arrow] (specproc.east) -- ++(0.4,0) |- (holistic.west);
+\draw[arrow] (specproc.east) -- (macrobox.west);
+\draw[arrow] (specproc.east) -- ++(0.4,0) |- (criterion.west);
+
+\node[paneltitle, anchor=south west] (titleA)
+    at ([yshift=0.6cm]objectclaim.north west)
+    {1.\ Theoretical Specification};
+
+% =========================================================
+% PANEL 2: LLM MEASUREMENT OPERATIONALIZATION
+% =========================================================
+
+\node[compbox, below=1.71cm of specproc] (triplet) {
+    \textbf{Model Input}\\[3pt]
+    for each $c_j\in C$:\\[2pt]
+    $\mathbf{u}_{ij}=[\,s\,;\,c_j\,;\,d_i\,]$\\[4pt]
+    $s$: system context + task\\
+    $c_j$: criterion + anchors\\
+    $d_i$: target artefact
+};
+
+\node[compbox, right=0.84cm of triplet] (operator) {
+    \textbf{LLM Measurement Operator}\\[3pt]
+    $\Phi_\theta\!\left(\mathbf{u}_{ijm}\right)=\mathbf{p}_{ijm}$\\[4pt]
+    output: $\mathbf{P}_i(C_m)\in[0,1]^{J_m\times L}$\\
+    for criteria $J_m$ and rating levels $L$
+};
+
+% Bridge Panel 1 to Panel 2
+\draw[arrow] (specproc.south) -- (triplet.north);
+
+% Panel 2 arrow
+\draw[arrow] (triplet.east) -- (operator.west);
+
+\node[paneltitle, anchor=south west] (titleB)
+    at ([yshift=0.6cm]triplet.north west -| objectclaim.west)
+    {2.\ LLM Measurement Operationalization};
+
+% =========================================================
+% PANEL 3: EMPIRICAL EVALUATION
+% =========================================================
+
+\node[compbox, below left=2.22cm and 0.01cm of triplet, xshift=0.95cm] (summaries) {
+    \textbf{Derived measurements}\\[2pt]
+    expected value scores $x^{\mathrm{EV}}_{ij}$\\
+    entropy $H_{ij}$
+};
+
+
+\node[evidbox, right=1.2cm of summaries, yshift=0.8cm] (align) {
+    \textbf{Validity evidence}\\[2pt]
+    convergent validity: human ratings\\
+    predictive validity: KPIs
+};
+
+\node[evidbox, right=1.2cm of summaries, yshift=-0.8cm] (diag) {
+    \textbf{Measurement diagnostics}\\[2pt]
+    distributional properties\\
+    verbosity sensitivity, multicollinearity
+};
+
+\node[rqbox, right=0.8cm of align] (rq1) {
+    \textbf{RQ1}\\[2pt]
+    does stronger construct specification\\
+    provide stronger validity evidence?
+};
+
+\node[rqbox, right=0.8cm of diag] (rq2) {
+    \textbf{RQ2}\\[2pt]
+    does stronger construct specification\\
+    improve diagnostic interpretability?
+};
+
+% Permitted-claims bounding frame
+\begin{scope}[on background layer]
+    \node[
+        rectangle,
+        rounded corners=4pt,
+        draw=green!45!black,
+        dashed,
+        thick,
+        fill=none,
+        fit=(align) (diag) (rq1) (rq2),
+        inner xsep=8pt,
+        inner ysep=5pt
+    ] (claimframe) {};
+\end{scope}
+
+\node[
+    font=\sffamily\scriptsize,
+    text=green!35!black,
+    fill=white,
+    inner sep=2pt,
+    anchor=south west,
+    align=left
+] at ([xshift=0.2cm,yshift=-0.02cm]claimframe.north west) {
+    \textbf{Permitted claims}: evidence for meaningful artefact-level measurement
+};
+
+% Bridge Panel 2 to Panel 3
+% \draw[arrow] (operator.south) -- ++(0,-0.6) -| (summaries.north);
+\draw[arrow] (operator.south) -- ++(0,-0.6) -| ([xshift=0.5cm]summaries.north);
+
+% Panel 3 arrows
+\draw[arrow] (summaries.east) -- ++(0.4,0) |- (align.west);
+\draw[arrow] (summaries.east) -- ++(0.4,0) |- (diag.west);
+\draw[arrow] (align.east) -- (rq1.west);
+\draw[arrow] (diag.east) -- (rq2.west);
+
+\node[paneltitle, anchor=south west] (titleC)
+    at ([yshift=0.6cm]summaries.north west -| objectclaim.west)
+    {3.\ Empirical Evaluation};
+
+% =========================================================
+% LEFT-SIDE STEP ARROWS
+% =========================================================
+
+\coordinate (A_left) at ([xshift=-0.5cm]titleA.west);
+\coordinate (B_left) at ([xshift=-0.5cm]titleB.west);
+\coordinate (C_left) at ([xshift=-0.5cm]titleC.west);
+
+\draw[panelarrow, bend right=18] (A_left) to (B_left);
+\draw[panelarrow, bend right=18] (B_left) to (C_left);
+
+\end{tikzpicture}%

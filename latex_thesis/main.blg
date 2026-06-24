@@ -4,23 +4,24 @@ The top-level auxiliary file: main.aux
 Reallocating 'name_of_file' (item size: 1) to 9 items.
 The style file: abbrvnat.bst
 Reallocating 'name_of_file' (item size: 1) to 11 items.
-Reallocating 'name_of_file' (item size: 1) to 25 items.
-A level-1 auxiliary file: appendices/A_prompts.aux
-Reallocating 'name_of_file' (item size: 1) to 29 items.
-A level-1 auxiliary file: appendices/B_sample_data.aux
-Reallocating 'name_of_file' (item size: 1) to 41 items.
-A level-1 auxiliary file: appendices/C_additional_graphs_diags.aux
-Reallocating 'name_of_file' (item size: 1) to 41 items.
-A level-1 auxiliary file: appendices/D_measurement_diagnostics.aux
-Reallocating 'name_of_file' (item size: 1) to 37 items.
-A level-1 auxiliary file: appendices/E_evaluation_criteria.aux
+Reallocating 'name_of_file' (item size: 1) to 23 items.
+A level-1 auxiliary file: appendices/prompts.aux
+Reallocating 'name_of_file' (item size: 1) to 32 items.
+A level-1 auxiliary file: appendices/score_extraction.aux
+Reallocating 'name_of_file' (item size: 1) to 27 items.
+A level-1 auxiliary file: appendices/sample_data.aux
+Reallocating 'name_of_file' (item size: 1) to 45 items.
+A level-1 auxiliary file: appendices/additional_graphs_diagnostics.aux
+Reallocating 'name_of_file' (item size: 1) to 39 items.
+A level-1 auxiliary file: appendices/measurement_diagnostics.aux
+Reallocating 'name_of_file' (item size: 1) to 35 items.
+A level-1 auxiliary file: appendices/evaluation_criteria.aux
 Database file #1: references.bib
-Warning--I didn't find a database entry for "zhong_towards_2022"
+Warning--I didn't find a database entry for ""
 Warning--to sort, need author or key in PDFModernLLM2026
 Warning--empty year in bang_transforming_2025
 Warning--empty journal in binetteImprovingValidityPractical2024
 Warning--empty year in fabbri_summeval_2021
-Warning--empty year in gu_survey_2025
 Warning--empty year in hashemi_llm-rubric_2024
 Warning--empty year in hashemi_llm-rubric_2024
 Warning--empty year in li_using_2022
@@ -44,45 +45,45 @@ Warning--empty year in zhaoChallengesTrustworthyHuman
 Warning--empty journal in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
-You've used 53 entries,
+You've used 62 entries,
             2773 wiz_defined-function locations,
-            972 strings with 21470 characters,
-and the built_in function-call counts, 32691 in all, are:
-= -- 2746
-> -- 2686
-< -- 28
-+ -- 898
-- -- 844
-* -- 2950
-:= -- 5055
-add.period$ -- 191
-call.type$ -- 53
-change.case$ -- 430
-chr.to.int$ -- 52
-cite$ -- 135
-duplicate$ -- 1180
-empty$ -- 2130
-format.name$ -- 906
-if$ -- 6757
+            1041 strings with 23771 characters,
+and the built_in function-call counts, 37488 in all, are:
+= -- 3158
+> -- 3058
+< -- 33
++ -- 1024
+- -- 961
+* -- 3381
+:= -- 5823
+add.period$ -- 228
+call.type$ -- 62
+change.case$ -- 496
+chr.to.int$ -- 61
+cite$ -- 152
+duplicate$ -- 1344
+empty$ -- 2458
+format.name$ -- 1036
+if$ -- 7735
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 34
-newline$ -- 295
-num.names$ -- 224
-pop$ -- 980
+missing$ -- 39
+newline$ -- 350
+num.names$ -- 260
+pop$ -- 1104
 preamble$ -- 1
-purify$ -- 377
+purify$ -- 434
 quote$ -- 0
-skip$ -- 1046
+skip$ -- 1191
 stack$ -- 0
-substring$ -- 898
-swap$ -- 225
+substring$ -- 1020
+swap$ -- 243
 text.length$ -- 14
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 583
-warning$ -- 28
-while$ -- 227
+type$ -- 682
+warning$ -- 27
+while$ -- 261
 width$ -- 0
-write$ -- 715
-(There were 29 warnings)
+write$ -- 849
+(There were 28 warnings)

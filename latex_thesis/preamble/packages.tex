@@ -6,17 +6,22 @@
 %
 \usepackage{array}
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
 % T1 fonts will be used to generate the final print and online PDFs,
 % so please use T1 fonts in your manuscript whenever possible.
 % Other font encondings may result in incorrect characters.
 %
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage[square,numbers,sort&compress]{natbib}
+\usepackage{graphicx}
+
 \usepackage{tikz}
-\usetikzlibrary{positioning, shapes, arrows.meta}
+
+% \usetikzlibrary{positioning, shapes, arrows.meta, calc}
+\usetikzlibrary{positioning, shapes, arrows.meta, calc, fit, backgrounds}
 \usepackage{booktabs}
 \usepackage{tabularx}
 % \usepackage{pdflscape}
@@ -31,6 +36,9 @@
 \usepackage[figuresright]{rotating}
 \usepackage{placeins}
 \usepackage{subcaption}
+
+\usepackage{dblfloatfix}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
 
 % Used for displaying a sample figure. If possible, figure files should

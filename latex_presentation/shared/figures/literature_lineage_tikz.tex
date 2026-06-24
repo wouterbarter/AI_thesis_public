@@ -1,0 +1,101 @@
+\begin{tikzpicture}[
+    >=Latex,
+    font=\sffamily\scriptsize,
+    % Styles
+    stagehead/.style={font=\sffamily\bfseries\footnotesize, align=center, text=black!80},
+    histbox/.style={rectangle, rounded corners=2pt, draw=black!50, thick, fill=gray!10, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    llmbox/.style={rectangle, rounded corners=2pt, draw=blue!60!black, thick, fill=blue!6, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    pragbox/.style={rectangle, rounded corners=2pt, draw=red!60!black, thick, fill=red!5, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    valbox/.style={rectangle, rounded corners=2pt, draw=green!45!black, thick, fill=green!8, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    finalbox/.style={rectangle, rounded corners=2pt, draw=green!60!black, thick, fill=green!15, align=center, inner sep=6pt, text width=3.4cm, minimum height=1.2cm},
+    arrow/.style={-{Latex[length=2mm]}, semithick, draw=black!75},
+    edgelabel/.style={font=\sffamily\scriptsize\itshape, text=black!70, align=center, fill=white, inner sep=2pt}
+]
+
+% =========================================================
+% COLUMN 1: HOLISTIC AUTOMATIC EVALUATION
+% =========================================================
+\node[histbox] (lex) {
+    \textbf{Lexical Overlap}\\[2pt]
+    Basic automatic text evaluation\\[1pt]
+    \textit{BLEU \citep{papineni2001bleu}, ROUGE \citep{lin2004rouge}}
+};
+
+\node[histbox, below=1.2cm of lex] (sem) {
+    \textbf{Semantic Similarity}\\[2pt]
+    More nuanced text similarity\\[1pt]
+    \textit{BERTScore \citep{zhang2019bertscore}, BLEURT \citep{sellam_bleurt_2020}}
+};
+
+% =========================================================
+% COLUMN 2: LLM-BASED CRITERION SCORING
+% =========================================================
+\node[llmbox, right=3.2cm of lex, yshift=-1.0cm] (iso) {
+    \textbf{Isolated Criterion Scoring}\\[2pt]
+    Fine-grained, reference-free evaluation\\[1pt]
+    \textit{G-Eval \citep{liu_g-eval_2023}, GPTScore \citep{fuGPTScoreEvaluateYou2023}}
+};
+
+% =========================================================
+% COLUMN 3: RECOMPOSITION STRATEGIES
+% =========================================================
+\node[pragbox, right=3.6cm of iso, yshift=1.4cm] (black) {
+    \textbf{Black-Box Aggregation}\\[2pt]
+    Best fit to human rating distributions\\[1pt]
+    \textit{LLM-Rubric \citep{hashemi_llm-rubric_2024}, SAJA \citep{kolaSAJASimpleApproach2026}}
+};
+
+\node[valbox, right=3.6cm of iso, yshift=-1.4cm] (exp) {
+    \textbf{Explainable Aggregation}\\[2pt]
+    Transparent recomposition\\
+    via criterion weights\\[1pt]
+    \textit{UniScore \citep{bang_transforming_2025}}
+};
+
+% =========================================================
+% COLUMN 4: MEANINGFUL MEASUREMENT
+% =========================================================
+\node[finalbox, below=1.37cm of exp] (thesis) {
+    \textbf{Construct-Specified\\Measurement}\\[2pt]
+    Theoretically specified criteria\\
+    and explicit construct claim\\[1pt]
+    \textit{This Thesis}
+};
+
+% =========================================================
+% ARROWS & LABELS
+% =========================================================
+% Chronological drop from Lexical to Semantic
+\draw[arrow] (lex.south) -- node[right=3pt, edgelabel, pos=0.46] {Need to move \\beyond surface features} (sem.north);
+
+% Evolutionary curve from Semantic to Isolated Criteria
+\draw[arrow] (sem.east) to[out=0, in=180] node[midway, edgelabel] {Need for fine-grained\\diagnosis} (iso.west);
+
+% Trunk extension for the recomposition fork 
+% Dynamically placed 85% of the way between the iso box and the right-side boxes
+\coordinate (fork) at ($(iso.east)!0.65!(iso.east -| black.west)$);
+
+% Draw the line and center the text label on this newly lengthened trunk
+\draw[-] (iso.east) -- (fork) node[midway, edgelabel] {Need for unified\\construct claims};
+
+% Split to aggregation types
+\draw[arrow] (fork) to[out=0, in=180] (black.west);
+\draw[arrow] (fork) to[out=0, in=180] (exp.west);
+
+
+
+
+% Evolutionary curve from Explainable to Thesis
+% Pushed label safely away from the starting box with pos=0.45
+\draw[arrow] (exp.south) -- node[pos=0.45, edgelabel] {Need for construct-level\\measurement interpretation} (thesis.north);
+
+% =========================================================
+% STAGE HEADERS
+% =========================================================
+\node[stagehead, above=0.8cm of lex] (h1) {Holistic\\Similarity Metrics};
+\node[stagehead] at (h1 -| iso) (h2) {Multi-Dimensional\\LLM Scoring};
+\node[stagehead] at (h1 -| black) (h3) {Criterion\\ Recomposition};
+
+
+
+\end{tikzpicture}%

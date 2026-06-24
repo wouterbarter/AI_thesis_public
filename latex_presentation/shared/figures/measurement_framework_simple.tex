@@ -1,0 +1,115 @@
+% \begin{tikzpicture}[
+%     >=Latex,
+%     font=\sffamily\scriptsize,
+%     box/.style={
+%         rectangle,
+%         rounded corners=2pt,
+%         draw=black!65,
+%         thick,
+%         align=center,
+%         inner sep=6pt,
+%         minimum height=1.0cm
+%     },
+%     theorybox/.style={
+%         box,
+%         fill=blue!6,
+%         text width=3.4cm
+%     },
+%     compbox/.style={
+%         box,
+%         fill=gray!10,
+%         text width=3.5cm
+%     },
+%     evidbox/.style={
+%         box,
+%         fill=green!8,
+%         text width=3.6cm
+%     },
+%     stage/.style={
+%         font=\sffamily\bfseries\footnotesize,
+%         align=center
+%     },
+%     arrow/.style={
+%         -{Latex[length=2mm]},
+%         semithick,
+%         draw=black!75
+%     }
+% ]
+
+% % Stage headers
+% \node[stage] (s1) at (0,1.9) {1. Theoretical\\Specification};
+% \node[stage] (s2) at (5.3,1.9) {2. LLM\\Measurement};
+% \node[stage] (s3) at (10.6,1.9) {3. Empirical\\Evaluation};
+
+% % Boxes
+% \node[theorybox] (theory) at (0,0) {
+%     \textbf{Construct specification}\\[2pt]
+%     Define the target construct\\
+%     and the criterion set
+% };
+
+% \node[compbox] (measure) at (5.3,0) {
+%     \textbf{Criterion-level scoring}\\[2pt]
+%     Each criterion is scored\\
+%     by the LLM evaluator\\[2pt]
+%     Output: $\mathbf{P}_i(C_m)$
+% };
+
+% \node[evidbox] (eval) at (10.6,0) {
+%     \textbf{Evaluation of measurements}\\[2pt]
+%     Derive EV / entropy\\
+%     Assess validity evidence\\
+%     and diagnostics
+% };
+
+% % Arrows
+% \draw[arrow] (theory.east) -- (measure.west);
+% \draw[arrow] (measure.east) -- (eval.west);
+
+% \end{tikzpicture}
+\begin{tikzpicture}[
+    >=Latex,
+    font=\sffamily\scriptsize,
+    node distance=1.2cm, 
+    box/.style={
+        rectangle,
+        rounded corners=2pt,
+        draw=black!65,
+        thick,
+        align=center,
+        inner sep=6pt,
+        minimum height=1.1cm
+    },
+    theorybox/.style={box, fill=blue!6, text width=3.4cm},
+    compbox/.style={box, fill=gray!10, text width=3.5cm},
+    evidbox/.style={box, fill=green!8, text width=3.6cm},
+    stage/.style={font=\sffamily\bfseries\footnotesize, align=center},
+    arrow/.style={-{Latex[length=2mm]}, semithick, draw=black!75}
+]
+
+\node[theorybox] (theory) {
+    \textbf{Construct specification}\\[2pt]
+    Define the target construct\\
+    and the criterion set
+};
+
+\node[compbox, right=of theory] (measure) {
+    \textbf{LLM scoring \& derivation}\\[2pt]
+    Score each criterion with the LLM\\[2pt]
+    Derive expected values \& entropy
+};
+
+\node[evidbox, right=of measure] (eval) {
+    \textbf{Evaluation of measurements}\\[2pt]
+    Assess validity evidence\\
+    and diagnostic interpretability
+};
+
+\draw[arrow] (theory.east) -- (measure.west);
+\draw[arrow] (measure.east) -- (eval.west);
+
+\node[stage, above=0.5cm of theory] (s1) {1. Theoretical\\Specification};
+\node[stage] at (s1 -| measure) (s2) {2. LLM\\Measurement};
+\node[stage] at (s1 -| eval) (s3) {3. Empirical\\Evaluation};
+
+\end{tikzpicture}
