@@ -35,6 +35,24 @@ def process_timestamps(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def restrict_analysis_period(df: pd.DataFrame, start_month: str = "2025-04") -> pd.DataFrame:
+    """
+    Restricts the raw export to the intended analysis period.
+    With start_month='2025-04', this keeps Deals after April 2025,
+    i.e. month > '2025-04'.
+    """
+    df = df.copy()
+    initial_len = len(df)
+
+    df["month"] = df["created_at"].dt.to_period("M").astype(str)
+    df = df[df["month"] > start_month].copy()
+
+    logger.info(
+        f"Dropped {initial_len - len(df)} rows: Outside analysis period (month <= {start_month})."
+    )
+    return df
+
+
 def apply_quality_filters(df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFrame:
     """
     Applies exclusion criteria based on thresholds defined in config.yaml.
@@ -135,6 +153,11 @@ def clean_barter_data(raw_path: Path, output_path: Path, config: Dict[str, Any])
         df[col] = df[col].apply(clean_html_text)
 
     df = process_timestamps(df)
+
+    df = restrict_analysis_period(
+        df,
+        start_month=config.get("START_DATE", "2025-04")
+    )
     df = apply_quality_filters(df, config)
 
     # Save the output

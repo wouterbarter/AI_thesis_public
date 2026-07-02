@@ -1,0 +1,336 @@
+% !TEX root = ../main.tex
+
+\section{Results}
+
+% Rewrite, just introduce the structure being used here
+The results follow the structure introduced in the Methods chapter. We first report the measurement diagnostics that apply to both datasets: scale utilization and entropy calibration, residual verbosity sensitivity, and criterion separability. These diagnostics are presented jointly for FeedbackQA and Barter Deals because they evaluate the behavior of the LLM-based measurement procedure itself, before assessing its validity.
+
+After establishing these instrument-level properties, we turn to the dataset-specific validation analyses. For FeedbackQA, we assess convergent validity by comparing LLM-derived evaluations with human quality judgments. For Barter Deals, we assess predictive validity by testing whether the LLM-derived evaluations explain variation in creator application behavior.
+
+\subsection{Instrument Diagnostics}
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/single_dimension_rating_regimes_feedbackqa.pdf}
+    \caption{Expected-value rating distributions for the FeedbackQA \textit{Overall Quality (Naive)} criterion. The figure illustrates representative model-specific rating regimes: Gemma 4 and Qwen 3 show more integer-anchored distributions, whereas Llama 3.2 and Qwen 3.5 produce smoother sub-integer variation. Full criterion-level distributions are reported in Appendix~\ref{app:add_graphs_diags}.}
+    \label{fig:rating_regimes_feedbackqa}
+\end{figure}
+
+
+
+\paragraph{Expected-Value and Entropy Distributions}
+%TODO Shorten?
+
+The models exhibit recognizable rating regimes, although these regimes are partly moderated by task and criterion. Figure~\ref{fig:rating_regimes_feedbackqa} shows the distribution of EV ratings for the FeedbackQA \textit{Overall Quality (Naive)} criterion as a representative visual diagnostic, while Table~\ref{tab:scale_utilization} summarizes the corresponding dataset-level diagnostics.
+
+Qwen 3.5 exhibits the most favorable profile for continuous measurement. Across both datasets, it combines moderate-to-broad EV dispersion with consistently high entropy, indicating that its ratings vary between integer values rather than collapsing into hard ordinal classifications. Llama 3.2 shows a similar high-entropy regime for FeedbackQA, but in Barter Deals its EV dispersion is substantially lower, indicating a compressed continuous regime.
+
+Qwen 3 and Gemma 4 show lower average entropy and therefore behave more like ordinal classifiers than continuous measurement instruments. Qwen 3 is the most consistent example of this pattern: across both datasets, it combines broad EV dispersion with low entropy, indicating a broad but quantized rating regime. Gemma 4 is also relatively dispersed, but its entropy is higher in Barter Deals than in FeedbackQA, suggesting a more semi-quantized broad regime in that setting. Notably, the visual distributions further distinguish the two low-entropy models: Qwen 3 forms several distinct integer-centered peaks, whereas Gemma 4 concentrates more mass around preferred rating regions with thinner tails across the scale. Full criterion-level distributions are reported in Appendix~\ref{app:rating_distributions}.
+
+
+% , visualised in Figure~\ref{fig:rating_regimes_feedbackqa}. 
+
+
+% Figure~\ref{fig:rating_regimes_feedbackqa} illustrates the distribution of EV ratings for the FeedbackQA \textit{Overall Quality (Naive)} criterion. The figure is used as a representative visual diagnostic of the model-specific rating regimes observed in FeedbackQA. The distributions for the remaining criteria are reported in Appendix~\ref{app:add_graphs_diags}. Table~\ref{tab:scale_utilization} complements this visual diagnostic by summarizing the mean and standard deviation of both EV ratings and entropy. Values are computed within each criterion and then averaged across criteria, so the reported rating SD reflects average within-criterion scale utilization.
+
+% The FeedbackQA diagnostics show a clear separation between low-entropy and high-entropy scoring regimes. Gemma 4 and Qwen 3 produce low mean entropy values, $0.13$ and $0.12$, respectively, indicating highly concentrated rating-token distributions. In Figure~\ref{fig:rating_regimes_feedbackqa}, this appears as clustering around integers. However, the models differ in scale utilization: Gemma 4 is more concentrated around the central rating region, whereas Qwen 3 displays broader use of the available rating range. Llama 3.2 and Qwen 3.5 produce substantially higher mean entropy values, $0.72$ and $0.73$, respectively, and smoother EV distributions. These models therefore behave less like hard ordinal classifiers and more like continuous scoring instruments.
+
+% For Barter Deals, Table~\ref{tab:scale_utilization} shows the same broad diagnostic structure, although the criterion-level distributions vary more across dimensions. Gemma 4 shows broad semi-quantized scoring, combining high within-criterion rating dispersion, $1.00$, with intermediate entropy, $0.30$. Qwen 3 shows broad quantized scoring, with similarly high rating dispersion, $1.01$, but substantially lower entropy, $0.18$. Llama 3.2 shows compressed continuous scoring: its entropy is high, $0.67$, but its within-criterion rating dispersion is low, $0.40$. Qwen 3.5 shows the most favorable measurement profile, combining relatively broad scale use, $0.79$, with high entropy, $0.66$. Across both datasets, Qwen 3.5 therefore exhibits the most consistent characteristics of a continuous measurement instrument. This interpretation is further supported by the criterion-level distributions reported in Appendix~\ref{app:add_graphs_diags}.
+
+
+
+
+\begin{table}[h]
+    \centering
+    \caption{Scale Utilization and Rating-Token Entropy by Dataset and Model Architecture}
+    \label{tab:scale_utilization}
+    \begin{tabular}{lcc}
+    \toprule
+    Model & Rating: Mean (SD) & Entropy: Mean (SD) \\
+    \midrule
+    \multicolumn{3}{l}{\textbf{FeedbackQA (1--4 scale)}} \\
+    Gemma 4 & 2.54 (0.74) & 0.13 (0.18) \\
+    Llama 3.2 & 2.72 (0.77) & 0.72 (0.23) \\
+    Qwen 3 & 2.95 (0.88) & 0.12 (0.16) \\
+    Qwen 3.5 & 2.66 (0.67) & 0.73 (0.15) \\
+
+    \addlinespace[0.5em]
+    \multicolumn{3}{l}{\textbf{Barter Deals (1--7 scale)}} \\
+    Gemma 4 & 3.54 (1.00) & 0.30 (0.17) \\
+    Llama 3.2 & 4.29 (0.40) & 0.67 (0.08) \\
+    Qwen 3 & 4.14 (1.01) & 0.18 (0.13) \\
+    Qwen 3.5 & 3.68 (0.79) & 0.66 (0.09) \\
+    \bottomrule
+    \end{tabular}
+
+    \begin{flushleft}
+    \footnotesize
+    % \textit{Note.} Values are first computed within each evaluation criterion and then averaged across criteria. Ratings are expected-value (EV) scores computed over the model's rating-token distribution. Rating SD reflects average within-criterion scale utilization: higher values indicate that, for a typical criterion, the model spreads EV scores more broadly across documents. Entropy indicates how concentrated the model's probability mass is over the rating options: low entropy concentrates EV ratings around integer values, while higher entropy spreads probability across  multiple ratings, allowing EV scores to fall between integer values.
+    \textit{Note.} Values are first computed within each evaluation criterion and then averaged across criteria. Ratings are expected-value (EV) scores computed over the model's rating-token distribution. Rating SD reflects within-criterion scale utilization: higher values indicate broader use of the rating scale across documents. Entropy reflects rating-token dispersion: low entropy indicates that probability mass is concentrated on one or a few rating tokens, producing more quantized EV scores; higher entropy indicates that probability mass is spread across multiple rating tokens, producing more continuous EV scores.
+    \end{flushleft}
+\end{table}
+
+
+
+\paragraph{Verbosity Sensitivity}
+
+Table~\ref{tab:verbosity_bias} shows that residual verbosity sensitivity is strongly model-dependent. Llama 3.2 is the only model with systematic medium-sized effects in both datasets: all six FeedbackQA comparisons fall in the medium range, and Barter Deals contains eight medium and one large effect. This indicates that Llama 3.2 remains sensitive to text length even after comparing only mature-length texts. By contrast, Gemma 4, Qwen 3, and Qwen 3.5 show mostly negligible or small effects, with no medium or large effects in either dataset. This implies that robustness to text length should be treated as part of model selection, since models with favorable rating regimes may differ in their susceptibility to residual verbosity effects.
+
+
+\begin{table}
+    \centering
+    \caption{Summary of Verbosity-Bias Diagnostics by Dataset and Model Architecture}
+    \label{tab:verbosity_bias}
+    \begin{tabular}{lccccccc}
+    \toprule
+    Model & Mean $|d|$ & Max $|d|$ & $N$ & Negligible & Small & Medium & Large \\
+    \midrule
+    \multicolumn{8}{l}{\textbf{FeedbackQA}} \\
+    Gemma 4   & 0.16 & 0.20 & 6 & 5 & 1 & 0 & 0 \\
+    Llama 3.2 & 0.57 & 0.62 & 6 & 0 & 0 & 6 & 0 \\
+    Qwen 3    & 0.15 & 0.25 & 6 & 4 & 2 & 0 & 0 \\
+    Qwen 3.5  & 0.11 & 0.25 & 6 & 5 & 1 & 0 & 0 \\
+
+    \addlinespace[0.5em]
+    \multicolumn{8}{l}{\textbf{Barter Deals}} \\
+    Gemma 4   & 0.17 & 0.46 & 14 & 8 & 6 & 0 & 0 \\
+    Llama 3.2 & 0.53 & 0.85 & 14 & 1 & 4 & 8 & 1 \\
+    Qwen 3    & 0.20 & 0.47 & 14 & 8 & 6 & 0 & 0 \\
+    Qwen 3.5  & 0.17 & 0.43 & 14 & 10 & 4 & 0 & 0 \\
+    \bottomrule
+    \end{tabular}
+
+    \begin{flushleft}
+    \footnotesize
+    \textit{Note.} Verbosity bias is measured as absolute Cohen's $d$ from the Q3--Q4 word-count comparison. $N$ is the number of evaluated criterion--text-section comparisons per model. Effect-size bins are mutually exclusive: negligible ($|d| < .20$), small ($.20 \le |d| < .50$), medium ($.50 \le |d| < .80$), and large ($|d| \ge .80$). Absolute values are used because length effects may occur in either direction depending on criterion valence.
+    \end{flushleft}
+\end{table}
+
+
+
+\paragraph{Construct Separability and Multicollinearity}
+
+% Only the VIFs for multi-dimensional conditions (FeedbackQA: Formative, Barter Deals: Macro-Formative, Formative) are reported. VIFs below 5, indicating limited multi-collinearity, are omitted. 
+
+The FeedbackQA VIF diagnostics indicate moderate to substantial multicollinearity among the formative criterion scores. All model specifications contain at least three predictors with VIF values above 5, and Llama 3.2 and Qwen 3.5 also contain predictors above 10. This suggests that the FeedbackQA criteria are empirically difficult to separate, despite being theoretically specified as distinct formative components. Consequently, the FeedbackQA regressions are interpreted primarily in terms of overall model fit and convergent validity, rather than as strong evidence for independent criterion-level effects.
+
+
+\begin{table}
+    \centering
+    \caption{VIF Diagnostics for FeedbackQA Formative Specifications}
+    \label{tab:VIF_feedbackqa}
+    \begin{tabular}{lccrrl}
+    \toprule
+    Group & Max VIF & Mean VIF & N VIF $>$ 5 & N VIF $>$ 10 & Multicollinearity \\
+    \midrule
+    Gemma 4 Formative & 6.75 & 4.46 & 3 & 0 & Moderate \\
+    Llama 3.2 Formative & 16.93 & 9.43 & 4 & 2 & Substantial \\
+    Qwen 3 Formative & 9.38 & 6.86 & 4 & 0 & Moderate \\
+    Qwen 3.5 Formative & 11.39 & 6.88 & 4 & 1 & Substantial \\
+    \bottomrule
+    \end{tabular}
+
+    \begin{flushleft}
+    \footnotesize
+    \textit{Note.} VIF values are computed for the formative criterion-level EV predictors in each model-specific FeedbackQA regression. Values above 5 are interpreted as moderate multicollinearity and values above 10 as substantial multicollinearity. High VIFs indicate that the formative criteria contain overlapping information, limiting independent coefficient-level interpretation.
+    \end{flushleft}
+\end{table}
+
+For Barter Deals, the VIF diagnostics indicate limited multicollinearity across all formative specifications. No predictor exceeds the threshold of 5 in any model, and the maximum VIF remains low across architectures, ranging from $1.79$ for Gemma 4 to $3.70$ for Llama 3.2 in the Formative condition, and from $1.34$ for Qwen 3 and Qwen 3.5 to $4.20$ for Llama 3.2 in the Macro-Formative condition. 
+
+Because the Barter Deals regressions also include non-LLM control variables, we additionally inspected VIFs for the baseline control specification. This diagnostic identified one marginally flagged dummy variable, \textit{macro\_category\_Home Cooking \& CPG}, with a VIF of $5.09$. Since this value only slightly exceeds the threshold of 5 and no predictor exceeds 10, the control specification does not indicate substantial multicollinearity.
+
+This confirms that both the formative criteria and the structural covariates provide sufficiently separable information for coefficient-level interpretation in the predictive validity models. The full Barter Deals VIF diagnostics, including the baseline controls, are reported in Appendix~\ref{app:vif_diagnostics}.
+
+% Together with the FeedbackQA diagnostics, this shows a clear difference between the two validation settings. In FeedbackQA, the formative criteria are empirically difficult to separate, limiting independent interpretation of criterion-level coefficients. In Barter Deals, by contrast, the predictors are well separated, allowing the coefficient estimates to be interpreted more directly as predictive associations between the criteria and the target variable.
+
+\subsection{Convergent Validity: FeedbackQA}
+
+% \paragraph{EV-Based Model Comparison}
+
+% Table \ref{tab:feedbackqa_cv_compact} shows the main results for predicting the human ratings using the LLM evaluations using 5-fold cross validation. Formative decomposition improves upon both the naive baseline and the informed baseline across all models, for all metrics. The magnitude of the improvements is moderate. The informed baseline shows only marginal improvements compared to the naive baseline. These results indicate that formative decomposition with isolated criterion measurement consistently outperforms holistic measurement, even when the holistic condition contains the construct information obtained from formative decomposition. 
+
+% Qwen 3 and Qwen 3.5 obtain the strongest results, and perform nearly identically. For Spearman's $\rho$, the formative Qwen specifications exceed the human-human reference point. Llama3.2 performs worst, while Gemma 4 shows intermediate performance. 
+
+
+
+\paragraph{EV-Based Model Comparison}
+
+Table~\ref{tab:feedbackqa_cv_compact} reports the main cross-validated convergent-validity results for the EV-only specifications. The full set of cross-validation metrics, including Pearson's $r$ and Kendall's $\tau$, is reported in Appendix~\ref{app:feedbackqa_full_cv}. Across all model architectures, the formative condition improves over both the naive holistic and informed holistic baselines on RMSE and Spearman's $\rho$. The improvements are modest in absolute size, but consistent across models and metrics. The informed holistic condition provides only marginal improvement over the naive holistic condition. This indicates that the benefits of formative decomposition are obtained through isolated criterion measurement, in addition to enhanced construct specification.
+
+The strongest performance is obtained by the Qwen models. Qwen 3 and Qwen 3.5 perform nearly identically in the formative condition, reaching Spearman correlations of $0.578$ and $0.576$, respectively. Both exceed the human-human baseline on Spearman's $\rho$ ($0.541$), although the human-human baseline should be interpreted as a reference point rather than a fitted model. Llama 3.2 performs weakest across conditions, while Gemma 4 shows intermediate performance.
+
+
+\begin{table}
+    \centering
+    \caption{Cross-Validated FeedbackQA Performance by Experimental Condition}
+    \label{tab:feedbackqa_cv_compact}
+    \begin{tabular}{llcccc}
+    \toprule
+    Metric & Condition & Gemma 4 & Llama 3.2 & Qwen 3 & Qwen 3.5 \\
+    \midrule
+    \multirow{3}{*}{RMSE $\downarrow$} 
+        & Holistic Naive    & 1.119 & 1.144 & 1.044 & \textbf{1.033} \\
+        & Holistic Informed & 1.111 & 1.144 & 1.039 & \textbf{1.034} \\
+        & Formative         & 1.094 & 1.128 & \textbf{1.018} & 1.019 \\
+    \addlinespace[0.5em]
+    \multirow{3}{*}{Spearman's $\rho$ $\uparrow$}
+        & Holistic Naive    & 0.436 & 0.395 & 0.544 & \textbf{0.559} \\
+        & Holistic Informed & 0.450 & 0.396 & 0.550 & \textbf{0.558} \\
+        & Formative         & 0.480 & 0.423 & \textbf{0.578} & 0.576 \\
+    \addlinespace[0.5em]
+    \multicolumn{2}{l}{Human-Human Baseline} 
+        & \multicolumn{4}{c}{RMSE = 1.196; Spearman's $\rho = 0.541$} \\
+    \bottomrule
+    \end{tabular}
+
+    \begin{flushleft}
+    \footnotesize
+    \textit{Note.} Values report out-of-fold cross-validated performance for EV-only specifications. RMSE measures prediction error, while Spearman's $\rho$ measures rank alignment with human quality judgments. Lower RMSE and higher Spearman's $\rho$ indicate better convergent validity. Bold values indicate the best-performing model architecture within each metric-condition row. The human-human baseline compares the two available human annotations and is not a fitted model.
+    \end{flushleft}
+\end{table}
+
+
+
+% \paragraph{Entropy-Augmented Model Comparison}
+
+% Entropy augmentation provided negligible gains over the EV-only specifications. The largest out-of-fold RMSE reduction was observed for Gemma 4 in the formative condition, with an improvement of only $0.006$. The largest increase in rank correlation was observed for Gemma 4 in the holistic naive condition, with $\Delta \rho = 0.011$, while most changes in Spearman's $\rho$ were below $0.005$. For this reason, the remaining FeedbackQA interpretation focuses on the EV-only specifications. The full entropy-augmentation comparison is reported in Appendix~\ref{tab:feedbackqa_entropy_delta}.
+
+
+
+\paragraph{Coefficient-Level Interpretation}
+
+The formative coefficients are not interpreted substantively for FeedbackQA. As shown in the construct-separability diagnostics, the FeedbackQA criteria exhibit moderate to substantial multicollinearity, meaning that criterion-level coefficients are unstable and do not support clean independent interpretation. This is consistent with the empirical structure of the task: the criteria appear to capture overlapping aspects of general answer quality rather than clearly separable formative components. The FeedbackQA analysis is therefore interpreted at the level of experimental condition performance, focusing on whether formative decomposition improves convergent validity over holistic prompting.
+
+% Cautious because VIF diagnostics showed multicollinearity
+% Interpret coefficients only broadly, not as clean independent effects
+
+\subsection{Predictive Validity: Barter Deals}
+
+This section reports the results of the Negative Binomial models predicting the behavioral KPI \textit{applications after 7 days}. The main analysis tests whether the LLM-derived measurements explain variation in creator applications beyond a comprehensive set of observed structural covariates from the Barter database, and whether formative decomposition improves predictive validity relative to holistic measurement. The section therefore focuses on in-sample likelihood-based model comparison and out-of-sample predictive performance. Detailed regression outputs, including coefficient estimates and significance tests, are reported in Appendix~\ref{app:barter_full_results}. 
+
+
+
+\paragraph{Structural Baseline Model}
+
+Before evaluating the LLM-derived measurements, a structural baseline model is estimated using only non-LLM platform covariates. This model serves as the benchmark against which the incremental contribution of the LLM measurements is assessed. Table~\ref{tab:barter_baseline_performance} reports both its in-sample likelihood-based fit and its out-of-sample cross-validated performance.
+
+The baseline model achieves a McFadden pseudo $R^2$ of 0.056, indicating modest but non-trivial explanatory power given the noisiness of behavioral application data. The estimated dispersion parameter, $\alpha = 0.8590$, is consistent with substantial overdispersion in the application counts, supporting the use of a Negative Binomial specification rather than a Poisson model. As reported in the full regression output in Appendix~\ref{app:barter_full_results}, the most substantively important baseline effects are associated with market scope, month-year fixed effects, and product category, consistent with theoretical expectations of marketplace dynamics.
+
+% The cross-validated baseline performance confirms that application volume is difficult to predict using structural platform variables alone, whereas . The baseline obtains an RMSE of 19.48, a Poisson deviance of 14.68, and a Spearman's $\rho$ of 0.533. These values define the out-of-sample reference point for evaluating whether the LLM-derived measurements improve prediction beyond the structural covariates.
+
+The cross-validated baseline performance shows that exact application counts are difficult to predict using structural platform variables alone, with an RMSE of 19.48. However, the Poisson deviance of 14.68 and Spearman's $\rho$ of 0.533 indicate that the baseline retains useful count-loss and rank-order information. These values define the out-of-sample reference point for evaluating whether the LLM-derived measurements improve prediction beyond the structural covariates.
+
+
+
+
+\begin{table}[ht]
+    \centering
+    \caption{Structural Baseline Model Performance for Barter Deals}
+    \label{tab:barter_baseline_performance}
+    \begin{tabular}{llr}
+    \toprule
+    Evaluation & Metric & Value \\
+    \midrule
+    \multirow{4}{*}{In-sample fit} 
+        & Pseudo $R^2$ & 0.056 \\
+        & LogLik       & -10489.2 \\
+        & AIC          & 21056.4 \\
+        & BIC          & 21290.1 \\
+    \addlinespace[0.5em]
+    \multirow{3}{*}{Cross-validated performance}
+        & RMSE                 & 19.48 \\
+        & Poisson deviance      & 14.68 \\
+        & Spearman's $\rho$     & 0.533 \\
+    \bottomrule
+    \end{tabular}
+
+    \begin{flushleft}
+    \footnotesize
+    \textit{Note.} The structural baseline is a Negative Binomial model containing only non-LLM platform covariates, including the controls and fixed effects specified in the methods section. In-sample fit statistics provide the reference point for the likelihood-based LLM comparisons in Table~\ref{tab:barter_insample_compact}; cross-validated performance metrics provide the reference point for the out-of-sample comparisons in Table~\ref{tab:barter_cv_compact}.
+    \end{flushleft}
+\end{table}
+
+\paragraph{Incremental Predictive Validity of LLM Measurements}
+
+
+
+\begin{table}[h]
+    \centering
+    \caption{In-Sample Barter Deals Model Comparison by Experimental Condition}
+    \label{tab:barter_insample_compact}
+    \begin{tabular}{llcccc}
+    \toprule
+    Metric & Condition & Gemma 4 & Llama 3.2 & Qwen 3 & Qwen 3.5 \\
+    \midrule
+    \multirow{3}{*}{Pseudo $R^2$ $\uparrow$} & Holistic Naive  & 0.058 & 0.056 & \textbf{0.060} & 0.059 \\
+     & Macro-Formative & 0.057 & 0.058 & \textbf{0.062} & 0.059 \\
+     & Formative       & 0.074 & 0.067 & 0.072 & \textbf{0.075} \\
+    \addlinespace[0.5em]
+    \multirow{3}{*}{$\Delta$LL $\uparrow$} & Holistic Naive  & 20.4 & 2.0 & \textbf{43.0} & 34.5 \\
+     & Macro-Formative & 17.4 & 23.5 & \textbf{64.8} & 33.7 \\
+     & Formative       & 207.1 & 118.7 & 177.1 & \textbf{216.2} \\
+    \addlinespace[0.5em]
+    \multirow{3}{*}{$\Delta$AIC $\uparrow$} & Holistic Naive  & 38.8 & 2.0 & \textbf{84.1} & 67.1 \\
+     & Macro-Formative & 28.8 & 41.0 & \textbf{123.5} & 61.3 \\
+     & Formative       & 394.2 & 217.5 & 334.1 & \textbf{412.3} \\
+    \addlinespace[0.5em]
+    \multirow{3}{*}{$\Delta$BIC $\uparrow$} & Holistic Naive  & 32.8 & -4.0 & \textbf{78.1} & 61.1 \\
+     & Macro-Formative & 10.8 & 23.0 & \textbf{105.5} & 43.3 \\
+     & Formative       & 334.2 & 157.5 & 274.2 & \textbf{352.4} \\
+    \bottomrule
+    \end{tabular}
+
+    \begin{flushleft}
+    \footnotesize
+    \textit{Note.} Values report in-sample Negative Binomial model comparison for EV-only LLM-augmented specifications. The structural baseline has pseudo $R^2 = 0.056$, $LL = -10489.2$, AIC $= 21056.4$, and BIC $= 21290.1$. $\Delta$LL, $\Delta$AIC, and $\Delta$BIC are computed relative to this structural baseline and are oriented so that positive values indicate improvement. $\Delta$LL is defined as $LL_{\text{model}} - LL_{\text{baseline}}$, while $\Delta$AIC and $\Delta$BIC are defined as $AIC_{\text{baseline}} - AIC_{\text{model}}$ and $BIC_{\text{baseline}} - BIC_{\text{model}}$, respectively. Bold values indicate the best-performing LLM-augmented model family within each metric-condition row.
+    \end{flushleft}
+\end{table}
+
+
+
+
+\begin{table}[ht]
+    \centering
+    \caption{Cross-Validated Out-of-Sample Predictive Performance by Experimental Condition}
+    \label{tab:barter_cv_compact}
+    \begin{tabular}{llcccc}
+    \toprule
+    Metric & Condition & Gemma 4 & Llama 3.2 & Qwen 3 & Qwen 3.5 \\
+    \midrule
+    \multirow{3}{*}{Poisson Dev. $\downarrow$} & Holistic Naive   & 14.60 & 14.75 & 14.46 & \textbf{14.41} \\
+     & Macro-Formative  & 14.64 & 14.46 & \textbf{14.38} & 14.48 \\
+     & Formative        & \textbf{13.23} & 13.91 & 13.53 & 13.28 \\
+    \addlinespace[0.5em]
+    \multirow{3}{*}{RMSE $\downarrow$} & Holistic Naive   & 19.47 & 19.52 & 19.41 & \textbf{19.35} \\
+     & Macro-Formative  & 19.51 & \textbf{19.30} & 19.42 & 19.35 \\
+     & Formative        & 18.88 & 19.08 & 18.98 & \textbf{18.86} \\
+    \addlinespace[0.5em]
+    \multirow{3}{*}{Spearman's $\rho$ $\uparrow$} & Holistic Naive   & 0.539 & 0.530 & \textbf{0.548} & 0.545 \\
+     & Macro-Formative  & 0.536 & 0.538 & \textbf{0.555} & 0.539 \\
+     & Formative        & \textbf{0.600} & 0.574 & 0.590 & 0.594 \\
+    \bottomrule
+    \end{tabular}
+    \begin{flushleft}
+    \footnotesize
+    \textit{Note.} Values report 5-fold cross-validated out-of-sample predictive performance for EV-only LLM-augmented Negative Binomial specifications. The cross-validated structural baseline achieves Poisson Dev. $= 14.68$, RMSE $= 19.48$, and Spearman's $\rho = 0.533$. Bold values indicate the best-performing LLM-augmented model family within each metric-condition row.
+    \end{flushleft}
+\end{table}
+
+
+The in-sample results for model fit are reported in Table~\ref{tab:barter_insample_compact}, and the out-of-sample cross validation results are reported in Table~\ref{tab:barter_cv_compact}. Across both in-sample and out-of-sample comparisons, the formative condition provides the strongest and most consistent support for incremental predictive validity. The gains are largest for likelihood-based fit, Poisson deviance, and rank-order performance, while improvements in RMSE are more modest.
+
+In the in-sample comparison, the formative specifications produce substantially larger improvements in log-likelihood, AIC, and BIC than either the Holistic Naive or Macro-Formative specifications. The Holistic Naive and Macro-Formative conditions yield negligible to modest gains, and Llama 3.2 even worsens BIC under the Holistic Naive condition ($\Delta\text{BIC} = -4.0$). By contrast, the formative specifications produce large positive $\Delta$BIC values, ranging from 157.5 for Llama 3.2 to 352.4 for Qwen 3.5. This suggests that fine-grained formative decomposition provides incremental predictive information beyond holistic or macro-level measurements of deal quality.
+
+In the out-of-sample cross-validation results, the smallest improvements are observed in RMSE, which remains high for all conditions, with a value between $18.86$ (Qwen 3.5 Formative) and $19.52$ (Llama 3.2 Holistic Naive). The clearest out-of-sample improvements are obtained in count-loss and rank-order performance. Although the Holistic Naive and Macro-Formative conditions remain close to the baseline Poisson deviance of $14.68$, the Formative condition meaningfully improves it for all models. Gemma 4 obtains the lowest Poisson deviance of $13.23$, which is a $9.88\%$ reduction in count-prediction loss relative to the structural baseline. Similarly, the Holistic Naive and Macro-Formative conditions show marginal improvements in rank-order performance compared to the baseline, whereas rank-order performance substantially improved for all models in the Formative condition. Gemma 4 again obtains the best result with $\rho=0.600$. These results indicate that the LLM-augmented models can meaningfully rank deals by application count, even if they struggles to predict exact application counts. 
+
+Comparing the models on the best-performing Formative condition, Gemma 4 and Qwen 3.5 obtain the best overall results, with marginal between-model differences. Llama 3.2 exhibits the smallest improvements, while Qwen 3 obtains intermediate results. The result for Qwen 3.5 is in line with the results for FeedbackQA, where it showed the strongest convergent validity. Gemma 4, on the other hand, did not perform well on convergent validity, while it matches the performance of Qwen 3.5 for predictive validity. This indicates that an LLM's measurement performance is not guaranteed to generalize across distinct validity assessments.
+
+% Entropy augmentation was evaluated as an exploratory extension and is reported in Appendix~\ref{tab:barter_entropy_appendix}. The results suggest that rating-distribution entropy contains some additional predictive information, particularly for the Qwen 3.5 Formative specification. For this model, adding entropy improves RMSE, MAE, Poisson deviance, and Spearman's $\rho$, yielding the strongest overall cross-validated performance. However, the entropy effect is not uniform across model families or experimental conditions. 
+
+%TODO REWRITE
+%Moreover, the present specification includes entropy only as a linear additive term in the Negative Binomial model. This is a conservative operationalization, because entropy may interact with the expected rating, vary by dimension, or indicate different forms of evaluative ambiguity depending on the score profile. The entropy results are therefore interpreted as preliminary evidence that the distributional structure of LLM ratings may contain predictive information beyond the EV score, rather than as a fully optimized use of entropy.
+
+
+% The entropy analysis should not be interpreted as an exhaustive test of distributional information in the LLM outputs. Entropy was included naively as an additive predictor, which assumes a constant linear association with expected application counts. Future work could model entropy as an interaction with the EV score, allow dimension-specific entropy effects, or use the full categorical probability vector rather than reducing the output distribution to EV and entropy. This may be especially relevant for models such as Qwen 3.5, where the rating distribution appears sufficiently continuous to preserve meaningful uncertainty information.

@@ -27,13 +27,41 @@ INPUT C:\Program Files\MiKTeX\tex\latex\base\inputenc.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\inputenc.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\lm\lmodern.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\lm\lmodern.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\siunitx\siunitx.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\siunitx\siunitx.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\translations\translations.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\translations\translations.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\etoolbox\etoolbox.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\etoolbox\etoolbox.sty
+INPUT C:\Program Files\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
+INPUT C:\Program Files\MiKTeX\tex\generic\pdftexcmds\pdftexcmds.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\generic\infwarerr\infwarerr.sty
+INPUT C:\Program Files\MiKTeX\tex\generic\iftex\iftex.sty
+INPUT C:\Program Files\MiKTeX\tex\generic\iftex\iftex.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\generic\ltxcmds\ltxcmds.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amstext.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amstext.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsgen.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsgen.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\xcolor\xcolor.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\xcolor\xcolor.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\color.cfg
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\color.cfg
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\color.cfg
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics-def\pdftex.def
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics-def\pdftex.def
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics-def\pdftex.def
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\colortbl\colortbl.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\colortbl\colortbl.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics\color.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsmath.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsmath.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsopn.sty
-INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amstext.sty
-INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amstext.sty
-INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsgen.sty
-INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsgen.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsbsy.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsbsy.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\amsmath\amsopn.sty
@@ -54,9 +82,6 @@ INPUT C:\Program Files\MiKTeX\tex\latex\graphics\trig.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics-def\pdftex.def
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics-def\pdftex.def
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics-def\pdftex.def
 INPUT C:\Program Files\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
@@ -89,14 +114,6 @@ INPUT C:\Program Files\MiKTeX\tex\generic\pgf\systemlayer\pgfsyssoftpath.code.te
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\systemlayer\pgfsysprotocol.code.tex
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\systemlayer\pgfsysprotocol.code.tex
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\systemlayer\pgfsysprotocol.code.tex
-INPUT C:\Program Files\MiKTeX\tex\latex\xcolor\xcolor.sty
-INPUT C:\Program Files\MiKTeX\tex\latex\xcolor\xcolor.sty
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\color.cfg
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\color.cfg
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\color.cfg
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
-INPUT C:\Program Files\MiKTeX\tex\latex\graphics\mathcolor.ltx
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\basiclayer\pgfcore.code.tex
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\basiclayer\pgfcore.code.tex
 INPUT C:\Program Files\MiKTeX\tex\generic\pgf\basiclayer\pgfcore.code.tex
@@ -262,10 +279,19 @@ INPUT appendices\additional_graphs_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.aux
 INPUT appendices\measurement_diagnostics.aux
+INPUT .\appendices\control_variables.aux
+INPUT .\appendices\control_variables.aux
+INPUT appendices\control_variables.aux
+INPUT .\appendices\additional_regression_results.aux
+INPUT .\appendices\additional_regression_results.aux
+INPUT appendices\additional_regression_results.aux
 INPUT .\appendices\evaluation_criteria.aux
 INPUT .\appendices\evaluation_criteria.aux
 INPUT appendices\evaluation_criteria.aux
 OUTPUT main.aux
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\translations\dicts\translations-basic-dictionary-english.trsl
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\translations\dicts\translations-basic-dictionary-english.trsl
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\translations\dicts\translations-basic-dictionary-english.trsl
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -396,12 +422,12 @@ INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx7.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx5.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmr5.tfm
-INPUT C:\Program Files\MiKTeX\fonts\enc\dvips\lm\lm-mathsy.enc
 INPUT .\sections\methodology.tex
 INPUT .\sections\methodology.tex
 INPUT .\sections\methodology.tex
 INPUT .\sections\methodology.tex
 INPUT sections\methodology.tex
+INPUT C:\Program Files\MiKTeX\fonts\enc\dvips\lm\lm-mathsy.enc
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx9.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx6.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmss8.tfm
@@ -417,12 +443,6 @@ INPUT .\sections\results.tex
 INPUT .\sections\results.tex
 INPUT .\sections\results.tex
 INPUT sections\results.tex
-INPUT .\figures\single_dimension_rating_regimes_feedbackqa.pdf
-INPUT .\figures\single_dimension_rating_regimes_feedbackqa.pdf
-INPUT .\figures\single_dimension_rating_regimes_feedbackqa.pdf
-INPUT .\figures\single_dimension_rating_regimes_feedbackqa.pdf
-INPUT .\figures\single_dimension_rating_regimes_feedbackqa.pdf
-INPUT .\figures\single_dimension_rating_regimes_feedbackqa.pdf
 INPUT .\main.bbl
 INPUT .\main.bbl
 INPUT main.bbl
@@ -480,6 +500,18 @@ OUTPUT appendices\measurement_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.tex
 INPUT .\appendices\measurement_diagnostics.tex
 INPUT appendices\measurement_diagnostics.tex
+INPUT .\appendices\control_variables.tex
+INPUT .\appendices\control_variables.tex
+OUTPUT appendices\control_variables.aux
+INPUT .\appendices\control_variables.tex
+INPUT .\appendices\control_variables.tex
+INPUT appendices\control_variables.tex
+INPUT .\appendices\additional_regression_results.tex
+INPUT .\appendices\additional_regression_results.tex
+OUTPUT appendices\additional_regression_results.aux
+INPUT .\appendices\additional_regression_results.tex
+INPUT .\appendices\additional_regression_results.tex
+INPUT appendices\additional_regression_results.tex
 INPUT .\appendices\evaluation_criteria.tex
 INPUT .\appendices\evaluation_criteria.tex
 OUTPUT appendices\evaluation_criteria.aux
@@ -502,6 +534,12 @@ INPUT appendices\additional_graphs_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.aux
 INPUT appendices\measurement_diagnostics.aux
+INPUT .\appendices\control_variables.aux
+INPUT .\appendices\control_variables.aux
+INPUT appendices\control_variables.aux
+INPUT .\appendices\additional_regression_results.aux
+INPUT .\appendices\additional_regression_results.aux
+INPUT appendices\additional_regression_results.aux
 INPUT .\appendices\evaluation_criteria.aux
 INPUT .\appendices\evaluation_criteria.aux
 INPUT appendices\evaluation_criteria.aux
@@ -557,6 +595,8 @@ INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy5.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy5.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy6.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy6.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy7.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy7.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\lm\lmsy9.pfb

@@ -490,7 +490,7 @@ def prepare_model_matrix(features_path: Path, output_path: Path, config: Dict[st
     clean_df = (
         df
         .pipe(filter_na_company_locations)
-        .pipe(start_date, start_date=config.get('START_DATE', '2025-04'))
+        # .pipe(start_date, start_date=config.get('START_DATE', '2025-04'))
         .pipe(filter_low_n_categories, min_observations=config.get('MIN_CATEGORY_OBSERVATIONS', 30))
         .pipe(filter_incomplete_weeks)
         .pipe(filter_dead_high_volume_deals, floor=config.get('diff_total_apps_7_days_floor', 10))

@@ -14,6 +14,10 @@ Reallocating 'name_of_file' (item size: 1) to 45 items.
 A level-1 auxiliary file: appendices/additional_graphs_diagnostics.aux
 Reallocating 'name_of_file' (item size: 1) to 39 items.
 A level-1 auxiliary file: appendices/measurement_diagnostics.aux
+Reallocating 'name_of_file' (item size: 1) to 33 items.
+A level-1 auxiliary file: appendices/control_variables.aux
+Reallocating 'name_of_file' (item size: 1) to 45 items.
+A level-1 auxiliary file: appendices/additional_regression_results.aux
 Reallocating 'name_of_file' (item size: 1) to 35 items.
 A level-1 auxiliary file: appendices/evaluation_criteria.aux
 Database file #1: references.bib
@@ -47,7 +51,7 @@ Warning--empty year in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
 You've used 62 entries,
             2773 wiz_defined-function locations,
-            1041 strings with 23771 characters,
+            1043 strings with 23847 characters,
 and the built_in function-call counts, 37488 in all, are:
 = -- 3158
 > -- 3058

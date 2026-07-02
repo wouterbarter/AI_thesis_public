@@ -22,19 +22,43 @@
 % \end{frame}
 
 
+% \begin{frame}{Motivation}
+% \framesubtitle{The challenges of artefact-level evaluation}
+
+% \begin{itemize}
+%     \item LLMs are increasingly used to produce open-ended text in operational settings.
+    
+%     \item Evaluation is therefore not only about comparing systems, but also about assessing individual outputs.
+    
+%     \item System-level benchmarks ask: \textit{How capable is the model?}
+    
+%     \item Artefact-level diagnostics ask: \textit{What is good or bad about this specific text?}
+    
+%     \item \textbf{Problem}: ``good'' is not self-evident; it depends on which dimensions are taken to constitute quality.
+% \end{itemize}
+
+% \vspace{0.30cm}
+
+% \begin{block}{Thesis motivation}
+%     Artefact-level evaluation requires explicit construct specification: defining quality dimensions, measuring them, and validating whether they support the intended quality claim.
+% \end{block}
+
+
+% \end{frame}
+
 \begin{frame}{Motivation}
-\framesubtitle{The challenges of artefact-level evaluation}
+\framesubtitle{The challenge of operational text evaluation}
 
 \begin{itemize}
-    \item LLMs are increasingly used to produce open-ended text in operational settings.
-    
-    \item Evaluation is therefore not only about comparing systems, but also about assessing individual outputs.
-    
-    \item System-level benchmarks ask: \textit{How capable is the model?}
-    
-    \item Artefact-level diagnostics ask: \textit{What is good or bad about this specific text?}
-    
-    \item \textbf{Problem}: ``good'' is not self-evident; it depends on which dimensions are taken to constitute quality.
+    \item LLMs increasingly produce open-ended text in operational settings.
+
+    \item In these settings, evaluation must support decisions about individual outputs: accept, revise, rank, diagnose, or improve.
+
+    \item A single holistic score can rank outputs, but does not explain \textit{why} an artefact is good or bad.
+
+    \item To diagnose quality, ``good'' must be decomposed into dimensions that constitute the target construct.
+
+    \item \textbf{Problem}: without explicit construct specification, multi-dimensional scores are difficult to interpret as meaningful measurements.
 \end{itemize}
 
 \vspace{0.30cm}
@@ -42,6 +66,5 @@
 \begin{block}{Thesis motivation}
     Artefact-level evaluation requires explicit construct specification: defining quality dimensions, measuring them, and validating whether they support the intended quality claim.
 \end{block}
-
 
 \end{frame}

@@ -1,7 +1,11 @@
 \section{Supplementary Measurement Diagnostics}
 \label{app:measurement_diagnostics}
 
-This appendix provides additional methodological detail for the diagnostic procedures used to evaluate the LLM-derived measurements. These diagnostics are not themselves validation tests. Instead, they characterize whether the expected-value (EV) ratings and entropy values behave in ways that are compatible with their intended use as continuous measurement variables.
+% This appendix provides additional methodological detail for the diagnostic procedures used to evaluate the LLM-derived measurements. These diagnostics are not themselves validation tests. Instead, they characterize whether the expected-value (EV) ratings and entropy values behave in ways that are compatible with their intended use as continuous measurement variables.
+This appendix provides additional methodological detail for the diagnostic procedures used to evaluate the LLM-derived measurements. These diagnostics are not themselves validation tests. Instead, they characterize whether the measurements exhibit properties required for their intended use: adequate scale behavior, robustness to residual text-length effects, and empirical separability among formative criteria.
+
+
+
 
 \subsection{Interpreting EV and Entropy Regimes}
 \label{app:rating_regimes}
@@ -38,23 +42,33 @@ The residual verbosity diagnostic is designed to distinguish general text-length
 
 Let $D$ represent the corpus of evaluated documents and let $Q(p)$ denote the $p$-th quantile of the word-count distribution. The third and fourth quartile subsets are defined as:
 
+% \[
+% D_{Q3} = {d \in D \mid Q(0.50) \leq \mathrm{length}(d) \leq Q(0.75)},
+% \]
+
+% \[
+% D_{Q4} = {d \in D \mid Q(0.75) < \mathrm{length}(d) \leq Q(1.00)}.
+% \]
 \[
-D_{Q3} = {d \in D \mid Q(0.50) \leq \mathrm{length}(d) \leq Q(0.75)},
+D_{Q3} = \{d \in D \mid Q(0.50) \leq \mathrm{length}(d) \leq Q(0.75)\},
 \]
 
 \[
-D_{Q4} = {d \in D \mid Q(0.75) < \mathrm{length}(d) \leq Q(1.00)}.
+D_{Q4} = \{d \in D \mid Q(0.75) < \mathrm{length}(d) \leq Q(1.00)\}.
 \]
 
-For a given model $m$ and criterion $c_i$, let $\mu_{Q3}$ and $\mu_{Q4}$ denote the mean EV ratings assigned to documents in $D_{Q3}$ and $D_{Q4}$, respectively. Let $s_p$ denote the pooled standard deviation across the two groups. The signed Q3--Q4 effect is computed as:
+
+
+
+A rating target denotes any LLM-derived score produced by a construct representation, including holistic scores, macro-dimension scores, and fine-grained criterion scores. For a given model $m$ and rating traget $r_i$, let $\mu_{Q3}$ and $\mu_{Q4}$ denote the mean EV ratings assigned to documents in $D_{Q3}$ and $D_{Q4}$, respectively. Let $s_p$ denote the pooled standard deviation across the two groups. The signed Q3--Q4 effect is computed as:
 
 \[
-\delta_{m,c_i} = \frac{\mu_{Q4} - \mu_{Q3}}{s_p}.
+\delta_{m,r_i} = \frac{\mu_{Q4} - \mu_{Q3}}{s_p}.
 \]
 
 
 
-Positive values indicate that the longest documents receive higher ratings than mature but shorter documents, while negative values indicate that the longest documents receive lower ratings. Because the substantive interpretation of the sign depends on the criterion coding \footnote{For example, Llama 3.2 shows a negative Q3--Q4 effect for \textit{Creative Restrictiveness}. This criterion is inversely coded: higher scores indicate more restrictive requirements, whereas for most other criteria higher scores indicate desirable properties. This illustrates why the absolute effect size is used as the main diagnostic.}, the main diagnostic uses the absolute value $|\delta_{m,c_i}|$. This captures the magnitude of residual length sensitivity regardless of direction.
+Positive values indicate that the longest documents receive higher ratings than mature but shorter documents, while negative values indicate that the longest documents receive lower ratings. Because the substantive interpretation of the sign depends on the rating target and its coding \footnote{For example, Llama 3.2 shows a negative Q3--Q4 effect for \textit{Creative Restrictiveness}. This criterion is inversely coded: higher scores indicate more restrictive requirements, whereas for most other criteria higher scores indicate desirable properties. This illustrates why the absolute effect size is used as the main diagnostic.}, the main diagnostic uses the absolute value $|\delta_{m,r_i}|$. This captures the magnitude of residual length sensitivity regardless of direction.
 
 Following \citet{cohen1988statistical}, values around $0.2$ are interpreted as small, values around $0.5$ as medium, and values of $0.8$ or above as large.
 
@@ -68,4 +82,4 @@ For the formative specifications, the LLM-derived predictors are intended to rep
 \mathrm{VIF}_j = \frac{1}{1 - R_j^2},
 \]
 
-where $R_j^2$ is obtained by regressing $x_j$ on the remaining predictors. Higher VIF values indicate that a predictor is strongly predictable from the other predictors, which reduces the interpretability of individual coefficients. VIF values below 5 are treated as indicating limited multicollinearity, values between 5 and 10 as moderate multicollinearity, and values above 10 as substantial multicollinearity.
+where $R_j^2$ is obtained by regressing $x_j$ on the remaining predictors. Higher VIF values indicate that a predictor is strongly predictable from the other predictors, which reduces the interpretability of individual coefficients. VIF values below 5 are treated as indicating limited multicollinearity, values between 5 and 10 as moderate multicollinearity, and values above 10 as substantial multicollinearity. Thus, VIF is used as a diagnostic for coefficient-level interpretability rather than as a test of aggregate predictive performance.

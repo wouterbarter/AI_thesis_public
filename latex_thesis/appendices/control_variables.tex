@@ -1,0 +1,120 @@
+\section{Barter Deals Control Variables and Model-Matrix Construction}
+\label{app:barter_control_variables}
+
+This appendix describes the construction of the non-LLM platform variables used in the Barter Deals predictive-validity models. These variables define the structured baseline model and are included as controls in the LLM-augmented Negative Binomial regressions.
+
+\subsection{Engineered Platform Controls}
+
+\paragraph{Strict follower requirement.}
+The variable \textit{strict follower requirement} is coded as a binary indicator based on the minimum follower requirement specified for the Deal. Deals with a required minimum follower count above 4{,}000 are coded as having a strict follower requirement. This control captures eligibility restrictions that may reduce the number of creators who can apply.
+
+\paragraph{Competitor density.}
+\textit{Competitor density} is computed as the number of other active Deals in the same macro-category on the same publication date. The focal Deal itself is subtracted from the count. This variable controls for same-day category-level competition for creator attention on the marketplace.
+
+\paragraph{Platform strategy.}
+\textit{Platform strategy} is derived from the Deal title, body text, and creator requirements. These fields are concatenated and searched for platform references using regular expressions for Instagram, TikTok, YouTube, and Facebook. Deals are then grouped into platform-strategy categories: Instagram only, TikTok only, Instagram and TikTok, unspecified, and a residual high-friction deliverable category for more complex or less common platform combinations. In the regression, these categories enter as dummy variables relative to the omitted reference category.
+
+\paragraph{Geographic market scope.}
+\textit{Geographic market scope} is constructed from the accepted-country information associated with each Deal. The resulting categories distinguish Netherlands-only campaigns, campaigns that include the Netherlands and additional markets, Belgium-only campaigns, Germany campaigns, and other market scopes. These indicators control for differences in the size and relevance of the potential creator pool across geographic markets.
+
+\paragraph{Product category.}
+\textit{Product category} is constructed from the platform content-type tags and Deal type. Content tags are first cleaned by removing uninformative tags such as UGC, missing values, and null-like entries. Deals are then mapped into macro-categories using rule-based logic. For example, food- and drink-related Deals are separated into \textit{Home Cooking \& CPG} or \textit{Dining \& Hospitality} depending on whether the Deal is online or physical; entertainment-related Deals are separated into \textit{Digital Entertainment} or \textit{In-Person Experiences} using the same distinction. Other categories include \textit{Beauty}, \textit{Fashion}, \textit{Family \& Parenting}, \textit{Lifestyle \& Home}, and \textit{Tech \& Niche}. Categories with fewer than the minimum required number of observations are reassigned to \textit{Other} for statistical stability.
+
+\paragraph{Text-length controls.}
+Text length is controlled using separate variables for Deal body length and requirements length. These are converted into quartile indicators, allowing the baseline model to account for nonlinear differences between shorter and longer Deal texts without imposing a linear word-count effect. The model also computes the total raw input word count as the sum of title, body, and requirements word counts, which is used for descriptive and diagnostic analyses.
+
+\paragraph{Month-year fixed effects.}
+Publication time is represented using month-year fixed effects derived from the Deal creation timestamp. These fixed effects absorb platform growth, seasonality, and other time-varying shocks shared by Deals published in the same month.
+
+
+\subsection{Sample Construction and Filtering}
+
+The sample construction first restricts the raw Barter export to the post-April 2025 analysis period. This restriction reflects exploratory evidence of a structural break around April 2025, after which the platform entered a more stable operational regime for modeling seven-day application behavior. Quality filtering is then applied within this intended analysis period. Deals are required to have at least 160 cumulative exposure hours, ensuring sufficient opportunity to receive applications within the seven-day outcome window. Qualitative inspection indicated that some low-exposure observations were test, development, or otherwise non-substantive records rather than genuine marketplace offers.
+
+\begin{table}[htbp]
+\centering
+\caption{Barter Deals Sample Construction and Model-Matrix Filtering Pipeline}
+\label{tab:barter_sample_construction}
+\begin{tabular}{lrrr}
+\toprule
+Filtering step & Start $N$ & End $N$ & Dropped \\
+\midrule
+\multicolumn{4}{l}{\textit{Initial cleaning and quality filtering}} \\
+Raw Deal export & 7{,}967 & 7{,}967 & -- \\
+Restrict to post-April 2025 analysis period & 7{,}967 & 4{,}715 & 3{,}252 \\
+Require at least 160 cumulative exposure hours & 4{,}715 & 3{,}544 & 1{,}171 \\
+Remove short-text/spam candidates & 3{,}544 & 3{,}543 & 1 \\
+Remove Deals flagged as duplicate & 3{,}543 & 3{,}538 & 5 \\
+Remove Deals that never went live & 3{,}538 & 3{,}538 & 0 \\
+\addlinespace[0.35em]
+
+\multicolumn{4}{l}{\textit{Model-matrix preparation}} \\
+Cleaned candidate Deals & 3{,}538 & 3{,}538 & -- \\
+Remove physical Deals without company location & 3{,}538 & 3{,}411 & 127 \\
+Collapse low-$N$ categories & 3{,}411 & 3{,}411 & 0 \\
+Remove incomplete recent weeks & 3{,}411 & 3{,}302 & 109 \\
+Remove anomalous high-volume zero-seven-day Deals & 3{,}302 & 3{,}250 & 52 \\
+Remove archived Deals & 3{,}250 & 3{,}226 & 24 \\
+Apply maximum follower-requirement threshold & 3{,}226 & 3{,}066 & 160 \\
+Apply minimum seven-day applications filter & 3{,}066 & 3{,}066 & 0 \\
+Apply minimum total applications filter & 3{,}066 & 3{,}066 & 0 \\
+Remove invalid Deals & 3{,}066 & 3{,}066 & 0 \\
+Remove excluded legacy partners & 3{,}066 & 2{,}996 & 70 \\
+Remove excluded partners & 2{,}996 & 2{,}962 & 34 \\
+Apply configured log transformations & 2{,}962 & 2{,}962 & 0 \\
+\midrule
+Final model-ready sample & 7{,}967 & 2{,}962 & 5{,}005 \\
+\bottomrule
+\end{tabular}
+
+\begin{flushleft}
+\footnotesize
+\textit{Note.} The table reports the sequential filtering steps used to construct the Barter Deals model matrix. The initial cleaning stage standardizes the raw export, restricts the analysis to the post-April 2025 operational period, removes low-exposure Deals, and excludes obvious non-substantive records. The model-matrix preparation stage constructs engineered controls and applies additional exclusions before estimation. The final model-ready sample contains 2{,}962 Deals, retaining 37.2\% of the full raw export, 62.8\% of the post-April candidate set, and 83.7\% of the cleaned candidate sample. Category reassignment and log-transformation steps do not remove observations.
+\end{flushleft}
+\end{table}
+
+
+
+
+
+% \subsection{Model-Matrix Filtering}
+
+% Table~\ref{tab:barter_filtering_pipeline} summarizes the filtering steps used to construct the Barter Deals model matrix. Starting from 3{,}583 candidate Deals, the preparation pipeline retains 2{,}962 Deals, dropping 621 observations (17.3\%). The final baseline regression uses 2{,}960 observations after model-specific handling of the fitted design matrix.
+
+% Before model estimation, the Barter Deals dataset is filtered to remove observations that are not suitable for predictive-validity analysis. Physical Deals without a company location are removed, because location is required for the interpretation of physical offers. Deals are restricted to the analysis period defined in the configuration file, and incomplete recent weeks are excluded to ensure that the seven-day application outcome can be observed. Archived Deals are removed, as are invalid Deals without a go-live timestamp or images. Deals with extremely high follower requirements are excluded according to the configured maximum follower threshold. The pipeline also removes anomalous high-volume Deals that record many total applications but zero applications within the first seven days, since these observations are likely to reflect data inconsistencies rather than genuine creator response behavior.
+
+% The resulting model-ready dataframe contains the engineered platform controls, publication-time fixed effects, application outcomes, and the LLM-derived evaluation scores used in the augmented predictive-validity regressions.
+
+
+% \begin{table}[htbp]
+% \centering
+% \caption{Barter Deals Model-Matrix Filtering Pipeline}
+% \label{tab:barter_filtering_pipeline}
+% \begin{tabular}{lrrr}
+% \toprule
+% Filtering step & Start $N$ & End $N$ & Dropped \\
+% \midrule
+% Initial candidate Deals & 3{,}583 & 3{,}583 & -- \\
+% Remove physical Deals without company location & 3{,}583 & 3{,}454 & 129 \\
+% Apply analysis start date & 3{,}454 & 3{,}411 & 43 \\
+% Collapse low-$N$ categories & 3{,}411 & 3{,}411 & 0 \\
+% Remove incomplete recent weeks & 3{,}411 & 3{,}302 & 109 \\
+% Remove anomalous high-volume zero-seven-day Deals & 3{,}302 & 3{,}250 & 52 \\
+% Remove archived Deals & 3{,}250 & 3{,}226 & 24 \\
+% Apply maximum follower-requirement threshold & 3{,}226 & 3{,}066 & 160 \\
+% Apply minimum seven-day applications filter & 3{,}066 & 3{,}066 & 0 \\
+% Apply minimum total applications filter & 3{,}066 & 3{,}066 & 0 \\
+% Remove invalid Deals & 3{,}066 & 3{,}066 & 0 \\
+% Remove excluded legacy partners & 3{,}066 & 2{,}996 & 70 \\
+% Remove excluded partners & 2{,}996 & 2{,}962 & 34 \\
+% Apply configured log transformations & 2{,}962 & 2{,}962 & 0 \\
+% \midrule
+% Total retained after preparation & 3{,}583 & 2{,}962 & 621 \\
+% \bottomrule
+% \end{tabular}
+
+% \begin{flushleft}
+% \footnotesize
+% \textit{Note.} The table reports the row count after each filtering step in the Barter Deals model-preparation pipeline. The preparation pipeline retains 2{,}962 of 3{,}583 candidate Deals, dropping 621 observations (17.3\%). The final baseline regression uses 2{,}960 observations after construction of the fitted design matrix. Category reassignment and log-transformation steps do not remove observations.
+% \end{flushleft}
+% \end{table}
