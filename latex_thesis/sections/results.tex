@@ -1,19 +1,20 @@
 % !TEX root = ../main.tex
 
 \section{Results}
-
+% TODO too explicit maybe, the first sentence
 The results are organized around the two research questions. The first subsection addresses RQ1 by comparing validation performance across construct representations: holistic baselines, the FeedbackQA informed holistic control, and formative specifications. These comparisons test whether richer construct specification and isolated criterion measurement improve validity evidence. In FeedbackQA, the informed holistic control further distinguishes these two design mechanisms, testing whether separately eliciting the criteria and recomposing them through regression improves validity evidence beyond richer construct specification alone. The second subsection addresses RQ2 by evaluating whether the resulting criterion-level measurements support diagnostic interpretation. It first examines coefficient-level interpretability through criterion-separability diagnostics (VIF), and then evaluates broader measurement behavior through rating regimes and residual verbosity sensitivity.
 
 
 \subsection{Validity Evidence for RQ1}
 
 \subsubsection{Convergent Validity: FeedbackQA}
-
+%TODO I only treat the CV results here, check with the methods whether this is correct
 
 Table~\ref{tab:feedbackqa_cv_compact} reports the main cross-validated convergent-validity results for the EV-only specifications. The full set of cross-validation metrics, including Pearson's $r$ and Kendall's $\tau$, is reported in Appendix~\ref{app:feedbackqa_full_cv}. Across all model architectures, the formative condition improves over both the naive holistic and informed holistic baselines on RMSE and Spearman's $\rho$. The improvements are modest in absolute size, but consistent across models and metrics. The informed holistic condition provides only marginal improvement over the naive holistic condition. This indicates that richer construct specification alone is insufficient: the benefits of the formative specification depend on its combination with isolated criterion measurement and regression-based recomposition.
 
 The strongest convergent-validity results are obtained by the Qwen models. In the formative condition, Qwen 3 and Qwen 3.5 perform nearly identically, reaching Spearman correlations of $0.578$ and $0.576$, respectively. These values exceed the human-human reference correlation of $0.541$, although this benchmark reflects annotation consistency rather than fitted model performance. Llama 3.2 performs weakest across conditions, while Gemma 4 shows intermediate performance.
 
+% TODO maybe make best Green and worst Red?
 \begin{table}[ht]
     \centering
     \caption{Cross-Validated FeedbackQA Performance by Experimental Condition}
@@ -52,6 +53,7 @@ The strongest convergent-validity results are obtained by the Qwen models. In th
 Table~\ref{tab:barter_insample_compact} and Table~\ref{tab:barter_cv_compact} report the incremental predictive validity of the LLM-derived measurements relative to the structured non-LLM baseline. The central pattern is consistent across in-sample and out-of-sample evaluation: fine-grained formative specifications provide substantially stronger predictive validity than either holistic or macro-formative alternatives. The gains are largest for likelihood-based fit, Poisson deviance, and rank-order performance, while improvements in RMSE are more modest. Across these comparisons, Gemma 4 and Qwen 3.5 obtain the strongest overall results, although the main performance differences are between construct representation rather than between model architectures. Baseline performance is repeated in the table notes as the reference point for these comparisons.
 
 
+% TODO maybe make best Green and worst Red?
 
 \begin{table}[h]
     \centering
@@ -161,7 +163,9 @@ For \textit{FeedbackQA}, the VIF diagnostics indicate moderate to substantial mu
 %     \end{flushleft}
 % \end{table}
 
-
+%TODO maybe better define the 5 and the 10 as moderate and substantial
+%TODO have to include what is total N
+%TODO also why are there 6? Shouldnt it be 4 total?? This is now unclear since there is overlap in the categories
 \begin{table}
     \centering
     \caption{Multicollinearity Diagnostics for FeedbackQA Formative Specifications}
@@ -197,9 +201,10 @@ These diagnostics produce a clear contrast between the two validation settings. 
 Because the Barter Deals criteria are sufficiently separable, the fine-grained formative coefficients can be interpreted substantively as conditional predictive associations. Table~\ref{tab:barter_coefficients_selected} reports the coefficient estimates for the two strongest formative specifications, Gemma 4 and Qwen 3.5. The most robust pattern is the strong positive association of \textit{Product Universality} and \textit{Perceived Economic Value} with creator application behavior. In both models, a one-standard-deviation increase in \textit{Product Universality} is associated with approximately 40\% higher expected application counts, while a one-standard-deviation increase in \textit{Perceived Economic Value} is associated with approximately 17--19\% higher expected application counts, conditional on the structural controls and the other LLM-derived criteria.
 
 A second consistent pattern is the negative coefficient for \textit{Functional Utility}. This should not be interpreted as evidence that useful products are generally unattractive to creators. Rather, the coefficient is conditional on the other reward dimensions: after accounting for broad consumer appeal, economic value, brand prestige, and creator-brand fit, Deals rated as more utilitarian receive fewer applications. One plausible interpretation is that the residual variation captured by \textit{Functional Utility} reflects more mundane or less content-worthy offers, whereas creators respond more strongly to products that are broadly appealing or economically valuable.
+%TODO maybe remove the plausible interpretation, and come back to it in discussion? 
 
 Other dimensions show weaker or less consistent associations. \textit{Brand Prestige} is positive and significant for Gemma 4, but essentially zero for Qwen 3.5, indicating that this association is not robust across evaluator architectures. \textit{Call-to-Action Strength} is positive in both models, but the estimates are small and not statistically significant in the final specifications. The remaining cost and pitch-quality dimensions (see: Appendix \ref{app:barter_criteria}) are not consistently associated with application behavior once the reward-related dimensions and structural controls are included. Overall, the coefficient pattern suggests that creator application behavior is primarily driven by the substantive attractiveness of the offered product or service, especially its broad appeal and perceived economic value, rather than by the rhetorical quality of the pitch or the explicit cost dimensions measured here.
-
+%TODO last paragraph can be shortened significantly
 
 % % Cautious because VIF diagnostics showed multicollinearity
 % % Interpret coefficients only broadly, not as clean independent effects
@@ -328,7 +333,7 @@ Substantively, these results indicate that Llama 3.2's evaluator scores are more
 \paragraph{Synthesis}
 
 Taken together, the diagnostic results indicate that criterion-level LLM measurements cannot be evaluated on validity performance alone. The FeedbackQA formative specifications improve convergent validity, but their high criterion collinearity limits coefficient-level interpretation. In contrast, the Barter Deals formative specifications combine strong predictive validity with sufficiently separable criteria, allowing the regression weights to be interpreted as diagnostic associations. The rating-regime and verbosity diagnostics further show that models with similar validation performance can behave differently as measurement instruments: Gemma 4 and Qwen 3.5 perform similarly in the Barter Deals setting, but differ in rating-token entropy and scale behavior, while Llama 3.2 shows systematic residual verbosity sensitivity despite otherwise usable rating behavior. Overall, RQ2 is therefore answered conditionally: LLM-derived criterion measurements can support meaningful diagnostics, but only when criterion separability, rating behavior, and robustness to construct-irrelevant text features are evaluated alongside convergent or predictive validity.
-
+%TODO should this synthesis be here or in the discussion?
 
 
 

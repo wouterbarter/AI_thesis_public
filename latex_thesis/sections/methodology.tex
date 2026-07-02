@@ -9,9 +9,11 @@ The previous section motivates artefact-level evaluation as a formative measurem
 
 \textit{FeedbackQA} \citep{li_using_2022} ($n=9{,}065$) is an academic dataset of COVID-19-related Q\&A pairs with human evaluations of answer quality. Moreover, for each rating, the humans provide a natural language explanation motivating their rating. Each artefact is a question-answer pair, and the external criterion is the human quality rating assigned to the answer. This provides a convergent-validity setting: LLM-derived measurements of \textit{Answer Quality} are evaluated by testing whether they align with human quality judgments.
 
-\textit{Barter Deals} ($n=2{,}960$) is an industry dataset of written collaboration opportunities for creators, referred to as \textit{Deals}. In a typical Deal, a company offers a product, service, or experience in exchange for promotional creator content. Creators view these offers on the Barter marketplace and apply to the Deals they find appealing. Each artefact is the written Deal text, consisting of a title, body, and requirements section that together describe the offer and the requested creator deliverables. The external criterion is the number of creator applications received within the first seven days after publication. This provides a predictive-validity setting: LLM-derived measurements of \textit{Deal Attractiveness} are evaluated by testing whether they predict observed creator application behavior.
+\textit{Barter Deals} ($n=2{,}960$) is an industry dataset of written collaboration opportunities for creators, referred to as \textit{Deals}. In a typical Deal, a company offers a product, service, or experience in exchange for promotional creator content. Creators view these offers on the Barter marketplace and apply to the Deals they find appealing. Each artefact is the written Deal text, consisting of a title, body, and requirements section that together describe the offer and the requested creator deliverables. The external criterion is the number of creator applications received within the first seven days after publication. This provides a predictive-validity setting: LLM-derived measurements of \textit{Deal Attractiveness} are evaluated by testing whether they predict observed creator application behavior. 
+% TODO Maybe change semicolon in last sentence
 
 Across both settings, the central manipulation concerns how the target construct is represented. Holistic baselines ask the LLM to assign a single overall score. Formative representations instead elicit criterion-level scores separately and recompose them through regression. This means that the LLM does not produce the final composite score directly; instead, it produces one score per specified criterion, and the relationship between these criterion-level scores and the external validity criterion is estimated in the corresponding regression model.
+% TODO Explain that formative representations decompose the target construct into constituent dimensions
 
 Through these experiments, we answer the following research questions:
 
@@ -19,6 +21,7 @@ Through these experiments, we answer the following research questions:
 \item[\textbf{RQ1:}] Does explicit formative recomposition of theoretically specified criteria provide stronger validity evidence than holistic or weakly specified alternatives?
 \item[\textbf{RQ2:}] Do separately elicited formative criteria support more diagnostically interpretable artefact-level measurements than holistic or weakly specified alternatives?
 \end{description}
+% TODO The relation to the RQs is a bit unnatural, maybe weave them in 
 
 
 \begin{table*}[!h]
@@ -79,7 +82,7 @@ For \textit{FeedbackQA}, \textit{Answer Quality} is decomposed into four dimensi
 For \textit{Barter Deals}, \textit{Deal Attractiveness} is represented through three macro-dimensions derived from the creator's decision problem: \textit{Reward}, \textit{Cost}, and \textit{Pitch Quality}. \textit{Reward} captures what the creator receives from the collaboration, \textit{Cost} captures the effort and constraints required to participate, and \textit{Pitch Quality} captures how clearly and persuasively the opportunity is presented. The naive holistic baseline evaluates overall deal attractiveness using a minimal construct definition. The macro-formative baseline measures the three macro-dimensions separately, reflecting broad multi-dimensional evaluation schemes commonly used in NLG evaluation \citep{fabbri_summeval_2021, liu_g-eval_2023, zhongUnifiedMultiDimensionalEvaluator2022a}. The fine-grained formative condition further decomposes the macro-dimensions into ten theoretically specified dimensions: \textit{Brand Prestige}, \textit{Perceived Economic Value}, \textit{Creator Brand Alignment}, \textit{Functional Utility}, \textit{Product Universality}, \textit{Workload Volume}, \textit{Creative Restrictiveness}, \textit{Call-to-Action Strength}, \textit{Rhetorical Objectivity}, and \textit{Proposition Clarity}. This allows the analysis to test whether finer-grained decomposition improves predictive validity beyond broad theoretical pillars. All Barter Deals evaluations are performed on a seven-point Likert scale to allow finer-grained variation in the measurements.
 
 
-Table~\ref{tab:construct_representations} summarizes the construct representations compared in each validation setting. Full criterion definitions and scale anchors are provided in Appendix~\ref{app:evaluation_criteria}. Dataset descriptives, text-length distributions, and additional diagnostic plots are reported in Appendix~\ref{app:verbosity_diagnostics}.
+Table~\ref{tab:construct_representations} summarizes the construct representations compared in each validation setting. Full criterion definitions and scale anchors are provided in Appendix~\ref{app:evaluation_criteria}. Dataset descriptives, text-length distributions, and additional diagnostic plots are reported in Appendix~\ref{app:verbosity_diagnostics}. %TODO fix app eval criteria
 
 
 
@@ -156,10 +159,11 @@ construct specification};
 % =========================================================
 % PANEL 2: LLM MEASUREMENT OPERATIONALIZATION
 % =========================================================
-
+% TODO check if we need to say C_m here or just C (which it was previously)
+% TODO also why is J_m suddenly criteria? What is C_m?
 \node[compbox, below=1.71cm of specproc] (triplet) {
     \textbf{Model Input}\\[3pt]
-    for each $c_j\in C$:\\[2pt]
+    for each $c_j\in C_m$:\\[2pt]
     $\mathbf{u}_{ij}=[\,s\,;\,c_j\,;\,d_i\,]$\\[4pt]
     $s$: system context + task\\
     $c_j$: criterion + anchors\\
@@ -279,6 +283,7 @@ construct specification};
 
 In the evaluation procedure, the theoretical dimensions defined in Section~\ref{sec:methods_design} are operationalized as prompt-level criteria. The same procedure is used in both validation settings and is designed to produce criterion-level artefact measurements that can be recomposed in the convergent- and predictive-validity regressions. Because the scoring method relies on access to next-token logits, we use open-weight instruction-tuned models rather than closed API-based systems. This also reflects the operational setting motivating the thesis: repeated artefact-level evaluation requires evaluators that are feasible to run at scale and inspect at the token-probability level. The evaluation models are Llama-3.2-3B-Instruct (``Llama 3.2'') \citep{metaLlama323BInstruct2024}, Qwen3-4B-Instruct-2507 (``Qwen 3'') \citep{qwen3technicalreport}, Qwen/Qwen3.5-4B (``Qwen 3.5'') \citep{qwen35_4b_modelcard}, and google/gemma-4-E2B-it (``Gemma 4'') \citep{googleGemma4E2BIt2026}.
 
+% TODO define u
 All evaluations use a standardized prompt structure. For artefact $d_i$, construct representation $m$, and criterion $c_j \in C_m$, the model input is represented as
 \[
     \mathbf{u}_{ijm} = [\, s \,;\, c_j \,;\, d_i \,],
@@ -405,7 +410,7 @@ Before adding LLM-derived measurements, we estimate a structured baseline model 
 \begin{equation}\label{eq:barter_base_regression}
     \ln(\mu_i) = \beta_0 + \boldsymbol{\gamma}^{T}\mathbf{Z}_i + \alpha_{\tau(i)},
 \end{equation}
-where $\mu_i = \mathbb{E}[Y_i \mid \mathbf{Z}_i]$ is the expected application count for Deal $i$. The vector $\mathbf{Z}_i$ contains structural controls for strict follower requirements, competitor density, platform strategy, geographic market scope, and product category. To account for text-length effects, $\mathbf{Z}_i$ also includes quartile indicators for body length and requirements length. Finally, $\alpha_{\tau(i)}$ denotes month-year fixed effects, which absorb platform growth, seasonality, and other time-varying shocks. . The purpose of the baseline model is to partial out predictable market structure before evaluating the additional validity evidence provided by LLM-derived measurements.
+where $\mu_i = \mathbb{E}[Y_i \mid \mathbf{Z}_i]$ is the expected application count for Deal $i$. The vector $\mathbf{Z}_i$ contains structural controls for strict follower requirements, competitor density, platform strategy, geographic market scope, and product category. To account for text-length effects, $\mathbf{Z}_i$ also includes quartile indicators for body length and requirements length. Finally, $\alpha_{\tau(i)}$ denotes month-year fixed effects, which absorb platform growth, seasonality, and other time-varying shocks. The purpose of the baseline model is to partial out predictable market structure before evaluating the additional validity evidence provided by LLM-derived measurements. %TODO maybe move the purpose to the start of the paragraph
 
 For each construct representation $m$ defined in Table~\ref{tab:construct_representations}, the baseline model is augmented with the corresponding LLM-derived scores:
 \begin{equation}\label{eq:barter_augmented_regression}
@@ -421,7 +426,7 @@ For each construct representation $m$ defined in Table~\ref{tab:construct_repres
 \end{equation}
 where $x^{\mathrm{EV}}_{ijm}$ denotes the standardized LLM EV score for Deal $i$ on criterion $j$ under construct representation $m$. The number of LLM-derived predictors depends on the representation: $J_m=1$ for the naive holistic baseline, $J_m=3$ for the macro-formative representation, and $J_m=10$ for the fine-grained formative representation.
 
-Predictive-validity evidence is evaluated in two ways. First, we compare in-sample model fit against the structured baseline using log-likelihood, McFadden pseudo-$R^2$, AIC, and BIC. Improvements are reported relative to the baseline: $\Delta$LL is defined as $LL_{\mathrm{model}} - LL_{\mathrm{baseline}}$, while $\Delta$AIC and $\Delta$BIC are defined as $AIC_{\mathrm{baseline}} - AIC_{\mathrm{model}}$ and $BIC_{\mathrm{baseline}} - BIC_{\mathrm{model}}$, respectively. All three quantities are oriented so that positive values indicate improvement over the structured baseline.
+Predictive-validity evidence is evaluated in two ways. First, we compare in-sample model fit against the structured baseline using log-likelihood, McFadden pseudo-$R^2$, AIC, and BIC. Improvements are reported relative to the baseline: $\Delta$LL is defined as $LL_{\mathrm{model}} - LL_{\mathrm{baseline}}$, while $\Delta$AIC and $\Delta$BIC are defined as $AIC_{\mathrm{baseline}} - AIC_{\mathrm{model}}$ and $BIC_{\mathrm{baseline}} - BIC_{\mathrm{model}}$, respectively. All three quantities are oriented so that positive values indicate improvement over the structured baseline. %TODO structured or structural?
 
 Second, we assess out-of-sample generalization using five-fold cross-validation. In each fold, the model is estimated on the training partition and evaluated on held-out Deals. Folds are grouped by partner so that Deals from the same partner do not appear in both training and test partitions. Predictive performance is summarized using RMSE, Poisson deviance, and Spearman's $\rho$. RMSE captures prediction error on the original application-count scale, Poisson deviance provides a count-appropriate predictive loss, and Spearman's $\rho$ captures rank-order alignment between observed and predicted application counts.
 
@@ -432,6 +437,8 @@ Second, we assess out-of-sample generalization using five-fold cross-validation.
 \subsection{Diagnostic Evidence for RQ2}\label{sec:methods_diagnostics}
 
 RQ2 concerns whether separately elicited formative criteria support more diagnostically interpretable artefact-level measurements. Since the formative scores are recomposed through regression, the criterion-level measurements should exhibit properties that support coefficient-level interpretation. We therefore assess three diagnostic properties:
+
+%TODO maybe also include how values are interpreted? What is low/high VIF, Cohen's d, etc.
 
 \begin{description}
 
@@ -444,6 +451,8 @@ RQ2 concerns whether separately elicited formative criteria support more diagnos
 
     \item[\textbf{Distributional behavior.}]
     The distributional behavior of the criterion scores is informative for regression-based diagnostics. Since the formative criteria are recomposed through regression, the estimated weights depend on the variation present in the observed LLM-derived scores. Recent work on LLM-based evaluators similarly notes that compressed or imbalanced rubric-score distributions can affect regression-based aggregation and coefficient interpretation \citep{bang_transforming_2025}. In the present setting, the concern is not only whether scores vary across artefacts, but also how they vary: a model may use the rating scale broadly while still behaving like an ordinal classifier if its probability mass concentrates on a small number of rating tokens.
+
+    %TODO no need to define EV
 
     We therefore inspect the distribution, mean, and standard deviation of the Expected Value (EV) scores together with normalized rating-token entropy. EV dispersion captures \textit{scale utilization}: whether the model spreads artefacts broadly across the rating scale or concentrates scores within a narrow region. Entropy captures \textit{rating-token dispersion}: whether probability mass is concentrated on one or a few rating tokens, producing more quantized EV scores, or spread across multiple rating tokens, producing more continuous EV scores. Together, scale utilization and entropy define \textit{rating regimes}: broad-continuous, broad-quantized, narrow-continuous, and narrow-quantized scoring behavior. These regimes characterize how the evaluator produces criterion scores and therefore how those scores can be used for recomposition and diagnostic interpretation. Detailed interpretations are provided in Appendix~\ref{app:rating_regimes}.
 
