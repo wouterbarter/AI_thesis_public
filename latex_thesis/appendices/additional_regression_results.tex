@@ -1,3 +1,5 @@
+\newpage
+
 \section{Additional Regression Results}\label{app:additional_regression_results}
 
 
@@ -44,7 +46,6 @@ Table~\ref{tab:feedbackqa_cv_full} reports the full set of cross-validated conve
 \subsection{Barter Deals Regression Results}
 \label{app:barter_full_results}
 
-\paragraph{Structural baseline model results (excluding LLM evaluations)}
 
 \begin{table}[ht]
     \centering
@@ -69,17 +70,16 @@ Table~\ref{tab:feedbackqa_cv_full} reports the full set of cross-validated conve
 
     \begin{flushleft}
     \footnotesize
-    \textit{Note.} The structural baseline is a Negative Binomial model containing only non-LLM platform covariates, including the controls and fixed effects specified in the methods section. In-sample fit statistics provide the reference point for the likelihood-based LLM comparisons in Table~\ref{tab:barter_insample_compact}; cross-validated performance metrics provide the reference point for the out-of-sample comparisons in Table~\ref{tab:barter_cv_compact}.
+    \textit{Note.} The structured baseline is a Negative Binomial model containing only non-LLM platform covariates, including the controls and fixed effects specified in the methods section. In-sample fit statistics provide the reference point for the likelihood-based LLM comparisons in Table~\ref{tab:barter_insample_compact}; cross-validated performance metrics provide the reference point for the out-of-sample comparisons in Table~\ref{tab:barter_cv_compact}.
     \end{flushleft}
 \end{table}
 
-\paragraph{Structural baseline coefficient estimates}
 
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{Selected Structural Baseline Coefficients for Barter Deals}
+\caption{Selected Structured Baseline Coefficients for Barter Deals}
 \label{tab:barter_baseline_coefficients}
 \begin{tabular}{
 @{}
@@ -135,13 +135,6 @@ Body length & Long & -0.107 &  & 0.077 & 0.898 \\
 \end{flushleft}
 \end{table}
 
-
-
-
-
-
-
-\paragraph{Selected fine-grained formative coefficient estimates}
 
 
 \begin{table}[htbp]
@@ -206,7 +199,3 @@ Workload Volume
 \end{flushleft}
 \end{table}
 
-[Gemma 4 and Qwen 3.5 coefficient table]
-
-\paragraph{Model specification notes}
-[Short note: controls, fixed effects, clustered SEs, standardized predictors]

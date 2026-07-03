@@ -82,6 +82,18 @@ INPUT C:\Program Files\MiKTeX\tex\latex\graphics\trig.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics-cfg\graphics.cfg
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\pdflscape\pdflscape.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\pdflscape\pdflscape.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\pdflscape\pdflscape-nometadata.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\pdflscape\pdflscape-nometadata.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics\lscape.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\graphics\lscape.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\float\float.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\float\float.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\ragged2e\ragged2e.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\ragged2e\ragged2e.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\tools\longtable.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\tools\longtable.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\pgf\frontendlayer\tikz.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\pgf\basiclayer\pgf.sty
@@ -246,6 +258,8 @@ INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\caption\caption.st
 INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\caption\caption.sty
 INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\caption\caption3.sty
 INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\caption\caption3.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\caption\ltcaption.sty
+INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\caption\ltcaption.sty
 INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\dblfloatfix\dblfloatfix.sty
 INPUT C:\Users\Wouter Barter\AppData\Roaming\MiKTeX\tex\latex\dblfloatfix\dblfloatfix.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\base\fixltx2e.sty
@@ -264,24 +278,21 @@ INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT .\main.aux
 INPUT .\main.aux
 INPUT main.aux
-INPUT .\appendices\prompts.aux
-INPUT .\appendices\prompts.aux
-INPUT appendices\prompts.aux
-INPUT .\appendices\score_extraction.aux
-INPUT .\appendices\score_extraction.aux
-INPUT appendices\score_extraction.aux
 INPUT .\appendices\sample_data.aux
 INPUT .\appendices\sample_data.aux
 INPUT appendices\sample_data.aux
+INPUT .\appendices\llm_scoring_implementation.aux
+INPUT .\appendices\llm_scoring_implementation.aux
+INPUT appendices\llm_scoring_implementation.aux
 INPUT .\appendices\additional_graphs_diagnostics.aux
 INPUT .\appendices\additional_graphs_diagnostics.aux
 INPUT appendices\additional_graphs_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.aux
 INPUT appendices\measurement_diagnostics.aux
-INPUT .\appendices\control_variables.aux
-INPUT .\appendices\control_variables.aux
-INPUT appendices\control_variables.aux
+INPUT .\appendices\barter_deals_dataset_construction.aux
+INPUT .\appendices\barter_deals_dataset_construction.aux
+INPUT appendices\barter_deals_dataset_construction.aux
 INPUT .\appendices\additional_regression_results.aux
 INPUT .\appendices\additional_regression_results.aux
 INPUT appendices\additional_regression_results.aux
@@ -386,9 +397,9 @@ INPUT .\sections\introduction.tex
 INPUT .\sections\introduction.tex
 INPUT .\sections\introduction.tex
 INPUT sections\introduction.tex
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmbx10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmri10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\enc\dvips\lm\lm-ts1.enc
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmbx10.tfm
 INPUT .\sections\literature_review.tex
 INPUT .\sections\literature_review.tex
 INPUT .\sections\literature_review.tex
@@ -446,25 +457,19 @@ INPUT sections\results.tex
 INPUT .\main.bbl
 INPUT .\main.bbl
 INPUT main.bbl
-INPUT .\appendices\prompts.tex
-INPUT .\appendices\prompts.tex
-OUTPUT appendices\prompts.aux
-INPUT .\appendices\prompts.tex
-INPUT .\appendices\prompts.tex
-INPUT appendices\prompts.tex
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmtk10.tfm
-INPUT .\appendices\score_extraction.tex
-INPUT .\appendices\score_extraction.tex
-OUTPUT appendices\score_extraction.aux
-INPUT .\appendices\score_extraction.tex
-INPUT .\appendices\score_extraction.tex
-INPUT appendices\score_extraction.tex
 INPUT .\appendices\sample_data.tex
 INPUT .\appendices\sample_data.tex
 OUTPUT appendices\sample_data.aux
 INPUT .\appendices\sample_data.tex
 INPUT .\appendices\sample_data.tex
 INPUT appendices\sample_data.tex
+INPUT .\appendices\llm_scoring_implementation.tex
+INPUT .\appendices\llm_scoring_implementation.tex
+OUTPUT appendices\llm_scoring_implementation.aux
+INPUT .\appendices\llm_scoring_implementation.tex
+INPUT .\appendices\llm_scoring_implementation.tex
+INPUT appendices\llm_scoring_implementation.tex
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmtk10.tfm
 INPUT .\appendices\additional_graphs_diagnostics.tex
 INPUT .\appendices\additional_graphs_diagnostics.tex
 OUTPUT appendices\additional_graphs_diagnostics.aux
@@ -500,12 +505,12 @@ OUTPUT appendices\measurement_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.tex
 INPUT .\appendices\measurement_diagnostics.tex
 INPUT appendices\measurement_diagnostics.tex
-INPUT .\appendices\control_variables.tex
-INPUT .\appendices\control_variables.tex
-OUTPUT appendices\control_variables.aux
-INPUT .\appendices\control_variables.tex
-INPUT .\appendices\control_variables.tex
-INPUT appendices\control_variables.tex
+INPUT .\appendices\barter_deals_dataset_construction.tex
+INPUT .\appendices\barter_deals_dataset_construction.tex
+OUTPUT appendices\barter_deals_dataset_construction.aux
+INPUT .\appendices\barter_deals_dataset_construction.tex
+INPUT .\appendices\barter_deals_dataset_construction.tex
+INPUT appendices\barter_deals_dataset_construction.tex
 INPUT .\appendices\additional_regression_results.tex
 INPUT .\appendices\additional_regression_results.tex
 OUTPUT appendices\additional_regression_results.aux
@@ -519,24 +524,21 @@ INPUT .\appendices\evaluation_criteria.tex
 INPUT .\appendices\evaluation_criteria.tex
 INPUT appendices\evaluation_criteria.tex
 INPUT main.aux
-INPUT .\appendices\prompts.aux
-INPUT .\appendices\prompts.aux
-INPUT appendices\prompts.aux
-INPUT .\appendices\score_extraction.aux
-INPUT .\appendices\score_extraction.aux
-INPUT appendices\score_extraction.aux
 INPUT .\appendices\sample_data.aux
 INPUT .\appendices\sample_data.aux
 INPUT appendices\sample_data.aux
+INPUT .\appendices\llm_scoring_implementation.aux
+INPUT .\appendices\llm_scoring_implementation.aux
+INPUT appendices\llm_scoring_implementation.aux
 INPUT .\appendices\additional_graphs_diagnostics.aux
 INPUT .\appendices\additional_graphs_diagnostics.aux
 INPUT appendices\additional_graphs_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.aux
 INPUT .\appendices\measurement_diagnostics.aux
 INPUT appendices\measurement_diagnostics.aux
-INPUT .\appendices\control_variables.aux
-INPUT .\appendices\control_variables.aux
-INPUT appendices\control_variables.aux
+INPUT .\appendices\barter_deals_dataset_construction.aux
+INPUT .\appendices\barter_deals_dataset_construction.aux
+INPUT appendices\barter_deals_dataset_construction.aux
 INPUT .\appendices\additional_regression_results.aux
 INPUT .\appendices\additional_regression_results.aux
 INPUT appendices\additional_regression_results.aux

@@ -17,27 +17,22 @@ Section~\ref{sec:theoretical_definition} defines the measurement model. Drawing 
 
 \subsection{Construct Specification and Measurement Models}\label{sec:theoretical_definition}
 
+LLM-based evaluators become measurement instruments when their scores are interpreted as evidence about a target construct, such as answer quality or deal attractiveness. These constructs are not directly observed in the text, but are specified and operationalized through the measurement procedure used to evaluate it. Such an interpretation necessarily implies a measurement model: the scoring procedure must assume that the observed scores relate to the target construct in a particular way.
 
-LLM-based evaluators become measurement instruments when their scores are interpreted as evidence about a target construct, such as answer quality or deal attractiveness. These constructs are not directly observed in the text, but are specified and operationalized through the measurement procedure used to evaluate it. Such an interpretation necessarily implies a measurement model: the criteria must be assumed to relate to the target construct in a particular way. 
-
-Measurement models make this assumption explicit by specifying the direction of the relationship between constructs and their indicators: observed scores may be treated either as effects of an underlying construct or as causal/formative indicators that constitute a composite construct \citep{bollen1991conventional, edwardsNatureDirectionRelationships2000}. The measurement model therefore determines how the criteria are assumed to relate to the construct, and what kinds of validity risks follow from that assumption.
-% TODO this paragraph is a bit awkward
-
+In psychometrics, this relationship is commonly formalized through latent variable models, which specify how observed indicators relate to an unobserved construct. The direction of this relationship is central. Observed scores may be treated either as effects of an underlying construct or as formative indicators that jointly constitute a composite construct \citep{bollen1991conventional, edwardsNatureDirectionRelationships2000}. The measurement model therefore determines both how scores are interpreted and what kinds of validity risks follow from that interpretation.
 
 
 \paragraph{Latent Variable Models}
 
-% TODO make link with previous paragraph smoother
-Latent variable models define the relationship between a target construct and its indicators. Two model specifications are commonly distinguished: formative and reflective \citep{bollen1991conventional}. They differ in their assumptions about the direction of the causal relationship between the indicators \footnote{We use the term \textit{indicator} here, following standard psychometric vocabulary. In the context of LLM evaluations, this corresponds to the theoretically defined subdimensions, operationalized as LLM-derived criterion scores.} and the construct.
-
+Two model specifications are commonly distinguished: formative and reflective \citep{bollen1991conventional}. They differ in their assumptions about the direction of the causal relationship between the indicators \footnote{We use the term \textit{indicator} here, following standard psychometric vocabulary. In the context of LLM evaluations, this corresponds to the theoretically defined subdimensions, operationalized as LLM-derived criterion scores.} and the construct.
 
 In formative models, the latent variable is assumed to be a composite construct, caused by the indicators. The canonical example is Socioeconomic Status (SES), which can be defined as the composite of three main features: income, education, and occupational prestige \citep{mcquitty2013structural}. Formally, for a set of causal indicators indexed by $j = 1,2, \dots ,J$, we assume
 
 \begin{equation}\label{eq:formative_model}
     \eta = \sum_{j=1}^{J} \gamma_j x_{j} + \zeta
 \end{equation}
-% TODO fix gamma_i
-where $\eta$ is a latent construct, $\gamma_i$ a formative weight, $x_{j}$ a causal indicator, and $\zeta$ the disturbance term. 
+
+where $\eta$ is a latent construct, $\gamma_j$ a formative weight for indicator $j$, $x_{j}$ a causal indicator, and $\zeta$ the disturbance term. 
 
 In reflective models, the latent variable causes the indicators. For example, following a "g-factor" interpretation of the latent variable intelligence \citep{spearman1961general}, we assume that intelligence is an inherent trait that humans possess which causes people's performance on cognitive tasks. Formally, for any effect indicator $j$, we assume
 
@@ -45,7 +40,7 @@ In reflective models, the latent variable causes the indicators. For example, fo
     x_j = \lambda_j \eta + \varepsilon_j
 \end{equation}
 
-where $\eta$ the latent construct, $\lambda_j$ a factor loading, $x_j$ is an effect indicator, and $\varepsilon_j$ the measurement error.
+where $\eta$ is the latent construct, $\lambda_j$ is the factor loading for indicator $j$, $x_j$ is an effect indicator, and $\varepsilon_j$ is the measurement error.
 
 
 \paragraph{Model Assumptions \& Validity Risks}
@@ -55,15 +50,14 @@ In a formative model, the indicators are not assumed to covary because of a shar
 In contrast, in a reflective model, the indicators are treated as manifestations of a shared latent cause. For example, under a "g-factor" interpretation of intelligence, performance across cognitive tasks is assumed to reflect a common underlying trait. Individual items may contain item-specific error, but with a sufficiently broad set of valid indicators, this error can be averaged out when estimating the latent trait. This illustrates the primary consequence of the reflective assumption: the indicators are theoretically interchangeable. The main validity risks therefore concern whether the indicators can plausibly be treated as manifestations of the same latent construct. If they instead reflect multiple constructs, item-specific effects, or construct-irrelevant sources of variation, the reflective measurement model is misspecified.
 
 
-% \paragraph{Model Assumptions \& Validity Risks}
+\paragraph{Artefact-Level and System-Level Measurement Models}
 
-% In a formative model, the indicators are assumed to be independent. This does not mean that they do not covary, but this is not necessitated my the model specification. Returning to the example of SES, highly-educated people could have a low income, and vice versa. However, higher education does often lead to higher income and high prestige. This has an important consequence: because each indicator uniquely contributes to the value of the latent variable, omitting an indicator means omitting a part of the construct \citep{bollen1991conventional}. The main validity risks therefore relate to construct underrepresentation: whether the target construct is adequately covered by the indicators defined.
+The distinction between reflective and formative specifications clarifies the difference between system-level and artefact-level LLM evaluation. As discussed in Section~\ref{sec:litrev_meaning}, system-level evaluation concerns the measurement of model abilities through benchmarks. This resembles a reflective specification: the latent trait is the model ability, while benchmark items, tasks, or criteria function as indicators from which that ability is inferred. Such a model is appropriate when the intended claim concerns average performance across a domain of tasks. However, it does not directly support diagnostic claims about individual artefacts. A model may have high latent writing ability, or score well on a writing benchmark, without every text it produces being high quality.
 
-% In contrast, in the reflective model, because the indicators are determined by a latent cause, they are dependent by assumption. For example, on an intelligence test, it is assumed that there is a single latent factor that determines the likelihood of providing a correct answer. Although it is possible that participants with an equivalent latent intelligence score provide different answers on the same question, during estimation of the latent trait, this gets absorbed by the disturbance term. Asymptotically, as the number of indicators approaches infinity, the disturbance term converges to zero. In this example, the indicators correspond to the items on an intelligence test. This illustrates the primary consequence of the reflective assumption: the indicators are theoretically interchangeable. The main validity risks therefore relate to whether the indicators can plausibly be treated as manifestations of the same latent construct. If the indicators instead reflect multiple constructs, item-specific effects, or construct-irrelevant sources of variation, the reflective measurement model is misspecified.
+Hence, artefact-level evaluation requires a different measurement specification. When the target is the quality of a specific answer or the attractiveness of a specific deal, the relevant criteria are not interchangeable indicators of a hidden ability. Rather, they define the dimensions along which the artefact is evaluated. Artefact-level diagnostic evaluation is therefore best understood formatively: the overall construct is composed of theoretically relevant dimensions, and its interpretation is determined by the dimensions through which it is measured. 
 
-%  When these participants answer a sufficient number of questions that probe the same latent trait, the disturbance term converges to zero.
+%and omitting or underspecifying these dimensions risks omitting or misspecifying part of the construct itself.
 
-% TODO maybe move this figure a bit further down?
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}[
@@ -153,25 +147,14 @@ In contrast, in a reflective model, the indicators are treated as manifestations
 \end{figure}
 
 
-\paragraph{Artefact-Level and System-Level Measurement Models}
-
-As discussed in Section~\ref{sec:litrev_meaning}, system-level evaluation concerns the measurement of model abilities through benchmarks. This resembles a reflective specification: the latent trait is the model ability, while benchmark items, tasks, or criteria function as indicators from which that ability is inferred. Such a model is appropriate when the intended claim concerns average performance across a domain of tasks. However, it does not directly support diagnostic claims about individual artefacts. A model may have high latent writing ability, or score well on a writing benchmark, without every text it produces being high quality.
-
-Artefact-level evaluation therefore requires a different measurement specification. When the target is the quality of a specific answer or the attractiveness of a specific deal, the relevant criteria are not interchangeable indicators of a hidden ability. Rather, they define the dimensions along which the artefact is evaluated. Artefact-level diagnostic evaluation is therefore best understood formatively: the overall construct is composed of theoretically relevant dimensions, and omitting or underspecifying these dimensions risks omitting or misspecifying part of the construct itself.
-
-% TODO is the sequence logical, where we first discuss the consequences, and then how artefact and system-level relate to reflective/formative? 
-This distinction has direct implications for artefact-level evaluation. If artefact-level quality is understood formatively, then an overall quality score is only interpretable to the extent that the dimensions constituting that score are specified. A holistic judgement may therefore be useful as a summary assessment, but it leaves the underlying construct representation implicit. In the empirical design, this implication is operationalized by comparing holistic, weakly decomposed, and formative construct representations.
-
-
-
 \subsection{Construct Validity and Empirical Validation}\label{sec:empirical_validation}
 
-Because the target constructs are not directly observable, the formative specification cannot be validated by comparing the resulting scores to a known true value. Instead, this thesis adopts a construct-validity approach, where validity concerns whether evidence supports the intended interpretation and use of a measurement \citep{messick1989meaning}. Human ratings and behavioral outcomes are therefore treated as sources of validity evidence, not as the object of measurement itself. They do not exhaust the meaning of answer quality or deal attractiveness, but provide theoretically relevant external criteria against which the expected behavior of the measurements can be assessed.
+% The empirical validation, then, of the formative specification involves assessing the degree to which the theoretically specified dimensions align with the evaluation target. 
 
-% TODO the role of emp validation _in this thesis_
-The role of empirical validation is therefore to evaluate the consequences of construct representation. The previous subsection identified construct underrepresentation and construct underspecification as central validity risks for formative artefact-level measurement. If these risks matter empirically, then more explicitly specified representations of the target construct should show stronger relationships with relevant external criteria than holistic or weakly specified alternatives. Stronger validity evidence is obtained when theoretically specified criterion measurements explain or predict the external criterion more clearly, more strongly, or more consistently than less specified scores.
+Given this formative specification, empirical validation concerns whether the theoretically specified dimensions support the intended interpretation of the artefact-level construct. Because the target constructs are not directly observable, the formative specification cannot be validated by comparing the resulting scores to a known true value. Instead, this thesis adopts a construct-validity approach, where validity concerns whether evidence supports the intended interpretation and use of a measurement \citep{messick1989meaning}. Human ratings and behavioral outcomes are therefore treated as sources of validity evidence, not as the object of measurement itself. They do not exhaust the meaning of answer quality or deal attractiveness, but provide theoretically relevant external criteria against which the expected behavior of the measurements can be assessed.
 
-% We formalize this notion as follows.
+The role of empirical validation in this thesis is therefore to evaluate the consequences of construct representation. The previous subsection identified construct underrepresentation and construct underspecification as central validity risks for formative artefact-level measurement. If these risks matter empirically, then more explicitly specified representations of the target construct should show stronger relationships with relevant external criteria than holistic or weakly specified alternatives. Stronger validity evidence is obtained when theoretically specified criterion measurements explain or predict the external criterion more clearly, more strongly, or more consistently than less specified scores.
+
 Let $\mathbf{x}(d)$ denote the vector of LLM-derived criterion measurements for document $d$, and let $x^{\text{hol}}(d)$ denote a holistic LLM score for the same document. For a validation criterion $y^{(r)}(d)$, the comparison can be written generically as
 \begin{equation}
     y^{(r)}(d) \approx f_r(\mathbf{x}(d))
@@ -180,5 +163,8 @@ Let $\mathbf{x}(d)$ denote the vector of LLM-derived criterion measurements for 
 \end{equation}
 The empirical question is not whether either side recovers a true score, but whether the more explicit construct representation produces stronger validity evidence for the intended interpretation of the measurement.
 
-This logic is evaluated in two complementary validation settings. Convergent validity is assessed on FeedbackQA, where human quality judgments provide an external reference for Q\&A answer quality. Predictive validity is assessed on Barter Deals, where LLM-derived measurements of deal attractiveness are related to theoretically relevant behavioral outcomes, measured as aggregate creator application behavior. The empirical analyses therefore compare the validity evidence produced by holistic, weakly specified, and formative representations of the target construct. The datasets, construct definitions, and model specifications are introduced in Sections~\ref{sec:methods_feedbackqa} and~\ref{sec:methods_barter}. %TODO is this still correct? Maybe just move to methods; this paragraph needs some love
+This logic implies two empirical tasks. First, the analyses compare whether increasingly explicit construct representations produce stronger external validity evidence than holistic or weakly specified alternatives. Second, because stronger external validity evidence does not by itself guarantee diagnostic interpretability, the analyses examine whether the resulting criterion scores exhibit the measurement properties needed for formative interpretation, including empirical separability, usable score distributions, and robustness to construct-irrelevant text features. The next section operationalizes this framework in two complementary validation settings: a convergent-validity setting based on human quality judgments and a predictive-validity setting based on behavioral outcomes.
+
+
+% This logic is evaluated in two complementary validation settings. Convergent validity is assessed on FeedbackQA, where human quality judgments provide an external reference for Q\&A answer quality. Predictive validity is assessed on Barter Deals, where LLM-derived measurements of deal attractiveness are related to theoretically relevant behavioral outcomes, measured as aggregate creator application behavior. The empirical analyses therefore compare the validity evidence produced by holistic, weakly specified, and formative representations of the target construct. The datasets, construct definitions, and model specifications are introduced in Sections~\ref{sec:methods_feedbackqa} and~\ref{sec:methods_barter}. %TODO is this still correct? Maybe just move to methods; this paragraph needs some love
 

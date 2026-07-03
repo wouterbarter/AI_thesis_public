@@ -4,24 +4,21 @@ The top-level auxiliary file: main.aux
 Reallocating 'name_of_file' (item size: 1) to 9 items.
 The style file: abbrvnat.bst
 Reallocating 'name_of_file' (item size: 1) to 11 items.
-Reallocating 'name_of_file' (item size: 1) to 23 items.
-A level-1 auxiliary file: appendices/prompts.aux
-Reallocating 'name_of_file' (item size: 1) to 32 items.
-A level-1 auxiliary file: appendices/score_extraction.aux
 Reallocating 'name_of_file' (item size: 1) to 27 items.
 A level-1 auxiliary file: appendices/sample_data.aux
+Reallocating 'name_of_file' (item size: 1) to 42 items.
+A level-1 auxiliary file: appendices/llm_scoring_implementation.aux
 Reallocating 'name_of_file' (item size: 1) to 45 items.
 A level-1 auxiliary file: appendices/additional_graphs_diagnostics.aux
 Reallocating 'name_of_file' (item size: 1) to 39 items.
 A level-1 auxiliary file: appendices/measurement_diagnostics.aux
-Reallocating 'name_of_file' (item size: 1) to 33 items.
-A level-1 auxiliary file: appendices/control_variables.aux
+Reallocating 'name_of_file' (item size: 1) to 49 items.
+A level-1 auxiliary file: appendices/barter_deals_dataset_construction.aux
 Reallocating 'name_of_file' (item size: 1) to 45 items.
 A level-1 auxiliary file: appendices/additional_regression_results.aux
 Reallocating 'name_of_file' (item size: 1) to 35 items.
 A level-1 auxiliary file: appendices/evaluation_criteria.aux
 Database file #1: references.bib
-Warning--I didn't find a database entry for ""
 Warning--to sort, need author or key in PDFModernLLM2026
 Warning--empty year in bang_transforming_2025
 Warning--empty journal in binetteImprovingValidityPractical2024
@@ -51,7 +48,7 @@ Warning--empty year in zheng_judging_2023
 Warning--empty year in zheng_judging_2023
 You've used 62 entries,
             2773 wiz_defined-function locations,
-            1043 strings with 23847 characters,
+            1042 strings with 23851 characters,
 and the built_in function-call counts, 37488 in all, are:
 = -- 3158
 > -- 3058
@@ -90,4 +87,4 @@ warning$ -- 27
 while$ -- 261
 width$ -- 0
 write$ -- 849
-(There were 28 warnings)
+(There were 27 warnings)

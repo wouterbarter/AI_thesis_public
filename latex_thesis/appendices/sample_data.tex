@@ -1,80 +1,416 @@
-\section{Sample data}\label{app:sample_data}
+\section{Illustrative Artefacts and Model Outputs}
+\label{app:sample_artefacts_outputs}
+
+This appendix provides illustrative examples from the two validation datasets. 
+The examples show the structure of the raw artefacts as provided to the LLM for evaluation, the external validity criteria, and representative LLM-derived measurements. 
 
 \subsection{FeedbackQA examples}
 
-\subsubsection*{Example F01} 
+
+The out-of-fold predictions shown below are produced by the annotation-level
+cross-validation procedure defined in Section~\ref{sec:methods_feedbackqa}.
+That is, each artefact-level LLM measurement is paired with each available human
+annotation during model estimation and evaluation. For readability, the examples
+in this appendix are displayed at the artefact level: the target is shown as the
+mean of the two human ratings, and the out-of-fold prediction is the corresponding
+artefact-level aggregation of the annotation-level predictions. These examples
+are illustrative only. All reported validity evidence is based on the full
+annotation-level cross-validation analysis.
+
+\subsubsection*{Example F01: Partial answer with annotator disagreement}
+
+% input_id = "8f5a7e754c32a771"
 
 \begin{description}
-    \item[Question:] Is it still possible to access medical appointments and medications through my doctor?
-    \item[Answer:] You can access bulk-billed appointments with your doctor, nurse or mental health professional via phone or videoconference. If you would like to arrange a telehealth appointment, contact your doctor. Accessing medicines while staying at home. Your doctor may be able to arrange to have your prescriptions sent to your pharmacy directly so you
-can stay at home. For more information on whether you can access this service please call your pharmacy and speak to them about the best way to arrange this.
-    \item[Rating 1:] 4
-    \item[Feedback 1:] Gives information on how patients can access appointments with their doctors during the pandemic.
-    \item[Rating 2:] 3
-    \item[Feedback 2:] This answer relates to accessing medical appointments and medications, but does not give much information.
+    \item[Question:] Are my horses prone to COVID-19?
+
+    \item[Answer:] Some coronaviruses that infect animals can sometimes be spread to humans and
+    then spread between people, but this is rare. This is what happened with the
+    virus that caused the current outbreak of COVID-19. However, we do not know
+    the exact source of this virus. Public health officials and partners are
+    working hard to identify the source of COVID-19. The first infections were
+    linked to a live animal market, but the virus is now spreading from person to person.
+
+    The virus that causes COVID-19 spreads mainly from person to person through
+    respiratory droplets from coughing, sneezing, and talking. Recent studies show
+    that people who are infected but do not have symptoms likely also play a role
+    in the spread of COVID-19. At this time, there is no evidence that animals
+    play a significant role in spreading the virus that causes COVID-19. Based on
+    the limited information available to date, the risk of animals spreading
+    COVID-19 to people is considered to be low.
+
+    \item[Human rating 1:] Excellent (4)
+
+    \item[Feedback 1:] Directly answers the question and explains a bit about the uncertainty.
+
+    \item[Human rating 2:] Could be Improved (2)
+
+    \item[Feedback 2:] Says that there is no evidence of animals spreading COVID-19, but does not address horses specifically.
+
+    \item[Mean human rating:] 3.00
 \end{description}
-
-% \textit{Question:} Is it still possible to access medical appointments and medications through my doctor \\
-% \textit{Answer:} You can access bulk-billed appointments with your doctor, nurse or mental health professional via phone or videoconference. If you would like to arrange a telehealth appointment, contact your doctor. Accessing medicines while staying at home. Your doctor may be able to arrange to have your prescriptions sent to your pharmacy directly so you
-% can stay at home. For more information on whether you can access this service please call your pharmacy and speak to them about the best way to arrange this. \\
-% \textit{Rating 1:} 4 \\
-% \textit{Feedback 1:} Gives information on how patients can access appointments with their doctors during the pandemic. \\
-% \textit{Rating 2:} 3 \\
-% \textit{Feedback 2:} This answer relates to accessing medical appointments and medications, but does not give much information. \\
-
 
 \begin{table}[h]
 \centering
-\caption{Sampled FeedbackQA items (IDs and labels), and Qwen scores for Relevance, Completeness, Directness, and Holistic criteria}
-\label{tab:feedbackqa_samples}
-\begin{tabularx}{\textwidth}{@{}l l r r r r r@{}}
+\small
+\caption{Out-of-fold predictions for Example F01. Predictions are generated by
+the annotation-level validation model described in Section~\ref{sec:methods_feedbackqa};
+for display, the target is reported as the mean of the two human ratings.}
+\label{tab:feedbackqa_example_f01_oof}
+\begin{tabularx}{\textwidth}{@{}l l r r r@{}}
 \toprule
-ID & Human label 1 & Human label 2 & Rel. & Comp. & Dir. & Holistic \\
+\textbf{Model} & \textbf{Construct representation} & \textbf{OOF prediction} & \textbf{Mean human rating} & \textbf{Abs. error} \\
 \midrule
-F01 & 4 & 3 & 4 & 3 & 3 & 4 \\
+Gemma 4 & Formative & 1.70 & 3.00 & 1.30 \\
+Gemma 4 & Holistic Naive & 2.50 & 3.00 & 0.50 \\
+Gemma 4 & Holistic Informed & 1.66 & 3.00 & 1.34 \\
+\addlinespace
+Qwen 3.5 & Formative & 3.06 & 3.00 & 0.06 \\
+Qwen 3.5 & Holistic Naive & 2.89 & 3.00 & 0.11 \\
+Qwen 3.5 & Holistic Informed & 2.76 & 3.00 & 0.24 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Raw LLM-derived criterion scores for Example F01. Scores are expected-value ratings on the original four-point scale.}
+\label{tab:feedbackqa_example_f01_scores}
+\begin{tabularx}{\textwidth}{@{}l X r r@{}}
+\toprule
+\textbf{Criterion} & \textbf{Interpretation} & \textbf{Gemma 4} & \textbf{Qwen 3.5} \\
+\midrule
+Topical Alignment & Whether the answer addresses the question. & 1.00 & 2.80 \\
+Information Coverage & Whether the answer provides sufficient information. & 1.14 & 2.86 \\
+Topical Concentration & Whether the answer stays focused on the question. & 1.00 & 2.42 \\
+Communicative Clarity & Whether the answer is clearly expressed. & 2.87 & 3.21 \\
+\addlinespace
+Overall Quality (Informed) & Holistic rating using the dimensional construct definition, elicited as one overall score. & 1.19 & 2.92 \\
+Overall Quality (Naive) & Holistic rating using a generic overall-quality definition. & 2.55 & 3.04 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 
-\subsection{Barter Deals examples}
+\subsubsection*{Example F02: Clear but under-specified answer}
 
 
-\subsubsection*{Example B01}
 \begin{description}
-  \item[Deal text:] We’d love a video capturing the experience of visiting our store in the heart of Amsterdam—from the vibe of the city and the walk over, to exploring the shop itself. While you’re there, pick your favorite bag from the collection and make it part of the story!
+    \item[Question:] Are there special provisions for asylum seekers to get free school meals?
 
-Keep it authentic, stylish, and feel free to show the charm of the surroundings too!
-  \item[Applications after 7 days:] 39
-  \item[Product category:] Activities
+    \item[Answer:] To be eligible for free school meals, the maximum annual household earnings
+    threshold is \pounds7,400 after tax. This equates to \pounds616 per month.
+    You should ask families wishing to apply to fill out a self-declaration.
+    To verify this, we suggest asking to view either a payslip, P60, bank statement,
+    letter from their bank, or letter from their employer.
+
+    Families who are receiving Section 4 support are not able to work, and as such
+    their earnings do not need to be verified.
+
+    \item[Human rating 1:] Could be Improved (2)
+
+    \item[Feedback 1:] The question was specifically asking for asylum seekers. It did not mention that.
+
+    \item[Human rating 2:] Bad (1)
+
+    \item[Feedback 2:] This is a bad answer because it talks about free meals, but does not mention anything about refugees or asylum seekers and if they are eligible. Therefore, this does not answer the question.
+
+    \item[Mean human rating:] 1.50
 \end{description}
 
+\begin{table}[h]
+\centering
+\small
+\caption{Out-of-fold predictions for Example F02. Predictions are generated by the annotation-level validation model described in Section~\ref{sec:methods_feedbackqa}; for display, the target is reported as the mean of the two human ratings.}
+\label{tab:feedbackqa_example_f02_oof}
+\begin{tabularx}{\textwidth}{@{}l l r r r@{}}
+\toprule
+\textbf{Model} & \textbf{Construct representation} & \textbf{OOF prediction} & \textbf{Mean human rating} & \textbf{Abs. error} \\
+\midrule
+Gemma 4 & Formative & 1.65 & 1.50 & 0.15 \\
+Gemma 4 & Holistic Naive & 1.72 & 1.50 & 0.22 \\
+Gemma 4 & Holistic Informed & 1.39 & 1.50 & 0.11 \\
+\addlinespace
+Qwen 3.5 & Formative & 1.55 & 1.50 & 0.05 \\
+Qwen 3.5 & Holistic Naive & 2.00 & 1.50 & 0.50 \\
+Qwen 3.5 & Holistic Informed & 1.93 & 1.50 & 0.43 \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\subsubsection*{Example B02}
-\begin{description}
-  \item[Deal text:] Choose 2 coffees and pastries you like:)
-  \item[Applications after 7 days:] 6
-  \item[Product category:] Food
-\end{description}
+\begin{table}[h]
+\centering
+\small
+\caption{Raw LLM-derived scores for Example F02. Scores are expected-value ratings on the original four-point FeedbackQA scale.}
+\label{tab:feedbackqa_example_f02_scores}
+\begin{tabularx}{\textwidth}{@{}l X r r@{}}
+\toprule
+\textbf{Criterion} & \textbf{Interpretation} & \textbf{Gemma 4} & \textbf{Qwen 3.5} \\
+\midrule
+Topical Alignment & Whether the answer addresses the question. & 1.00 & 1.84 \\
+Information Coverage & Whether the answer provides sufficient information. & 1.77 & 1.83 \\
+Topical Concentration & Whether the answer stays focused on the question. & 1.00 & 2.82 \\
+Communicative Clarity & Whether the answer is clearly expressed. & 2.46 & 2.99 \\
+\addlinespace
+Overall Quality (Informed) & Holistic rating using the dimensional construct definition, elicited as one overall score. & 1.02 & 2.16 \\
+Overall Quality (Naive) & Holistic rating using a generic overall-quality definition. & 1.63 & 2.18 \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 
 
-% \begin{table}[t]
-% \centering
-% \caption{Sampled Barter deals with category, KPI, and LLM indicators.}
-% \label{tab:barter_samples}
-% \begin{tabularx}{\textwidth}{@{}l l r r r r@{}}
-% \toprule
-% ID & Category & Apps (7d) & Pers. & Clar. & CTA \\
-% \midrule
-% B01 & Travel & 0 & 2.1 & 3.4 & 2.7 \\
-% B02 & Beauty & 37 & 3.6 & 3.2 & 3.8 \\
-% \bottomrule
-% \end{tabularx}
-% \end{table}
 
-% \paragraph{B02}
-% \begin{lstlisting}[basicstyle=\ttfamily\small, breaklines=true]
-% Marketing copy:
-% ...
-% \end{lstlisting}
+
+\subsection{Barter Deal Examples}\label{app:barter_examples}
+
+The following examples illustrate how individual Barter artefacts, out-of-fold predictions, and fine-grained LLM scores relate to one another. The examples are selected for interpretability rather than representativeness. They are not used as standalone evidence of model performance; predictive-validity evidence is evaluated using the full-sample cross-validation analyses in Section~\ref{sec:results_pred_val}. The purpose of these examples is to make the measurement pipeline concrete by showing how different construct representations behave for held-out Deals.
+
+
+\subsubsection*{Example B01: High-demand product deal}
+
+Example B01 is a relatively high-demand product Deal. The sunglasses offer combines a concrete reward, a broadly usable product, and a clearly specified collaboration request. The out-of-fold predictions show that both fine-grained formative models assign higher expected application counts than the corresponding holistic and macro-formative representations. This is consistent with the fine-grained profile, where the Deal receives relatively high scores on creator brand alignment, product universality, call-to-action strength, and proposition clarity. The example illustrates how the fine-grained representation can recover high expected demand when several substantively relevant deal components are evaluated favourably.
+
+\begin{table}[p]
+\centering
+\small
+\caption{Example B01: High-demand product deal}
+\label{tab:barter_example_b01_artefact}
+\begin{tabularx}{\textwidth}{@{}L{0.20\textwidth}Y@{}}
+\toprule
+Field & Content \\
+\midrule
+
+Deal title
+&
+Sunglasses ready for summer, OCCU
+\\
+
+\addlinespace[0.5em]
+Deal text
+&
+You will receive a pair of premium-quality sunglasses from OCCU, a new Amsterdam-based eyewear brand focused on timeless design, stylish details, and standout colorways.
+
+Our frames are handcrafted from high-grade Italian acetate, offering a refined look and durable feel. Each pair is designed to elevate your everyday style with a bold, clean aesthetic.
+
+As part of this collaboration, you will receive one of our signature frames: high-end, beautifully finished, and yours to keep.
+
+This is your chance to experience OCCU from the front row and be part of our growing creative community. We would love to see your creativity shine through content that feels natural to you and engaging for your audience.
+\\
+
+\addlinespace[0.5em]
+Creator requirement
+&
+\begin{minipage}[t]{\linewidth}
+As part of this collaboration, OCCU asks for:
+\begin{itemize}[leftmargin=1.3em, topsep=0.2em, itemsep=0.1em]
+    \item 2--3 Instagram Stories per week for four weeks;
+    \item one TikTok video per week, two in total;
+    \item an unboxing moment showing how the OCCU package arrives and the creator's first impressions;
+    \item content showing how the creator styles the eyewear;
+    \item a comparison with other sunglasses, showing what makes OCCU stand out.
+\end{itemize}
+The content should be shared with OCCU in good quality so that it can be reused, with credit, on the brand's own channels.
+\end{minipage}
+\\
+
+\addlinespace[0.5em]
+Applications after 7 days
+&
+30
+\\
+
+\bottomrule
+\end{tabularx}
+
+\begin{flushleft}
+\footnotesize
+\textit{Note.} Deal text is lightly formatted for readability. LLM scores and out-of-fold predictions were computed using the original artefact text.
+\end{flushleft}
+\end{table}
+
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Out-of-fold predictions for Example B01}
+\label{tab:barter_example_b01_predictions}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Evaluation model & Construct representation & Predicted apps & Observed apps & Abs. error \\
+\midrule
+Baseline & Platform controls only & 20.70 & 30 & 9.30 \\
+\addlinespace
+Gemma 4 & Holistic & 19.29 & 30 & 10.71 \\
+Gemma 4 & Macro-formative & 21.60 & 30 & 8.40 \\
+Gemma 4 & Fine-grained formative & 26.20 & 30 & 3.80 \\
+\addlinespace
+Qwen 3.5 & Holistic & 19.03 & 30 & 10.97 \\
+Qwen 3.5 & Macro-formative & 21.32 & 30 & 8.68 \\
+Qwen 3.5 & Fine-grained formative & 29.80 & 30 & 0.20 \\
+\bottomrule
+\end{tabular}
+
+\begin{flushleft}
+\footnotesize
+\textit{Note.} Predictions are out-of-fold predictions from the predictive-validity procedure. The baseline uses platform and deal-level controls only; the LLM-based models add scores from the corresponding construct representation.
+\end{flushleft}
+\end{table}
+
+
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Fine-grained formative scores for Example B01}
+\label{tab:barter_example_b01_scores}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Dimension & Gemma 4 & Qwen 3.5 \\
+\midrule
+Brand Prestige & 3.01 & 3.03 \\
+Perceived Economic Value & 4.61 & 3.51 \\
+Creator Brand Alignment & 4.99 & 5.53 \\
+Functional Utility & 3.17 & 3.18 \\
+Product Universality & 4.00 & 4.78 \\
+Workload Volume & 3.76 & 3.78 \\
+Creative Restrictiveness & 3.98 & 3.26 \\
+Call To Action Strength & 5.75 & 5.52 \\
+Rhetorical Objectivity & 3.06 & 3.97 \\
+Proposition Clarity & 5.03 & 5.23 \\
+\bottomrule
+\end{tabular}
+
+\begin{flushleft}
+\footnotesize
+\textit{Note.} Scores are raw expected-value ratings on the original 1--7 scale before standardization in the predictive-validity regressions.
+\end{flushleft}
+\end{table}
+
+
+\clearpage
+\subsubsection*{Example B02: Reduced overprediction for a restricted-fit deal}
+
+Example B02 is a lower-demand Deal with a more restricted eligible creator pool. The Cloudless offer is clearly written and functionally relevant, but it targets creators who currently experience acne, breakouts, or hormonal skin concerns and asks them to document a personal product journey. The holistic and macro-formative representations substantially overpredict observed demand, while the fine-grained formative representations reduce this overprediction. Absolute count prediction remains imperfect, which reflects the broader difficulty of predicting low-application Deals. However, the fine-grained scores provide additional artefact-level information for ranking the Deal lower than similarly polished but more broadly applicable offers.
+
+
+
+
+\begin{table}[p]
+\centering
+\small
+\caption{Example B02: Low-demand deal with restricted creator fit}
+\label{tab:barter_example_b02_artefact}
+\begin{tabularx}{\textwidth}{@{}L{0.20\textwidth}Y@{}}
+\toprule
+Field & Content \\
+\midrule
+
+Deal title
+&
+Content creators for our brand
+\\
+
+\addlinespace[0.5em]
+Deal text
+&
+We are Cloudless, a supplement brand that helps fight acne and skin concerns from the inside out. We are looking for authentic content creators, men and women, who currently struggle with acne, breakouts, or hormonal skin imbalances.
+
+In return for free product, our ClearDay+ 90-day supplement pack, we ask for high-quality user-generated content that shows your journey and experience. This can include before/after updates, B-roll of your skincare routine, testimonials or honest reactions, hooks for ad creatives, product shots or unboxing, and selfie-style storytelling.
+
+All content can be shot with your phone. No editing is required. We are looking for real, relatable people who want to share their honest story and results.
+\\
+
+\addlinespace[0.5em]
+Creator requirement
+&
+\begin{minipage}[t]{\linewidth}
+Cloudless asks for:
+\begin{itemize}[leftmargin=1.3em, topsep=0.2em, itemsep=0.1em]
+    \item a selfie with the product;
+    \item B-roll clips of the product;
+    \item visual hooks;
+    \item raw clips of the product;
+    \item two TikToks and two Instagram Reels.
+\end{itemize}
+If the brand is happy with the content, the creator can become one of its recurring creators and may be paid on a monthly basis.
+\end{minipage}
+\\
+
+\addlinespace[0.5em]
+Applications after 7 days
+&
+8
+\\
+
+\bottomrule
+\end{tabularx}
+
+\begin{flushleft}
+\footnotesize
+\textit{Note.} Deal text is lightly formatted for readability. LLM scores and out-of-fold predictions were computed using the original artefact text.
+\end{flushleft}
+\end{table}
+
+
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Out-of-fold predictions for Example B02}
+\label{tab:barter_example_b02_predictions}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Evaluation model & Construct representation & Predicted apps & Observed apps & Abs. error \\
+\midrule
+Baseline & Platform controls only & 19.86 & 8 & 11.86 \\
+\addlinespace
+Gemma 4 & Holistic & 19.08 & 8 & 11.08 \\
+Gemma 4 & Macro-formative & 19.78 & 8 & 11.78 \\
+Gemma 4 & Fine-grained formative & 15.61 & 8 & 7.61 \\
+\addlinespace
+Qwen 3.5 & Holistic & 20.66 & 8 & 12.66 \\
+Qwen 3.5 & Macro-formative & 17.31 & 8 & 9.31 \\
+Qwen 3.5 & Fine-grained formative & 12.97 & 8 & 4.97 \\
+\bottomrule
+\end{tabular}
+
+\begin{flushleft}
+\footnotesize
+\textit{Note.} Predictions are out-of-fold predictions from the predictive-validity procedure. The baseline uses platform and deal-level controls only; the LLM-based models add scores from the corresponding construct representation.
+\end{flushleft}
+\end{table}
+
+
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Fine-grained formative scores for Example B02}
+\label{tab:barter_example_b02_scores}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Dimension & Gemma 4 & Qwen 3.5 \\
+\midrule
+Brand Prestige & 3.03 & 3.80 \\
+Perceived Economic Value & 3.12 & 2.53 \\
+Creator Brand Alignment & 5.32 & 4.85 \\
+Functional Utility & 5.06 & 4.94 \\
+Product Universality & 3.59 & 3.71 \\
+Workload Volume & 3.82 & 4.02 \\
+Creative Restrictiveness & 3.43 & 3.15 \\
+Call To Action Strength & 3.98 & 3.32 \\
+Rhetorical Objectivity & 4.01 & 4.24 \\
+Proposition Clarity & 5.23 & 4.44 \\
+\bottomrule
+\end{tabular}
+
+\begin{flushleft}
+\footnotesize
+\textit{Note.} Scores are raw expected-value ratings on the original 1--7 scale before standardization in the predictive-validity regressions.
+\end{flushleft}
+\end{table}
+
+
+

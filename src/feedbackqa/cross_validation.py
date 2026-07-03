@@ -34,12 +34,13 @@ class FeedbackQACrossValidator:
             clusters = data.get("clusters")
 
             # 1. Construct deterministic observation identifiers for strict pairing
-            input_col = self.runner.input_col
-            if "rater_id" in long_df.columns:
-                obs_idx = long_df[input_col].astype(
-                    str) + "_" + long_df["rater_id"].astype(str)
-            else:
-                obs_idx = long_df[input_col].astype(str)
+            obs_idx = self._make_observation_ids(long_df)
+            # input_col = self.runner.input_col
+            # if "rater_id" in long_df.columns:
+            #     obs_idx = long_df[input_col].astype(
+            #         str) + "_" + long_df["rater_id"].astype(str)
+            # else:
+            #     obs_idx = long_df[input_col].astype(str)
 
             y_true_series = pd.Series(y.values, index=obs_idx, name='y_true')
             y_pred_series = pd.Series(np.nan, index=obs_idx, name='y_pred')
@@ -187,74 +188,6 @@ class FeedbackQACrossValidator:
         metrics["nobs"] = len(y_1)
         return pd.Series(metrics)
 
-    # @staticmethod
-    # def _calculate_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, float]:
-    #     rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-    #     if np.std(y_pred) == 0 or np.std(y_true) == 0:
-    #         r, rho = np.nan, np.nan
-    #     else:
-    #         r, _ = pearsonr(y_true, y_pred)
-    #         rho, _ = spearmanr(y_true, y_pred)
-    #     return {"RMSE": rmse, "Pearson_r": r, "Spearman_rho": rho}
-
-    # def batch_test_structural_delta(
-    #     self,
-    #     base_suffix: str,
-    #     test_suffix: str,
-    #     metric: str = 'spearman',
-    #     n_permutations: int = 10000,
-    #     seed: int = 42
-    # ) -> pd.DataFrame:
-    #     """
-    #     Auto-discovers model families and executes paired permutation tests across the grid.
-
-    #     Parameters:
-    #     -----------
-    #     base_suffix : str
-    #         The prompt suffix of the baseline (e.g., 'Holistic Informed').
-    #     test_suffix : str
-    #         The prompt suffix of the test condition (e.g., 'Formative').
-    #     metric : str
-    #         The correlation metric to test ('spearman' or 'pearson').
-
-    #     Returns:
-    #     --------
-    #     pd.DataFrame
-    #         A matrix of p-values and boolean significance flags for easy table integration.
-    #     """
-    #     results = []
-
-    #     # Auto-discover unique model families (assuming format "ModelName_Condition")
-    #     all_labels = list(self.oof_predictions.keys())
-    #     model_families = sorted(
-    #         list(set([label.split("_")[0] for label in all_labels])))
-
-    #     for model in model_families:
-    #         base_label = f"{model}_{base_suffix}"
-    #         test_label = f"{model}_{test_suffix}"
-
-    #         if base_label in self.oof_predictions and test_label in self.oof_predictions:
-    #             p_val = self.test_structural_delta(
-    #                 base_label=base_label,
-    #                 test_label=test_label,
-    #                 metric=metric,
-    #                 n_permutations=n_permutations,
-    #                 seed=seed
-    #             )
-
-    #             results.append({
-    #                 "Model": model,
-    #                 "Base": base_suffix,
-    #                 "Test": test_suffix,
-    #                 f"p_value_{metric}": p_val,
-    #                 "Significant (p<0.05)": "*" if p_val < 0.05 else ""
-    #             })
-    #         else:
-    #             print(
-    #                 f"Warning: Missing keys for {model}. Check suffixes '{base_suffix}' and '{test_suffix}'.")
-
-    #     return pd.DataFrame(results).set_index("Model")
-
     @staticmethod
     def _calculate_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, float]:
         valid = ~np.isnan(y_true) & ~np.isnan(y_pred)
@@ -284,3 +217,147 @@ class FeedbackQACrossValidator:
             "Spearman_rho": rho,
             "Kendall_tau": tau
         }
+
+    def _make_observation_ids(self, long_df: pd.DataFrame) -> pd.Index:
+        """
+        Constructs deterministic, unique observation identifiers for OOF pairing.
+        The base identifier preserves the document-rater structure, while the row
+        suffix prevents accidental collisions when duplicated artefacts occur.
+        """
+        input_col = self.runner.input_col
+
+        if input_col not in long_df.columns:
+            raise KeyError(f"Input column '{input_col}' not found in long_df.")
+
+        base = long_df[input_col].astype(str)
+
+        if "rater_id" in long_df.columns:
+            base = base + "__rater=" + long_df["rater_id"].astype(str)
+
+        row_component = pd.Series(
+            long_df.index.to_numpy(),
+            index=long_df.index
+        ).astype(str)
+
+        obs_ids = base + "__row=" + row_component
+        return pd.Index(obs_ids.to_numpy(), name="_obs_id")
+
+    def get_oof_predictions_long(
+        self,
+        label: str,
+        pred_col: str = "OOF_prediction"
+    ) -> pd.DataFrame:
+        """
+        Returns the annotation-/observation-level dataset with out-of-fold
+        predictions attached.
+
+        This is the exact level at which cross-validated metrics are computed.
+        For FeedbackQA, this means one row per document-rater observation.
+        """
+        if label not in self.oof_predictions:
+            raise KeyError(
+                f"Label '{label}' not found in OOF cache. "
+                "Execute evaluate_models() first."
+            )
+
+        if label not in self.runner.run_data:
+            raise KeyError(f"Label '{label}' not found in runner.run_data.")
+
+        long_df = self.runner.run_data[label]["long_df"].copy()
+        obs_ids = self._make_observation_ids(long_df)
+
+        out = long_df.copy()
+        out["_obs_id"] = obs_ids.to_numpy()
+
+        oof = (
+            self.oof_predictions[label]
+            .rename(columns={"y_pred": pred_col})
+            .reset_index()
+            .rename(columns={"index": "_obs_id"})
+        )
+
+        out = out.merge(
+            oof[["_obs_id", "y_true", pred_col]],
+            on="_obs_id",
+            how="left",
+            validate="one_to_one"
+        )
+
+        return out
+
+    def build_oof_prediction_dataset(
+        self,
+        label: str,
+        original_df: Optional[pd.DataFrame] = None,
+        id_col: Optional[str] = None,
+        pred_col: str = "OOF_prediction",
+        target_col: str = "OOF_target",
+        aggregate: str = "mean",
+        include_n_observations: bool = True
+    ) -> pd.DataFrame:
+        """
+        Builds an artefact-level dataset with OOF predictions aligned to the
+        original dataset.
+
+        Parameters
+        ----------
+        label:
+            Model/condition label stored in runner.run_data and oof_predictions.
+        original_df:
+            Optional original wide-format dataset. If provided, predictions are
+            left-joined onto it. If omitted, a minimal artefact-level dataset is
+            constructed from long_df.
+        id_col:
+            Artefact-level key used for alignment. If omitted, runner.input_col
+            is used. Prefer a stable document/deal ID if available.
+        pred_col:
+            Name of the created OOF prediction column.
+        target_col:
+            Name of the aggregated target column.
+        aggregate:
+            Aggregation used when multiple validation rows correspond to the same
+            artefact. For FeedbackQA, 'mean' is appropriate because each document
+            has two human annotations.
+        include_n_observations:
+            Whether to include the number of validation rows per artefact.
+
+        Returns
+        -------
+        pd.DataFrame
+            Artefact-level dataframe containing the OOF prediction column.
+        """
+        long_oof = self.get_oof_predictions_long(label, pred_col=pred_col)
+
+        if id_col is None:
+            id_col = self.runner.input_col
+
+        if id_col not in long_oof.columns:
+            raise KeyError(f"id_col '{id_col}' not found in OOF long dataset.")
+
+        grouped = long_oof.groupby(id_col, dropna=False)
+
+        agg_kwargs = {
+            pred_col: (pred_col, aggregate),
+            target_col: ("y_true", aggregate),
+        }
+
+        if include_n_observations:
+            agg_kwargs["OOF_n_observations"] = (pred_col, "size")
+
+        artefact_oof = grouped.agg(**agg_kwargs).reset_index()
+
+        if original_df is None:
+            base = long_oof[[id_col]].drop_duplicates().copy()
+        else:
+            if id_col not in original_df.columns:
+                raise KeyError(f"id_col '{id_col}' not found in original_df.")
+            base = original_df.copy()
+
+        out = base.merge(
+            artefact_oof,
+            on=id_col,
+            how="left",
+            validate="many_to_one"
+        )
+
+        return out

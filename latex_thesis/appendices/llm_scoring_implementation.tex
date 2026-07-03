@@ -1,6 +1,41 @@
-\section{Logit-Based Score Extraction}\label{app:logit_score_extraction}
+\section{Prompt Formatting and Logit-Based Score Extraction}
+\label{app:llm_scoring_implementation}
 
-This appendix provides the technical details for the logit-based scoring procedure described in Section~\ref{sec:methods_llm_procedure}. The procedure converts each prompt-document pair into a continuous Expected Value (EV) score and a normalized entropy diagnostic by restricting the model's next-token distribution to the valid rating tokens.
+This appendix provides the technical details for specification of the LLM input and the logit-based scoring procedure described in Section~\ref{sec:methods_llm_procedure}. The procedure specifies how the prompt for some criterion and artefact are specified. Then, it converts each prompt-document pair into a continuous EV score and a normalized entropy diagnostic by restricting the model's next-token distribution to the valid rating tokens.
+
+
+\subsection{Prompt rendering via \texttt{apply\_chat\_template}}\label{app:apply_chat_template}
+
+
+All prompts are rendered using the model-specific Hugging Face chat template. For each evaluation input $\mathbf{u}_{ijm}=[,s,;,c_j,;,d_i,]$, the system message contains the evaluator role and task context, while the user message contains the criterion specification and the target artefact. The tokenizer's \texttt{apply\_chat\_template} function is called with \texttt{add\_generation\_prompt=True}, which appends the model-specific assistant header. The literal assistant prefix \texttt{Rating:} is then appended, and the next-token logits are extracted immediately after this prefix.
+
+Schematically, the rendered prompt has the following structure:
+
+\begin{lstlisting}[basicstyle=\ttfamily\small, breaklines=true] 
+
+<System role header as produced by the tokenizer>
+{s}
+</System role>
+
+<User role header as produced by the tokenizer>
+Criterion:
+{c_j}
+
+Target artefact:
+{d_i}
+</User role>
+
+<Assistant role header inserted by add_generation_prompt=True>
+Rating:
+\end{lstlisting}
+
+The role headers and separator tokens are model-specific, and are inserted by the tokenizer according to each model's chat template. No free-text response is generated. Instead, a single forward pass is used to obtain the next-token logits after the \texttt{Rating:} prefix. These logits are restricted to the valid rating-token set $\mathcal{S}={1,\ldots,L}$ and converted into the rating-token distribution used to compute the expected-value score and entropy diagnostics described in Section~\ref{sec:methods_llm_procedure}.
+
+
+
+\subsection{Logit-Based Score Extraction}\label{app:logit_score_extraction}
+
+
 
 \subsection{Prompt Formatting and Forward Pass}
 
@@ -66,3 +101,8 @@ P_{\mathcal{S}}(l \mid \mathbf{u}_{ij})
 The normalization by $\ln(K)$ makes entropy comparable across rating scales with different numbers of categories. The statistic takes values in $[0,1]$: it equals 0 when all probability mass is concentrated on a single rating token and equals 1 when probability mass is uniformly distributed across all valid rating tokens.
 
 Entropy is used as a diagnostic of rating-token dispersion. Low entropy indicates that the EV score is based on concentrated probability mass over one or a few rating tokens, producing more quantized, integer-like scores. Higher entropy indicates that probability mass is distributed more diffusely across the rating scale, allowing EV scores to behave more continuously. The interpretation of entropy together with EV dispersion is discussed in Appendix~\ref{app:rating_regimes}.
+
+
+
+
+

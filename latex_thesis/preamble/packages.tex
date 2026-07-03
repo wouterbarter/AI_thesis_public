@@ -44,6 +44,30 @@
 \usepackage[square,numbers,sort&compress]{natbib}
 \usepackage{graphicx}
 
+\usepackage{pdflscape}
+\usepackage{float}
+
+
+
+\usepackage{ragged2e}
+
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+
+
+
+\usepackage{longtable}
+
+\usepackage{ragged2e}
+
+
+
+
+
+
+
 \usepackage{tikz}
 
 % \usetikzlibrary{positioning, shapes, arrows.meta, calc}
@@ -64,7 +88,7 @@
 \usepackage{subcaption}
 
 \usepackage{dblfloatfix}
-\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
 
 
 % Used for displaying a sample figure. If possible, figure files should
@@ -78,3 +102,4 @@
 
 
 % \usepackage[numbers,sort&compress]{natbib}
+
