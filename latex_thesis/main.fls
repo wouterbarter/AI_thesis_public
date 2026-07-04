@@ -433,12 +433,12 @@ INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx7.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx5.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmr5.tfm
+INPUT C:\Program Files\MiKTeX\fonts\enc\dvips\lm\lm-mathsy.enc
 INPUT .\sections\methodology.tex
 INPUT .\sections\methodology.tex
 INPUT .\sections\methodology.tex
 INPUT .\sections\methodology.tex
 INPUT sections\methodology.tex
-INPUT C:\Program Files\MiKTeX\fonts\enc\dvips\lm\lm-mathsy.enc
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx9.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\rm-lmbx6.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\lm\ec-lmss8.tfm
@@ -454,6 +454,11 @@ INPUT .\sections\results.tex
 INPUT .\sections\results.tex
 INPUT .\sections\results.tex
 INPUT sections\results.tex
+INPUT .\sections\discussion_conclusion.tex
+INPUT .\sections\discussion_conclusion.tex
+INPUT .\sections\discussion_conclusion.tex
+INPUT .\sections\discussion_conclusion.tex
+INPUT sections\discussion_conclusion.tex
 INPUT .\main.bbl
 INPUT .\main.bbl
 INPUT main.bbl

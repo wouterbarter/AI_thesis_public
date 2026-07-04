@@ -76,7 +76,8 @@ Table~\ref{tab:construct_representations} summarizes the construct representatio
 
 
 
-\begin{figure*}[t]
+\begin{figure*}[h]
+% \begin{figure}[!htbp]
 \centering
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
@@ -264,9 +265,12 @@ construct specification};
 
 \end{tikzpicture}%
 }
-\caption{Validity-guided framework for artefact-level LLM measurement. The framework proceeds from theoretical specification of the object of claim $\eta(d_i)$ to LLM measurement operationalization and empirical evaluation. Construct specification selects a criterion set $C_m$ for representation $m$, where $m \in \{H,M,F\}$ indexes holistic, macro-formative, and fine-grained formative construct representations, respectively. The number of criteria in representation $m$ is denoted by $J_m = |C_m|$. For each artefact $d_i$ and criterion $c_j \in C_m$, the model input $\mathbf{u}_{ijm}=[\,s\,;\,c_j\,;\,d_i\,]$ is passed to the LLM measurement operator, which returns a criterion-specific rating distribution $\mathbf{p}_{ijm}$ over $L$ valid rating levels. The criterion-level distributions are stacked into $\mathbf{P}_i(C_m)\in[0,1]^{J_m\times L}$, summarized using expected values $x^{\mathrm{EV}}_{ijm}$ and entropy $H_{ijm}$, and evaluated through validity evidence and measurement diagnostics. These empirical evidence streams determine the permitted artefact-level claims addressed by RQ1 and RQ2. The informed holistic control used in the FeedbackQA analysis is omitted for simplicity, because it functions as a design control rather than as a separate construct-representation category.}
+\caption{Validity-guided framework for artefact-level LLM measurement. The framework proceeds from theoretical specification of the target construct $\eta(d_i)$, to LLM-based scoring of criteria $c_j \in C_m$, to empirical evaluation through validity evidence and measurement diagnostics. Here, $m$ indexes the construct representation, $C_m$ is its criterion set, and $J_m=|C_m|$ is the number of criteria. For each artefact--criterion pair, the LLM returns a rating distribution $\mathbf{p}_{ijm}$, summarized by expected-value scores $x^{\mathrm{EV}}_{ijm}$ and entropy $H_{ijm}$. The informed holistic control used in the FeedbackQA analysis is omitted for simplicity because it functions as a design control rather than as a separate construct-representation category.}
+% \caption{Validity-guided framework for artefact-level LLM measurement. The framework proceeds from theoretical specification of the object of claim $\eta(d_i)$ to LLM measurement operationalization and empirical evaluation. Construct specification selects a criterion set $C_m$ for representation $m$, where $m \in \{H,M,F\}$ indexes holistic, macro-formative, and fine-grained formative construct representations, respectively. The number of criteria in representation $m$ is denoted by $J_m = |C_m|$. For each artefact $d_i$ and criterion $c_j \in C_m$, the model input $\mathbf{u}_{ijm}=[\,s\,;\,c_j\,;\,d_i\,]$ is passed to the LLM measurement operator, which returns a criterion-specific rating distribution $\mathbf{p}_{ijm}$ over $L$ valid rating levels. The criterion-level distributions are stacked into $\mathbf{P}_i(C_m)\in[0,1]^{J_m\times L}$, summarized using expected values $x^{\mathrm{EV}}_{ijm}$ and entropy $H_{ijm}$, and evaluated through validity evidence and measurement diagnostics. These empirical evidence streams determine the permitted artefact-level claims addressed by RQ1 and RQ2. The informed holistic control used in the FeedbackQA analysis is omitted for simplicity, because it functions as a design control rather than as a separate construct-representation category.}
 \label{fig:measurement_framework}
+% \end{figure}
 \end{figure*}
+
 
 
 \subsection{LLM Evaluation Procedure}\label{sec:methods_llm_procedure}
@@ -411,3 +415,5 @@ RQ2 concerns the conditions under which separately elicited formative criteria s
 
 
 \end{description}
+
+
